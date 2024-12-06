@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/theme/globalthemdata.dart';
+import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
+import 'package:quadro_platform/features/theme/globalthemdata.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: GlobalThemData.lightThemeData,
-      darkTheme: GlobalThemData.darkThemeData,
-      themeMode: ThemeMode.system,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("qadro app"),
-        ),
-        body: const Center(
-          child: Text("hi!!"),
-        ),
-      ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: MaterialApp(
+          theme: GlobalThemData.lightThemeData,
+          darkTheme: GlobalThemData.darkThemeData,
+          themeMode: ThemeMode.system,
+          home: const OnBoardingPage()),
     );
   }
 }
