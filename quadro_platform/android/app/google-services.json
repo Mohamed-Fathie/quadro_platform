@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "698030242237",
+    "project_id": "quadro-204be",
+    "storage_bucket": "quadro-204be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698030242237:android:ad1865a658ad5ad187bad4",
+        "android_client_info": {
+          "package_name": "com.example.quadro_platform"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy4vQeOdM4OZlqi6Cyj6oil43a6pi-Iqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

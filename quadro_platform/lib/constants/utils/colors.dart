@@ -23,6 +23,7 @@ Color green200 = Colors.green.shade200;
 Color error = const Color(0xff831D1D);
 Color blue50 = Colors.blue.shade50;
 Color blueAccent100 = Colors.blueAccent.shade100;
+Color txtfld = const Color(0xffeaf4f6);
 
 //Lienar Gradient Color
 
