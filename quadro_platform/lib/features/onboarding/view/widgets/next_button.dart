@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/features/onboarding/Cubit/Onboarding_cubit.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
@@ -22,7 +23,7 @@ class NextButton extends StatelessWidget {
                 // Move to the next page
                 context.read<OnboardingCubit>().nextPage();
               } else {
-                // Navigate to the main app or login screen
+                Navigator.pushNamed(context, LogInScreen.id);
               }
             },
             child: Text(

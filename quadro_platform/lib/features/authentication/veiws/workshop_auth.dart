@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
 class IdentityAuth extends StatelessWidget {
@@ -16,6 +15,9 @@ class IdentityAuth extends StatelessWidget {
                 color: Qcolors.primarycolor,
               ),
         ),
+      ),
+      body: const Column(
+        children: [Text("قم برفع بطاقة هويتك من اجل المتابعة :")],
       ),
     );
   }
