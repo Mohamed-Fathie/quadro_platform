@@ -20,6 +20,7 @@ class App extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: GlobalThemData.lightThemeData,
           darkTheme: GlobalThemData.darkThemeData,
           themeMode: ThemeMode.system,
