@@ -70,15 +70,8 @@ class BottomNavBar extends StatelessWidget {
           resizeToAvoidBottomInset: true,
           stateManagement: true,
 
-          popAllScreensOnTapOfSelectedTab: true,
           popActionScreens: PopActionScreensType.all,
 
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            curve: Curves.ease,
-            duration: Duration(
-              microseconds: 200,
-            ),
-          ),
           navBarBuilder: (navBarConfig) => Style6BottomNavBar(
             navBarConfig: navBarConfig,
             navBarDecoration: NavBarDecoration(

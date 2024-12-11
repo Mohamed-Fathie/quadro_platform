@@ -24,7 +24,6 @@ class LogInScreen extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: white),
                 image: const DecorationImage(
-                  fit: BoxFit.contain,
                   image: AssetImage('assets/images/logos/quadroLogo.jpg'),
                 ),
               ),
