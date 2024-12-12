@@ -1,12 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/view/loginScreen/log_in_screen.dart';
 import 'package:quadro_platform/common/view/registrationScreen/registration_screen.dart';
 import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
+import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
-import 'package:quadro_platform/theme/globalthemdata.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -14,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(Quadro());
+  runApp(const Quadro());
 }
 
 class Quadro extends StatelessWidget {
@@ -39,7 +40,7 @@ class Quadro extends StatelessWidget {
             theme: GlobalThemData.lightThemeData,
             darkTheme: GlobalThemData.darkThemeData,
             themeMode: ThemeMode.system,
-            home: OnBoardingPage(),
+            home: const OnBoardingPage(),
           ),
         );
       },

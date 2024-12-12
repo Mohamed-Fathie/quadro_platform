@@ -11,7 +11,7 @@ import 'package:sizer/sizer.dart';
 // ignore: must_be_immutable
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
- 
+
   List<PersistentTabConfig> _navBarItems(int currentTab) {
     return [
       PersistentTabConfig(
@@ -21,9 +21,8 @@ class BottomNavBar extends StatelessWidget {
               ? CupertinoIcons.house_fill
               : CupertinoIcons.house),
           title: 'الرئيسية',
-            inactiveForegroundColor: grey,
+          inactiveForegroundColor: grey,
           activeForegroundColor: green200,
-
         ),
       ),
       // PersistentTabConfig(
@@ -65,26 +64,22 @@ class BottomNavBar extends StatelessWidget {
           tabs: _navBarItems(tabProvider.currentTab),
           avoidBottomPadding: true,
           //onItemSelected: ,
-          
+
           handleAndroidBackButtonPress: true,
           resizeToAvoidBottomInset: true,
           stateManagement: true,
-          
-          popAllScreensOnTapOfSelectedTab: true,
+
           popActionScreens: PopActionScreensType.all,
-       
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            curve: Curves.ease,
-            duration: Duration(
-              microseconds: 200,
+
+          navBarBuilder: (navBarConfig) => Style6BottomNavBar(
+            navBarConfig: navBarConfig,
+            navBarDecoration: NavBarDecoration(
+              borderRadius: BorderRadius.circular(8.sp),
+              color: white,
             ),
+            itemAnimationProperties: const ItemAnimation(
+                duration: Duration(microseconds: 200), curve: Curves.ease),
           ),
-          navBarBuilder: (navBarConfig) =>
-              Style6BottomNavBar(navBarConfig: navBarConfig, navBarDecoration: NavBarDecoration(
-            borderRadius: BorderRadius.circular(8.sp),
-            color: white,
-          ),itemAnimationProperties: const ItemAnimation(
-              duration: Duration(microseconds: 200), curve: Curves.ease), ),
         );
       },
     );

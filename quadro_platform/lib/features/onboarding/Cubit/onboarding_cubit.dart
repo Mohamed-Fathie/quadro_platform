@@ -8,4 +8,10 @@ class OnboardingCubit extends Cubit<int> {
   void nextPage() {
     pagecontroller.jumpToPage(state + 1);
   }
+
+  @override
+  Future<void> close() {
+    pagecontroller.dispose();
+    return super.close();
+  }
 }
