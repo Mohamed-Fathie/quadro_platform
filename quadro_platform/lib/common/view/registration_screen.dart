@@ -11,7 +11,6 @@ import 'package:sizer/sizer.dart';
 // ignore: must_be_immutable
 class RegistrationScreen extends StatelessWidget {
   RegistrationScreen({super.key});
-  static String id = 'registration screen';
   File? profilePic;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class RegistrationScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 5.h),
           children: [
             InkWell(
-              onTap: (){},
+              onTap: () {},
               child: CircleAvatar(
                 radius: 8.h,
                 backgroundColor: white,

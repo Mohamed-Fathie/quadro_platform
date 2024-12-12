@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/onboarding/Cubit/Onboarding_cubit.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
 class SkipButton extends StatelessWidget {
@@ -18,10 +21,13 @@ class SkipButton extends StatelessWidget {
                     text: 'لديك حساب بالفعل؟',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: isDarkMode ? Colors.white : Qcolors.blackFont),
-                    children: const [
+                    children: [
                     TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => NavigationService()
+                              .replaceRoute(RoutesConstants.login),
                         text: "تسجيل الدخول",
-                        style: TextStyle(
+                        style: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: Qcolors.secondary,
                         ))
@@ -30,7 +36,7 @@ class SkipButton extends StatelessWidget {
                 ? TextButton(
                     onPressed: () {
                       // Skip to the main app
-                      //Navigator.pushReplacementNamed(context, '/home');
+                      NavigationService().replaceRoute(RoutesConstants.login);
                     },
                     child: const Text(
                       'تخطي',

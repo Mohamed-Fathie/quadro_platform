@@ -5,6 +5,8 @@ import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.d
 import 'package:quadro_platform/constants/commonWidgets/password_text_field.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:sizer/sizer.dart';
 
 class LogInScreen extends StatelessWidget {
@@ -94,7 +96,7 @@ class LogInScreen extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed((context), RegistrationScreen.id);
+                    NavigationService().routeTo(RoutesConstants.signUp);
                   },
                   child: Text(
                     "انشاء حساب ",
