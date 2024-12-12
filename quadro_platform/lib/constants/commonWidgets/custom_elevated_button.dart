@@ -3,7 +3,11 @@ import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({required this.buttonTitle, super.key, required this.fontSize, required this.fontColor});
+  const CustomElevatedButton(
+      {required this.buttonTitle,
+      super.key,
+      required this.fontSize,
+      required this.fontColor});
   final String buttonTitle;
   final int fontSize;
   final Color fontColor;

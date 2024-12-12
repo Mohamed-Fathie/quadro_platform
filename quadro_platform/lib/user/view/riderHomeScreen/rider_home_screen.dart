@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/constants/commonWidgets/trip_records.dart';
 import 'package:quadro_platform/constants/commonWidgets/where_to.dart';
-import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:sizer/sizer.dart';
 

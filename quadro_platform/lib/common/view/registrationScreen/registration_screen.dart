@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/constants/commonWidgets/customTextField.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/commonWidgets/password_text_field.dart';
@@ -7,9 +8,11 @@ import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:sizer/sizer.dart';
 
-class LogInScreen extends StatelessWidget {
-  const LogInScreen({super.key});
-  static String id = 'login screen';
+// ignore: must_be_immutable
+class RegistrationScreen extends StatelessWidget {
+  RegistrationScreen({super.key});
+  static String id = 'registration screen';
+  File? profilePic;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -17,14 +20,28 @@ class LogInScreen extends StatelessWidget {
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 5.h),
           children: [
-            Container(
-              height: 42.w,
-              width: 42.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: white),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/logos/quadroLogo.jpg'),
+            InkWell(
+              onTap: () {},
+              child: CircleAvatar(
+                radius: 8.h,
+                backgroundColor: white,
+                child: Builder(
+                  builder: (context) {
+                    if (profilePic != null) {
+                      return CircleAvatar(
+                        radius: 8.h - 2,
+                        backgroundColor: white,
+                        backgroundImage: FileImage(profilePic!),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 8.h - 2,
+                        backgroundColor: white,
+                        backgroundImage: const AssetImage(
+                            "assets/images/logos/quadroLogo.jpg"),
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -33,12 +50,22 @@ class LogInScreen extends StatelessWidget {
             ),
             Center(
               child: Text(
-                "تسجيل الدخول",
+                "سجل الان",
                 style: AppTextStyles.Mheading26Bold.copyWith(
                     color: teal, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(height: 6.h),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                "الاسم ",
+                style: AppTextStyles.Mbody16Bold.copyWith(color: teal),
+              ),
+            ),
+            SizedBox(height: 1.h),
+            const CustomTextField(),
+            SizedBox(height: 2.5.h),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -66,23 +93,19 @@ class LogInScreen extends StatelessWidget {
                 style: AppTextStyles.Mbody14Bold.copyWith(color: grey),
               ),
             ),
-            SizedBox(height: 2.5.h),
+            SizedBox(height: 2.h),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                "نسيت كلمة المرور؟",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontFamily: 'Madhani-Arabic',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  color: black,
-                ),
+                "رقم الهاتف ",
+                style: AppTextStyles.Mbody16Bold.copyWith(color: teal),
               ),
             ),
+            SizedBox(height: 1.h),
+            const CustomTextField(),
             SizedBox(height: 4.h),
             CustomElevatedButton(
-              buttonTitle: 'تسجيل الدخول',
+              buttonTitle: 'التسجيل',
               fontColor: white,
               fontSize: 16,
             ),
@@ -93,11 +116,9 @@ class LogInScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed((context), RegistrationScreen.id);
-                  },
+                  onTap: () => Navigator.pop(context),
                   child: Text(
-                    "انشاء حساب ",
+                    "تسجيل الدخول  ",
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontFamily: 'Madhani-Arabic',
@@ -108,7 +129,7 @@ class LogInScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "لا تمتلك حساب؟",
+                  "لديك حساب بالفعل؟  ",
                   style: AppTextStyles.Mbody16Bold.copyWith(color: black),
                 ),
               ],

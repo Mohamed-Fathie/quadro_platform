@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
@@ -9,6 +8,7 @@ import 'package:quadro_platform/user/view/riderActivityScreen/rider_activity_scr
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
  

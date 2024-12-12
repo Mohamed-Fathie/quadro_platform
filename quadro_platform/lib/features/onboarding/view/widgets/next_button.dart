@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/common/view/loginScreen/log_in_screen.dart';
 import 'package:quadro_platform/features/onboarding/Cubit/Onboarding_cubit.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
