@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/constants/commonWidgets/customTextField.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/commonWidgets/password_text_field.dart';
@@ -83,7 +82,7 @@ class LogInScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 4.h),
-            CustomElevatedButton(
+            CustomElevatedButton(onPressed: (){},
               buttonTitle: 'تسجيل الدخول',
               fontColor: white,
               fontSize: 16,
