@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_auth.dart';
+import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/workshop_auth.dart';
 
 class TradeLicenseScreen extends StatelessWidget {
   const TradeLicenseScreen({super.key});
