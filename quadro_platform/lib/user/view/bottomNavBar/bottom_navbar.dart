@@ -11,9 +11,9 @@ import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
 class BottomNavBar extends StatelessWidget {
-  BottomNavBar({super.key});
+   BottomNavBar({super.key});
 
-  List<PersistentTabConfig> _navBarItems(int currentTab) {
+   List<PersistentTabConfig> _navBarItems(int currentTab)  {
     return [
       PersistentTabConfig(
         screen: const RiderHomeScreen(),

@@ -1,11 +1,12 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
-import 'package:quadro_platform/constants/commonWidgets/registration_custom_password_field.dart';
-import 'package:quadro_platform/constants/commonWidgets/registration_textField.dart';
+import 'package:quadro_platform/shared/widgets/registration_custom_password_field.dart';
+import 'package:quadro_platform/shared/widgets/registration_textField.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
@@ -13,7 +14,7 @@ import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
 class RegistrationScreen extends StatefulWidget {
-  RegistrationScreen({super.key});
+  const RegistrationScreen({super.key});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -37,8 +38,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   TextEditingController drivingLicenceNumberController =
       TextEditingController();
-  String? email;
-  String? password;
+
   File? profilePic;
 
   String selectVehicleType = 'اختر نوع مركبتك';
@@ -157,7 +157,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             SizedBox(height: 2.h),
             selectUserType('التسجيل كصاحب ورشة'),
             SizedBox(height: 4.h),
-            
             Builder(
               builder: (context) {
                 if (userType == 'التسجيل كصاحب ورشة') {
@@ -175,7 +174,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () => NavigationService().goBack(),
                   child: Text(
                     "تسجيل الدخول  ",
@@ -249,7 +248,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             buttonTitle: 'تسجيل كمستخدم عادي',
             fontSize: 16,
             fontColor: white,
-            onPressed: authHandler,
+            onPressed: () => {
+                  AuthServices.registerUser(
+                      context: context,
+                      emailController: emailController,
+                      passwordController: passwordController)
+                },
             child: registrationButtonPressed == true
                 ? CircularProgressIndicator(
                     color: teal,
@@ -373,42 +377,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ],
     );
   }
-
-  Future<UserCredential> registerUser() async {
-    var auth = FirebaseAuth.instance;
-    UserCredential user = await auth.createUserWithEmailAndPassword(
-        email: emailController.text, password: passwordController.text);
-    log(passwordController.text);
-    return user;
-  }
-
-  void showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-authHandler() async {
-              try {
-                UserCredential user = await registerUser();
-                showSnackBar(context, ' تم التسجيل بنجاح');
-                await Future.delayed(const Duration(seconds: 3));
-                NavigationService().goBack();
-                print(user.user!.displayName);
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'weak-password') {
-                  showSnackBar(context,
-                      'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ');
-                } else if (e.code == 'email-already-in-use') {
-                  showSnackBar(context, 'هذا الحساب مسجل مسبقا!');
-                } else if (e.code == 'invalid-email') {
-                  showSnackBar(
-                      context, 'الرجاء ادخال البريد الالكتروني بشكل صحيح');
-                }
-              } catch (e) {
-                showSnackBar(context, 'There was an error, please try again.');
-              }
-            }
 }

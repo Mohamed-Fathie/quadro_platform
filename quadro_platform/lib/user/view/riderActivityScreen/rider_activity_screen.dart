@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/constants/commonWidgets/activiyt_records.dart';
+import 'package:quadro_platform/shared/widgets/activiyt_records.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 
 class RiderActivityScreen extends StatelessWidget {
