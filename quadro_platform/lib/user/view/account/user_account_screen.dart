@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
+import 'package:quadro_platform/shared/widgets/row_account_shape.dart';
 import 'package:sizer/sizer.dart';
 
 class UserAccountScreen extends StatelessWidget {
@@ -20,31 +21,9 @@ class UserAccountScreen extends StatelessWidget {
             ListView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 70.w,
-                      child: Text(
-                        'عبدالمؤمن حسين محمد',
-                        style: AppTextStyles.Mheading26Bold,
-                      ),
-                    ),
-                    Container(
-                      height: 18.w,
-                      width: 18.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: black87),
-                        image: const DecorationImage(
-                          image: AssetImage(
-                              'assets/images/uberLogo/quadroLogo.png'),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
+              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.h),
+              children: const [
+                RowHeader(),
               ],
             ),
             SizedBox(
@@ -55,7 +34,7 @@ class UserAccountScreen extends StatelessWidget {
               thickness: 0.3.h,
             ),
             ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 3.w),
+                padding: EdgeInsets.symmetric(horizontal: 3.w),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: accountButtons.length,

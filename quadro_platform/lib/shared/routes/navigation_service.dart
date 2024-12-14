@@ -55,7 +55,7 @@ class NavigationService {
       debugPrint('No routes in the navigation stack to pop.');
     }
   }
-  //navService.goBack(result: 'Returned Data');
+  // navService.goBack(result: 'Returned Data');
 
   /// Check if a route can pop
   bool canGoBack() {
