@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 
 import 'package:quadro_platform/features/theme/globalthemdata.dart';

@@ -1,11 +1,15 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
+import 'package:quadro_platform/driver/view/driver_home_screen.dart';
+import 'package:quadro_platform/features/workshop_authentication/veiws/id_screen.dart';
+import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_auth.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/user/view/bottomNavBar/bottom_navbar.dart';
 
@@ -38,7 +42,8 @@ class AuthServices {
       } else if (e.code == 'user-disabled') {
         showSnackBar(context, 'تم تعطيل حسابك مؤقتا!');
       } else if (e.code == 'invalid-credential') {
-        showSnackBar(context, 'خطأ في كلمة المرور او ان البريد الالكتروني غير موجود');
+        showSnackBar(
+            context, 'خطأ في كلمة المرور او ان البريد الالكتروني غير موجود');
       }
     } catch (e) {
       showSnackBar(context, 'There was an error, please try again.');
@@ -57,14 +62,7 @@ class AuthServices {
   static checkAuthenticationAndNavigate({required BuildContext context}) {
     bool userAuthenticated = checkAuthentication();
     userAuthenticated
-        ? Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-              child: BottomNavBar(),
-              type: PageTransitionType.bottomToTop,
-            ),
-            (route) => false,
-          )
+        ? checkUser(context)
         : Navigator.pushAndRemoveUntil(
             context,
             PageTransition(
@@ -104,6 +102,41 @@ class AuthServices {
       }
     } catch (e) {
       showSnackBar(context, 'There was an error, please try again.');
+    }
+  }
+
+ static checkUser(context) async {
+    bool userIsRegistered =
+        await ProfileDataCRUDServices.checkForRegisteredUser(context);
+    if (userIsRegistered == true) {
+      String userIsTowingDriver =
+          await ProfileDataCRUDServices.userIsTowingDriver(context);
+      if (userIsTowingDriver == 'التسجيل كصاحب ساحبة') {
+        Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: const DriverHomeScreen(),
+                type: PageTransitionType.bottomToTop),
+            (route) => false);
+      } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: const IdScreen(), type: PageTransitionType.bottomToTop),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: BottomNavBar(), type: PageTransitionType.bottomToTop),
+            (route) => false);
+      }
+    }else{
+       Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: RegistrationScreen(), type: PageTransitionType.bottomToTop),
+            (route) => false);
     }
   }
 }
