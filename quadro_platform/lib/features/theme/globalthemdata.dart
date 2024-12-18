@@ -36,7 +36,7 @@ class GlobalThemData {
       ),
       headlineSmall: const TextStyle().copyWith(
         fontWeight: FontWeight.w500, // Medium font
-        fontSize: 14,
+        fontSize: 16,
       ));
 
   // color scheme for the dark mode

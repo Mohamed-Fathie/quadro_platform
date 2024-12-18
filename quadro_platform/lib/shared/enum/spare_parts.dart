@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum SparePartsStatus {
   New,
   used,
@@ -7,17 +9,8 @@ enum SparePartsStatus {
 
 extension SparePartsStatusExtension on SparePartsStatus {
   // Convert enum to string
-  String statustoString() {
-    switch (this) {
-      case SparePartsStatus.New:
-        return "new";
-      case SparePartsStatus.used:
-        return "used";
-      case SparePartsStatus.imported:
-        return "imported";
-      case SparePartsStatus.none:
-        return "none";
-    }
+  String toJson() {
+    return toString().split('.').last;
   }
 
   // Convert string to enum
@@ -33,6 +26,34 @@ extension SparePartsStatusExtension on SparePartsStatus {
         return SparePartsStatus.none;
       default:
         throw ArgumentError("Invalid status string: $status");
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case SparePartsStatus.New:
+        return Icons.new_releases; // Icon for 'New'
+      case SparePartsStatus.used:
+        return Icons.replay_circle_filled; // Icon for 'Used'
+      case SparePartsStatus.imported:
+        return Icons.import_export; // Icon for 'Imported'
+      case SparePartsStatus.none:
+      default:
+        return Icons.help_outline; // Default icon for 'None'
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case SparePartsStatus.New:
+        return "جديدة";
+      case SparePartsStatus.used:
+        return "مستعمل";
+      case SparePartsStatus.imported:
+        return "استيراد";
+      case SparePartsStatus.none:
+      default:
+        return "لا يوجد";
     }
   }
 }

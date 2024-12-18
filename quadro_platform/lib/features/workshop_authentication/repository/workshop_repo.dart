@@ -17,9 +17,10 @@ class WorkshopRepository {
 
   // add workshop to firestore
   Future<void> addWorkshop(Workshop workshop) async {
-    await workshopRef.doc(workshop.ownerId).set(workshop).onError(
-          (error, stackTrace) =>
-              throw FirestroeReadWriteFailure.fromCode(error.code),
-        );
+    try {
+      await workshopRef.doc(workshop.ownerId).set(workshop);
+    } on FirebaseException catch (e) {
+      throw FirestroeReadWriteFailure.fromCode(e.code);
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Workshop {
   final String name;
@@ -9,7 +8,7 @@ class Workshop {
   final String phone;
   final List<SparePartsStatus> status;
   final List<CarBrand> carBrands;
-  final GeoPoint location;
+  //final GeoPoint location;
 
   Workshop({
     required this.name,
@@ -18,7 +17,7 @@ class Workshop {
     required this.phone,
     required this.status,
     required this.carBrands,
-    required this.location,
+    // required this.location,
   });
 
   // Convert a JSON map into a Workshop instance
@@ -34,7 +33,7 @@ class Workshop {
       carBrands: (json['carBrands'] as List<dynamic>)
           .map((e) => CarBrandExtension.fromString(e as String))
           .toList(),
-      location: json['location'] as GeoPoint,
+      // location: json['location'] as GeoPoint,
     );
   }
 
@@ -45,9 +44,9 @@ class Workshop {
       'owner_id': ownerId,
       'description': description,
       'phone': phone,
-      'status': status.map((e) => e.statustoString()).toList(),
+      'status': status.map((e) => e.toJson()).toList(),
       'carBrands': carBrands.map((e) => e.toJson()).toList(),
-      'location': location,
+      // 'location': location,
     };
   }
 }
