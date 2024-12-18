@@ -3,14 +3,24 @@ import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({required this.buttonTitle, super.key, required this.fontSize, required this.fontColor});
+  const CustomElevatedButton(
+      {required this.buttonTitle,
+      super.key,
+      required this.fontSize,
+      required this.fontColor,
+      this.buttomPressed,
+      required this.onPressed,
+      this.child});
   final String buttonTitle;
   final int fontSize;
   final Color fontColor;
+  final bool? buttomPressed;
+  final VoidCallback onPressed;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

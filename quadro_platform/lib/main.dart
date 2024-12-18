@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/common/view/log_in_screen.dart';
 
-import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
@@ -36,18 +37,14 @@ class Quadro extends StatelessWidget {
               create: (_) => BottomNavBarProvider(),
             ),
           ],
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: MaterialApp(
-              navigatorKey: NavigationService().navigatorKey,
-              onGenerateRoute: RouteGenerator.generateRoutes,
-              debugShowCheckedModeBanner: false,
-              theme: GlobalThemData.lightThemeData,
-              darkTheme: GlobalThemData.darkThemeData,
-              themeMode: ThemeMode.system,
-              // home: UserAccountScreen(),
-              home: const WorkshopRegisterationPage(),
-            ),
+          child: MaterialApp(
+            navigatorKey: NavigationService().navigatorKey,
+            onGenerateRoute: RouteGenerator.generateRoutes,
+            debugShowCheckedModeBanner: false,
+            theme: GlobalThemData.lightThemeData,
+            darkTheme: GlobalThemData.darkThemeData,
+            themeMode: ThemeMode.system,
+            home: const LogInScreen(),
           ),
         );
       },
