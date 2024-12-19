@@ -12,8 +12,8 @@ class RiderHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quadro',
-          style: AppTextStyles.heading20Bold,
+          'طلب ساحبة',
+          style: AppTextStyles.Mheading20Bold,
         ),
       ),
       body: ListView(
@@ -24,13 +24,16 @@ class RiderHomeScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
         children: [
-          InkWell(onTap: () {}, child: const WhereTo()),
+          InkWell(
+            onTap: () {},
+            child: const WhereTo(),
+          ),
           SizedBox(
             height: 1.h,
           ),
           const TripRecords(),
           SizedBox(
-            height: 6.h,
+            height: 1.h,
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 1.h),
@@ -38,7 +41,7 @@ class RiderHomeScreen extends StatelessWidget {
             height: 40.h,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/Towing-amico.png'),
+                image: AssetImage('assets/images/Towing-amico (1).png'),
               ),
             ),
           ),

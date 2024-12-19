@@ -10,8 +10,8 @@ class RiderActivityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quadro',
-          style: AppTextStyles.heading20Bold,
+          'النشاطات',
+          style: AppTextStyles.Mheading20Bold,
         ),
       ),
       body: const ActiviytRecords()

@@ -5,11 +5,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/common/controller/services/image_services.dart';
-import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/controller/services/toast_services.dart';
-import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/constants.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/widgets/registration_custom_password_field.dart';
 import 'package:quadro_platform/shared/widgets/registration_textField.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
@@ -40,8 +38,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String selectVehicleType = 'اختر نوع مركبتك';
   List<String> vehicleTypes = [
     'اختر نوع مركبتك',
-    'نقل خفيف',
-    'نقل متوسط',
+    'سيارة جر',
+    'سيارة سحب',
     'نقل ثقيل'
   ];
   String userType = 'زبون';
@@ -51,13 +49,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    emailController.text = auth.currentUser!.email!;
+    if (emailController.text.isNotEmpty) {
+      emailController.text = auth.currentUser!.email!;
+    }
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
+
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -66,198 +66,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     vehicleBrandController.dispose();
     vehicleRegistrationNumberController.dispose();
     drivingLicenceNumberController.dispose();
-  }
-
-  registerTowingDriver() async {
-    if (profilePic == null) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Select a Profile Pic',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (nameController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Name',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (mobileController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Mobile number',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (emailController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleBrandController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter the Vehicle Brand Name',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleModelController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter the vehicle model name',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (selectVehicleType == 'اختر نوع مركبتك') {
-      ToastService.sendScaffoldAlert(
-        msg: 'Select a vehicle type',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleRegistrationNumberController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter vehicle registration number',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (drivingLicenceNumberController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Driving license number',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (passwordController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else {
-      AuthServices.registerUser(
-          emailController: emailController,
-          passwordController: passwordController,
-          context: context);
-      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
-          image: File(profilePic!.path), context: context);
-      ProfileDataModel profileData = ProfileDataModel(
-        profilePicUrl: profilePicURL,
-        name: nameController.text.trim(),
-        mobileNumber: mobileController.text.trim(),
-        email: auth.currentUser!.email!,
-        password: passwordController.text.trim(),
-        userType: 'التسجيل كصاحب ساحبة',
-        vehicleBrandName: vehicleBrandController.text.trim(),
-        vehicleModel: vehicleModelController.text.trim(),
-        vehicleType: selectVehicleType,
-        vehicleRegistrationNumber:
-            vehicleRegistrationNumberController.text.trim(),
-        drivingLicenseNumber: drivingLicenceNumberController.text.trim(),
-        registeredDateTime: DateTime.now(),
-      );
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
-    }
-  }
-
-  registerCustomer() async {
-    if (profilePic == null) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء اختيار صورة شخصية , عن طريق الضغط على الايقونة في الاعلى',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (nameController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Name',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (mobileController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Mobile number',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (emailController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (passwordController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else {
-      AuthServices.registerUser(
-          emailController: emailController,
-          passwordController: passwordController,
-          context: context);
-      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
-          image: File(profilePic!.path), context: context);
-      ProfileDataModel profileData = ProfileDataModel(
-        profilePicUrl: profilePicURL,
-        name: nameController.text.trim(),
-        mobileNumber: mobileController.text.trim(),
-        email: auth.currentUser!.email!,
-        password: passwordController.text.trim(),
-        userType: 'تسجيل كمستخدم عادي',
-        registeredDateTime: DateTime.now(),
-      );
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
-    }
-  }
-
-  registerWorkShopPartner() async {
-    if (profilePic == null) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Select a Profile Pic',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (nameController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Name',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (mobileController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Mobile number',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (emailController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (passwordController.text.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Enter your Email',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else {
-      AuthServices.registerUser(
-          emailController: emailController,
-          passwordController: passwordController,
-          context: context);
-      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
-          image: File(profilePic!.path), context: context);
-      ProfileDataModel profileData = ProfileDataModel(
-        profilePicUrl: profilePicURL,
-        name: nameController.text.trim(),
-        mobileNumber: mobileController.text.trim(),
-        email: auth.currentUser!.email!,
-        password: passwordController.text.trim(),
-        userType: 'التسجيل كصاحب ورشة',
-        registeredDateTime: DateTime.now(),
-      );
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
-    }
+    super.dispose();
   }
 
   @override
@@ -376,7 +185,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
-                  onTap: () => NavigationService().goBack(),
+                  onTap: () =>
+                      NavigationService().routeTo(RoutesConstants.login),
                   child: Text(
                     "تسجيل الدخول  ",
                     style: TextStyle(
@@ -453,7 +263,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               setState(() {
                 registrationButtonPressed = true;
               });
-              await registerCustomer();
+              await AuthServices.registerCustomerAndWorkShopPartner(
+                context: context,
+                emailController: emailController.text.trim(),
+                mobileController: mobileController.text.trim(),
+                nameController: nameController.text.trim(),
+                passwordController: passwordController.text.trim(),
+                profilePic: profilePic,
+                userType: userType,
+              );
             },
             child: registrationButtonPressed == true
                 ? CircularProgressIndicator(
@@ -478,7 +296,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               setState(() {
                 registrationButtonPressed = true;
               });
-              await registerWorkShopPartner();
+              await AuthServices.registerCustomerAndWorkShopPartner(
+                context: context,
+                emailController: emailController.text.trim(),
+                mobileController: mobileController.text.trim(),
+                nameController: nameController.text.trim(),
+                passwordController: passwordController.text.trim(),
+                profilePic: profilePic,
+                userType: userType,
+              );
             },
             child: registrationButtonPressed == true
                 ? CircularProgressIndicator(
@@ -575,7 +401,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             setState(() {
               registrationButtonPressed = true;
             });
-            await registerTowingDriver();
+            await AuthServices.registerTowingDriver(
+              context: context,
+              drivingLicenceNumberController:
+                  drivingLicenceNumberController.text.trim(),
+              emailController: emailController.text.trim(),
+              mobileController: mobileController.text.trim(),
+              nameController: nameController.text.trim(),
+              passwordController: passwordController.text.trim(),
+              profilePic: profilePic,
+              selectVehicleType: selectVehicleType,
+              userType: userType,
+              vehicleBrandController: vehicleBrandController.text.trim(),
+              vehicleModelController: vehicleModelController.text.trim(),
+              vehicleRegistrationNumberController:
+                  vehicleRegistrationNumberController.text.trim(),
+            );
           },
           child: registrationButtonPressed == true
               ? CircularProgressIndicator(

@@ -86,8 +86,10 @@ flutter:
     - assets/images/vehicle/towingTruck.png
     - assets/images/ThanitApril_19.jpg
     - assets/images/uberLogo/quadroLogo.png
-    
     - assets/images/logos/quadroLogo.jpg
+    - assets/images/icons/icons8-car-50.png
+    - assets/images/icons/icons8-tow-truck-50.png
+    - assets/images/Towing-amico (1).png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

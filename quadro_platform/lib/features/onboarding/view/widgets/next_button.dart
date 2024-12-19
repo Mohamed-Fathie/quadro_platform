@@ -24,7 +24,7 @@ class NextButton extends StatelessWidget {
                 // Move to the next page
                 context.read<OnboardingCubit>().nextPage();
               } else {
-                NavigationService().replaceRoute(RoutesConstants.login);
+                NavigationService().replaceRoute(RoutesConstants.signUp);
               }
             },
             child: Text(
