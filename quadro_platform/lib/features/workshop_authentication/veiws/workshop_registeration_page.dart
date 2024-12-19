@@ -6,7 +6,6 @@ import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/d
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/pick_image.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/spare_parts.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/text_area.dart';
-import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
@@ -51,9 +50,6 @@ class WorkshopRegisterationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final workshopBloc = context.read<WorkshopAuthbloc>();
-    final brandList = context.select<WorkshopAuthbloc, List<CarBrand>>(
-      (cubit) => cubit.state.brands,
-    );
 
     return BlocListener<WorkshopAuthbloc, WorkshopAuthblocState>(
       listener: (context, state) {
@@ -86,15 +82,9 @@ class WorkshopRegisterationView extends StatelessWidget {
             const VerticalSpacing(height: 25),
             const SectionHeader(text: "انواع شركات السيارات التي تعمل بها"),
             const VerticalSpacing(height: 25),
-            DropdownMinu(
-              brandList: brandList,
-              onbrandselected: workshopBloc.addBrands,
-            ),
+            const DropdownMinu(),
             const VerticalSpacing(height: 25),
-            BrandList(
-              brands: brandList,
-              onDelete: workshopBloc.deleteBrand,
-            ),
+            const BrandList(),
             const VerticalSpacing(height: 25),
             const SectionHeader(text: "حالة القطع التي تعمل بها"),
             const VerticalSpacing(height: 20),
@@ -114,7 +104,7 @@ class WorkshopRegisterationView extends StatelessWidget {
               buttonColor: Qcolors.primarycolor,
               buttonTitle: "حفظ اعدادات الحساب",
               onPressed: () {
-                context.read<WorkshopAuthbloc>().save();
+                workshopBloc.save();
               },
             ),
           ],

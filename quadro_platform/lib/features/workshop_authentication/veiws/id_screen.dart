@@ -5,6 +5,8 @@ import 'package:quadro_platform/features/workshop_authentication/veiws/trade_lic
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/document_upload_veiw.dart';
 
 import 'package:quadro_platform/shared/enum/image_type.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -40,13 +42,8 @@ class IdCardView extends StatelessWidget {
             userId: "88",
             url: url,
             onContinue: (context) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TradeLicensePage(
-                    licenscubit: context.read<WorkshopAuthbloc>(),
-                  ),
-                ),
-              );
+              NavigationService().routeTo(RoutesConstants.licens,
+                  arguments: context.read<WorkshopAuthbloc>());
             },
           ),
         ),

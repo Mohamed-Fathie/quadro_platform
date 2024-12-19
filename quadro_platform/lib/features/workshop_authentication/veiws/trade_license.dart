@@ -5,6 +5,8 @@ import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/d
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
 
 import 'package:quadro_platform/shared/enum/image_type.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -57,13 +59,8 @@ class TradeLicenseVeiw extends StatelessWidget {
       userId: "88",
       url: url,
       onContinue: (context) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => WorkshopDetainsPage(
-              detailscubit: context.read<WorkshopAuthbloc>(),
-            ),
-          ),
-        );
+        NavigationService().routeTo(RoutesConstants.workshopdetails,
+            arguments: context.read<WorkshopAuthbloc>());
       },
     );
   }

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/rounded_container.dart';
 
 class BrandList extends StatelessWidget {
-  final List<CarBrand> brands;
-  final Function(CarBrand) onDelete;
-
-  const BrandList({required this.brands, required this.onDelete, super.key});
+  const BrandList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<WorkshopAuthbloc>();
+    final brandList = context.select<WorkshopAuthbloc, List<CarBrand>>(
+      (cubit) => cubit.state.brands,
+    );
+
     return Column(
-      children: brands.map((brand) {
+      children: brandList.map((brand) {
         return Container(
           margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
@@ -32,7 +36,7 @@ class BrandList extends StatelessWidget {
             trailing: IconButton(
               iconSize: 40,
               color: Qcolors.primarycolor,
-              onPressed: () => onDelete(brand),
+              onPressed: () => cubit.deleteBrand(brand),
               icon: const Icon(Icons.close_sharp),
             ),
           ),

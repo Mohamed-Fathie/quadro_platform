@@ -5,23 +5,24 @@ import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/widgets/rounded_container.dart';
 import 'package:sizer/sizer.dart';
 
-typedef Onbrandselected = void Function(CarBrand selectedbrand);
-
 class DropdownMinu extends StatelessWidget {
-  final List<CarBrand> brandList;
-  final Onbrandselected onbrandselected;
-  const DropdownMinu(
-      {super.key, required this.brandList, required this.onbrandselected});
+  const DropdownMinu({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final brandList = context.select<WorkshopAuthbloc, List<CarBrand>>(
+      (cubit) => cubit.state.brands,
+    );
+    final cubit = context.read<WorkshopAuthbloc>();
     return Directionality(
         textDirection: TextDirection.rtl,
         child: DropdownMenu<CarBrand>(
           width: 90.w,
           enableFilter: true,
           label: const Text("اختر الشركة"),
-          controller: context.read<WorkshopAuthbloc>().menuController,
+          controller: cubit.menuController,
           dropdownMenuEntries: CarBrand.values
               .where((brand) => !brandList.contains(brand))
               .map<DropdownMenuEntry<CarBrand>>((brand) {
@@ -41,11 +42,8 @@ class DropdownMinu extends StatelessWidget {
           }).toList(),
           onSelected: (CarBrand? selectedBrand) {
             if (selectedBrand != null) {
-              onbrandselected(selectedBrand);
-              context
-                  .read<WorkshopAuthbloc>()
-                  .menuController
-                  .clear(); // Clear the text after selection
+              cubit.addBrands(selectedBrand);
+              cubit.menuController.clear(); // Clear the text after selection
             }
           },
         ));

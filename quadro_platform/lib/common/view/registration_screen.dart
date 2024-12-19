@@ -51,7 +51,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    emailController.text = auth.currentUser!.email!;
   }
 
   @override
