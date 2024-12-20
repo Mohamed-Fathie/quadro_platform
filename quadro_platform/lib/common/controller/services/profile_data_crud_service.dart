@@ -9,7 +9,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 class ProfileDataCRUDServices {
@@ -28,6 +27,7 @@ class ProfileDataCRUDServices {
 
   static Future<bool> checkForRegisteredUser(BuildContext context) async {
     try {
+      
       final snapshot = await realTimeDatabaseRef
           .child('User/${auth.currentUser!.uid}')
           .get();
@@ -44,6 +44,14 @@ class ProfileDataCRUDServices {
 
   static registerUserToDatabase(
       {required ProfileDataModel profileData, required BuildContext context}) {
+    // if (auth.currentUser == null) {
+    //   Navigator.pushAndRemoveUntil(
+    //       context,
+    //       PageTransition(
+    //           child: const LogInScreen(), type: PageTransitionType.bottomToTop),
+    //       (route) => false);
+    // }
+
     realTimeDatabaseRef
         .child('User/${auth.currentUser!.uid}')
         .set(profileData.toMap())

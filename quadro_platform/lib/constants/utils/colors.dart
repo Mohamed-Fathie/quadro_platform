@@ -16,6 +16,9 @@ Color amber = Colors.amber;
 Color buttonColor = Colors.amber;
 Color transparent = Colors.transparent;
 Color teal = Colors.teal;
+Color teal2 = const Color(0xff04b3)!;
+Color teal3 = const  Color(0xff01c1b3)!;
+
 const secondaryColor = Color.fromRGBO(255, 153, 0, 1);
 Color red = Colors.red;
 Color success = const Color(0xff227444);

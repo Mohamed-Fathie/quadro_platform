@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
+import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
 import 'package:quadro_platform/user/view/riderActivityScreen/rider_activity_screen.dart';
@@ -10,10 +11,10 @@ import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
-class BottomNavBar extends StatelessWidget {
-   BottomNavBar({super.key});
+class UserBottomNavBar extends StatelessWidget {
+  UserBottomNavBar({super.key});
 
-   List<PersistentTabConfig> _navBarItems(int currentTab)  {
+  List<PersistentTabConfig> _navBarItems(int currentTab) {
     return [
       PersistentTabConfig(
         screen: const RiderHomeScreen(),
@@ -23,7 +24,7 @@ class BottomNavBar extends StatelessWidget {
               : CupertinoIcons.house),
           title: 'الرئيسية',
           inactiveForegroundColor: grey,
-          activeForegroundColor: green200,
+          activeForegroundColor: teal,
         ),
       ),
       // PersistentTabConfig(
@@ -39,7 +40,7 @@ class BottomNavBar extends StatelessWidget {
               ? CupertinoIcons.square_list_fill
               : CupertinoIcons.square_list),
           title: 'النشاطات',
-          activeForegroundColor: green200,
+          activeForegroundColor: teal,
         ),
       ),
       PersistentTabConfig(
@@ -49,7 +50,7 @@ class BottomNavBar extends StatelessWidget {
               ? CupertinoIcons.person_fill
               : CupertinoIcons.person),
           title: 'الحساب',
-          activeForegroundColor: green200,
+          activeForegroundColor: teal,
         ),
       ),
     ];
@@ -60,26 +61,34 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BottomNavBarProvider>(
       builder: (context, tabProvider, child) {
-        return PersistentTabView(
-          controller: controller,
-          tabs: _navBarItems(tabProvider.currentTab),
-          avoidBottomPadding: true,
-          //onItemSelected: ,
-
-          handleAndroidBackButtonPress: true,
-          resizeToAvoidBottomInset: true,
-          stateManagement: true,
-
-          popActionScreens: PopActionScreensType.all,
-
-          navBarBuilder: (navBarConfig) => Style6BottomNavBar(
-            navBarConfig: navBarConfig,
-            navBarDecoration: NavBarDecoration(
-              borderRadius: BorderRadius.circular(8.sp),
-              color: white,
+        return Scaffold(
+          appBar: AppBar(
+        title: Text(
+          'Quadro',
+          style: AppTextStyles.heading20Bold,
+        ),
+      ),
+          body: PersistentTabView(
+            controller: controller,
+            tabs: _navBarItems(tabProvider.currentTab),
+            avoidBottomPadding: true,
+            //onItemSelected: ,
+          
+            handleAndroidBackButtonPress: true,
+            resizeToAvoidBottomInset: true,
+            stateManagement: true,
+          
+            popActionScreens: PopActionScreensType.all,
+          
+            navBarBuilder: (navBarConfig) => Style2BottomNavBar(
+              navBarConfig: navBarConfig,
+              navBarDecoration: NavBarDecoration(
+                borderRadius: BorderRadius.circular(8.sp),
+                color: white,
+              ),
+              // itemAnimationProperties: const ItemAnimation(
+              //     duration: Duration(microseconds: 200), curve: Curves.ease),
             ),
-            itemAnimationProperties: const ItemAnimation(
-                duration: Duration(microseconds: 200), curve: Curves.ease),
           ),
         );
       },

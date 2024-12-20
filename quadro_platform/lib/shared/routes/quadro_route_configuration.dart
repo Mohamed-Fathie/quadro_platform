@@ -8,6 +8,8 @@ import 'package:quadro_platform/features/workshop_authentication/veiws/trade_lic
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
+import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
+import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
@@ -34,7 +36,9 @@ class RouteGenerator {
       case RoutesConstants.loginLogic:
         return PageTransition(
             child: const LogInLogic(), type: PageTransitionType.bottomToTop);
-
+      case RoutesConstants.bottomNavBar:
+        return PageTransition(
+            child: UserBottomNavBar(), type: PageTransitionType.bottomToTop);
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

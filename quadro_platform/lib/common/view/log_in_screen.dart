@@ -105,7 +105,7 @@ class _LogInScreenState extends State<LogInScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     NavigationService().routeTo(RoutesConstants.signUp);
                   },

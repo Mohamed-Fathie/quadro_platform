@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
@@ -20,9 +21,12 @@ class _LogInLogicState extends State<LogInLogic> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: white,
+    return Scaffold(
+      backgroundColor: white,
       body: const Center(
-        child: Image(image: AssetImage('assets/images/logos/Qadro2.png'),),
+        child: Image(
+          image: AssetImage('assets/images/logos/Qadro2.png'),
+        ),
       ),
     );
   }

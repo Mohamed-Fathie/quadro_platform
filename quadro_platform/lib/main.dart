@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
 
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/trade_license.dart';
@@ -14,8 +13,6 @@ import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
-import 'package:quadro_platform/user/view/bottomNavBar/bottom_navbar.dart';
-
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -46,8 +43,7 @@ class Quadro extends StatelessWidget {
             theme: GlobalThemData.lightThemeData,
             darkTheme: GlobalThemData.darkThemeData,
             themeMode: ThemeMode.system,
-            //home: const LogInScreen(),
-            home: const WorkshopRegisterationPage(),
+            home: const OnBoardingPage(),
           ),
         );
       },
