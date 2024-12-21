@@ -7,6 +7,7 @@ import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_
 import 'package:quadro_platform/features/workshop_authentication/veiws/trade_license.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
+import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
@@ -39,6 +40,8 @@ class RouteGenerator {
       case RoutesConstants.bottomNavBar:
         return PageTransition(
             child: UserBottomNavBar(), type: PageTransitionType.bottomToTop);
+      case RoutesConstants.workshopBottomNavBar:
+        return MaterialPageRoute(builder: (context) => const WorkshopNavBar());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

@@ -6,6 +6,8 @@ import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/d
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/pick_image.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/spare_parts.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/text_area.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
@@ -105,6 +107,8 @@ class WorkshopRegisterationView extends StatelessWidget {
               buttonTitle: "حفظ اعدادات الحساب",
               onPressed: () {
                 workshopBloc.save();
+                NavigationService()
+                    .routeTo(RoutesConstants.workshopBottomNavBar);
               },
             ),
           ],

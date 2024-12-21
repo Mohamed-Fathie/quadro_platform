@@ -7,6 +7,7 @@ import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/trade_license.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
+import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
@@ -43,7 +44,7 @@ class Quadro extends StatelessWidget {
             theme: GlobalThemData.lightThemeData,
             darkTheme: GlobalThemData.darkThemeData,
             themeMode: ThemeMode.system,
-            home: const OnBoardingPage(),
+            home: const WorkshopNavBar(),
           ),
         );
       },
