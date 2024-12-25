@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
-import 'package:quadro_platform/features/workshop_authentication/models/image_picker_service.dart';
+import 'package:quadro_platform/shared/utils/serivces/image_picker_service.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
@@ -75,9 +75,9 @@ class PickImageWidget extends StatelessWidget {
                                 .then((value) => context
                                     .read<WorkshopAuthbloc>()
                                     .uploadImage(
-                                        file: value,
-                                        imageType: ImageType.profile,
-                                        userId: "444")),
+                                      file: value,
+                                      imageType: ImageType.profile,
+                                    )),
                             child: const Icon(
                               Icons.camera_alt_sharp,
                               color: Colors.white,

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 
+import '../../../shared/utils/hleper_function/list_splitter.dart';
+
 class WorkshopRepository {
   final FirebaseFirestore _firestore;
   late final CollectionReference workshopRef;
@@ -9,9 +11,8 @@ class WorkshopRepository {
   WorkshopRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance {
     workshopRef = _firestore.collection("workshop").withConverter<Workshop>(
-          fromFirestore: (snapshot, options) =>
-              Workshop.fromJson(snapshot.data()!),
-          toFirestore: (workshop, options) => workshop.toJson(),
+          fromFirestore: (snapshot, _) => Workshop.fromJson(snapshot.data()!),
+          toFirestore: (workshop, _) => workshop.toJson(),
         );
   }
 
@@ -20,7 +21,39 @@ class WorkshopRepository {
     try {
       await workshopRef.doc(workshop.ownerId).set(workshop);
     } on FirebaseException catch (e) {
-      throw FirestroeReadWriteFailure.fromCode(e.code);
+      throw FirestoreReadWriteFailure.fromCode(e.code);
     }
+  }
+
+// get the current workshop from firestore
+  Future<Workshop> getWorkshopById({required String id}) {
+    try {
+      return workshopRef.doc(id).get().then(
+            (value) => value.data()! as Workshop,
+          );
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure.fromCode(e.code);
+    }
+  }
+
+  // Helper function to batch fetch Workshops
+  Future<Map<String, Workshop>> fetchWorkshops(Set<String> workshopIds) async {
+    final List<String> ids = workshopIds.toList();
+    final List<List<String>> chunks = splitIntoChunks(ids, 10);
+
+    List<Future<Map<String, Workshop>>> futures = chunks.map(
+      (chunk) async {
+        final snapshots =
+            await workshopRef.where(FieldPath.documentId, whereIn: chunk).get();
+        return {for (var doc in snapshots.docs) doc.id: doc.data() as Workshop};
+      },
+    ).toList();
+    final List<Map<String, Workshop>> workshopChunks =
+        await Future.wait(futures);
+    return workshopChunks.fold(
+      <String, Workshop>{},
+      (previousValue, element) =>
+          {...previousValue as Map<String, Workshop>, ...element},
+    );
   }
 }

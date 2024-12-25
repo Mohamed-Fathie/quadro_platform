@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
-import 'package:quadro_platform/features/workshop_authentication/models/image_picker_service.dart';
+import 'package:quadro_platform/shared/utils/serivces/image_picker_service.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/utils/constans/helper_functions.dart';
@@ -94,7 +94,6 @@ class DocumentUploadView extends StatelessWidget {
                         .then((value) => cubitt.uploadImage(
                               file: value,
                               imageType: imageType,
-                              userId: userId,
                             )),
                   );
                 },

@@ -44,7 +44,7 @@ class Workshop {
       'owner_id': ownerId,
       'description': description,
       'phone': phone,
-      'status': status.map((e) => e.toJson()).toList(),
+      'spare parts status': status.map((e) => e.toJson()).toList(),
       'carBrands': carBrands.map((e) => e.toJson()).toList(),
       // 'location': location,
     };

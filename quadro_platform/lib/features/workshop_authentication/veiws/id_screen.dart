@@ -1,10 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/trade_license.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/document_upload_veiw.dart';
+import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 
 import 'package:quadro_platform/shared/enum/image_type.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
@@ -42,6 +45,16 @@ class IdCardView extends StatelessWidget {
             userId: "88",
             url: url,
             onContinue: (context) {
+              MaintenanceRequestsRepository()
+                  .fetchRequests(
+                      "x6eQwPg4BkRlLaenwf9dM8QOqnC2", RequestType.workshop_id)
+                  .listen(
+                (event) {
+                  event.map(
+                    (e) => log(e.toString()),
+                  );
+                },
+              );
               NavigationService().routeTo(RoutesConstants.licens,
                   arguments: context.read<WorkshopAuthbloc>());
             },

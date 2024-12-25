@@ -4,6 +4,7 @@ import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/brand_list.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/dropdown_minu.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/pick_image.dart';
+import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/save_button.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/spare_parts.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/text_area.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
@@ -51,8 +52,6 @@ class WorkshopRegisterationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final workshopBloc = context.read<WorkshopAuthbloc>();
-
     return BlocListener<WorkshopAuthbloc, WorkshopAuthblocState>(
       listener: (context, state) {
         if (state.status == WorkshopAuthStatus.failure) {
@@ -102,15 +101,7 @@ class WorkshopRegisterationView extends StatelessWidget {
               iconColor: Qcolors.primarycolor,
             ),
             const VerticalSpacing(height: 20),
-            CustomElevatedButton(
-              buttonColor: Qcolors.primarycolor,
-              buttonTitle: "حفظ اعدادات الحساب",
-              onPressed: () {
-                workshopBloc.save();
-                NavigationService()
-                    .routeTo(RoutesConstants.workshopBottomNavBar);
-              },
-            ),
+            const SaveButton()
           ],
         ),
       ),

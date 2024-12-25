@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:quadro_platform/features/user/repository/user_repository.dart';
+import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
+import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/storage_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/shared/enum/car_brands.dart';
@@ -12,12 +17,16 @@ import 'package:quadro_platform/shared/enum/spare_parts.dart';
 part 'authbloc_state.dart';
 
 class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
-  WorkshopAuthbloc(this._workshopRepository, this._storageRepository)
-      : super(const WorkshopAuthblocState());
-  final WorkshopRepository? _workshopRepository;
+  WorkshopAuthbloc(
+      this._workshopRepository, this._storageRepository, this._user)
+      : // Initialize here
+        super(const WorkshopAuthblocState());
+  final WorkshopRepository _workshopRepository;
   final StorageRepository _storageRepository;
+  final UserRepository _user;
   final TextEditingController menuController = TextEditingController();
   final TextEditingController textareaController = TextEditingController();
+
   @override
   Future<void> close() {
     menuController.dispose();
@@ -28,10 +37,10 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
   // Add image for workshop
   Future<void> uploadImage({
     required ImageType imageType,
-    required String userId,
     required XFile? file,
   }) async {
-    if (file == null) return;
+    // final currentUser = await _user.getCachedUser();
+    // if (file == null || currentUser == null) return;
 
     try {
       emit(state.copyWith(
@@ -40,12 +49,12 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
       ));
 
       // Generate the dynamic path using userId
-      final path = imageType.pathWithId(userId);
+      final path = imageType.pathWithId("currentUser.id");
 
       // Upload the image to the determined path
       final url = await _storageRepository.uploadImageWithProgress(
         path: path,
-        xFile: file,
+        xFile: file!,
         onProgressUpdate: (double progress) {
           emit(state.copyWith(
             progress: progress,
@@ -77,6 +86,7 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
           break;
       }
     } catch (e) {
+      log(e.toString());
       emit(state.copyWith(
         exception: e.toString(),
         status: WorkshopAuthStatus.failure,
@@ -115,29 +125,32 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
     ));
   }
 
-  void save() {
-    print(state.toString());
-  }
   // Save data to repository
-  // Future<void> saveData() async {
-  //   final currentUser = getCurrentUser;
+  Future<void> saveData() async {
+    final currentUser = await _user.getCachedUser();
 
-  //   try {
-  //     await _workshopRepository.addWorkshop(
-  //       Workshop(
-  //         name: currentUser.name,
-  //         ownerId: currentUser.uid,
-  //         description: state.description,
-  //         phone: currentUser.phone,
-  //         status: state.partsStatus,
-  //         carBrands: state.brands,
-  //         // location: location,
-  //       ),
-  //     );
-  //     emit(state.copyWith(status: WorkshopAuthStatus.success));
-  //   } catch (e) {
-  //     emit(state.copyWith(
-  //         exception: e as Exception, status: WorkshopAuthStatus.failure));
-  //   }
-  // }
+    if (currentUser == null) {
+      emit(state.copyWith(
+          exception: "المستخدم ليس موثق", status: WorkshopAuthStatus.failure));
+      return;
+    }
+    try {
+      emit(state.copyWith(status: WorkshopAuthStatus.loading));
+      await _workshopRepository.addWorkshop(
+        Workshop(
+          name: currentUser.name,
+          ownerId: currentUser.id,
+          description: state.description,
+          phone: currentUser.phone,
+          status: state.truePartsStatus,
+          carBrands: state.brands,
+          // location: location,
+        ),
+      );
+      emit(state.copyWith(status: WorkshopAuthStatus.success));
+    } on FirestoreReadWriteFailure catch (e) {
+      emit(state.copyWith(
+          exception: e.message, status: WorkshopAuthStatus.failure));
+    }
+  }
 }
