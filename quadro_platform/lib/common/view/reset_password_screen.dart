@@ -4,6 +4,8 @@ import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/widgets/registration_textField.dart';
 import 'package:sizer/sizer.dart';
 
@@ -83,7 +85,7 @@ class ResetPassWordScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {  NavigationService().routeTo(RoutesConstants.signUp);},
                   child: Text(
                     "انشاء حساب ",
                     style: TextStyle(

@@ -24,11 +24,12 @@ class ActiviytRecords extends StatelessWidget {
                     BorderSide(color: index == 9 ? transparent : greyShade3),
               ),
             ),
-            height: 11.4.h,
+            height: 17.6.h,
             width: 94.w,
             child: Row(
               children: [
                 Container(
+                  
                   padding:
                       EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
                   height: 8.h,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/features/onboarding/Cubit/Onboarding_cubit.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
@@ -25,7 +24,7 @@ class NextButton extends StatelessWidget {
                 // Move to the next page
                 context.read<OnboardingCubit>().nextPage();
               } else {
-                NavigationService().replaceRoute(RoutesConstants.login);
+                NavigationService().replaceRoute(RoutesConstants.signUp);
               }
             },
             child: Text(

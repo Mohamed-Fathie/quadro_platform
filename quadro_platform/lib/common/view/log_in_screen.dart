@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/view/registration_screen.dart';
-import 'package:quadro_platform/constants/commonWidgets/customTextField.dart';
+import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
-import 'package:quadro_platform/constants/commonWidgets/password_text_field.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
+import 'package:quadro_platform/shared/widgets/registration_custom_password_field.dart';
+import 'package:quadro_platform/shared/widgets/registration_textField.dart';
 import 'package:sizer/sizer.dart';
 
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
   static String id = 'login screen';
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  bool loginButtonPressed = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,25 +49,22 @@ class LogInScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 6.h),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "البريد الالكتروني",
-                style: AppTextStyles.Mbody16Bold.copyWith(color: teal),
-              ),
+            RegistrationScreenTextField(
+              controller: emailController,
+              keyBoardType: TextInputType.emailAddress,
+              readOnly: false,
+              title: 'البريد الالكتروني',
+              hint: "",
             ),
-            SizedBox(height: 1.h),
-            const CustomTextField(),
             SizedBox(height: 2.h),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "كلمة المرور",
-                style: AppTextStyles.Mbody16Bold.copyWith(color: teal),
-              ),
+            RegistrationPasswordTextField(
+              controller: passwordController,
+              hint: '',
+              keyBoardType: TextInputType.visiblePassword,
+              readOnly: false,
+              title: 'كلمة المرور',
             ),
-            SizedBox(height: 1.h),
-            const PasswordTextField(),
+            SizedBox(height: 0.5.h),
             SizedBox(height: 1.h),
             Align(
               alignment: Alignment.centerRight,
@@ -87,6 +92,12 @@ class LogInScreen extends StatelessWidget {
             
             SizedBox(height: 4.h),
             CustomElevatedButton(
+              onPressed: () {
+                AuthServices.loginUser(
+                    context: context,
+                    emailController: emailController,
+                    passwordController: passwordController);
+              },
               buttonTitle: 'تسجيل الدخول',
               fontColor: white,
               fontSize: 16,
@@ -97,7 +108,7 @@ class LogInScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     NavigationService().routeTo(RoutesConstants.signUp);
                   },

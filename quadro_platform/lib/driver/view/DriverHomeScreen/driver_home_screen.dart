@@ -77,7 +77,7 @@ class DriverHomeScreen extends StatelessWidget {
                     jsonEncode(event.data!.snapshot.value),
                   ) as Map<String, dynamic>);
                   if (profileData.driverStatus == 'Online') {
-                  return  SwipeButton(
+                    return SwipeButton(
                       thumbPadding: EdgeInsets.all(1.3.w),
                       thumb: Icon(
                         Icons.chevron_right,
@@ -96,7 +96,7 @@ class DriverHomeScreen extends StatelessWidget {
                       child: Builder(
                         builder: (context) {
                           return Text(
-                            'اسحب لالغاءالاتصال',
+                            'اسحب لالغاء الاتصال',
                             style: AppTextStyles.Mbody18Bold,
                           );
                         },
@@ -146,7 +146,7 @@ class DriverHomeScreen extends StatelessWidget {
               builder: (context, mapProvider, child) {
                 return GoogleMap(
                   initialCameraPosition: mapProvider.initialCameraPosition,
-                  mapType: MapType.normal,
+                  mapType: MapType.satellite,
                   myLocationButtonEnabled: false,
                   myLocationEnabled: true,
                   zoomControlsEnabled: true,

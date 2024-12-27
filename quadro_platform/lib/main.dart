@@ -12,7 +12,6 @@ import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
 import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
-
 import 'package:sizer/sizer.dart';
 
 void main() async {
