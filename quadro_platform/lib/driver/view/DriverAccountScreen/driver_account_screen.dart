@@ -5,17 +5,16 @@ import 'package:quadro_platform/common/controller/provider/profile_data_provider
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:quadro_platform/shared/widgets/row_account_shape.dart';
 import 'package:sizer/sizer.dart';
 
-class UserAccountScreen extends StatefulWidget {
-  UserAccountScreen({super.key});
+class DriverAccountScreen extends StatefulWidget {
+  DriverAccountScreen({super.key});
 
   @override
-  State<UserAccountScreen> createState() => _UserAccountScreenState();
+  State<DriverAccountScreen> createState() => _DriverAccountScreenState();
 }
 
-class _UserAccountScreenState extends State<UserAccountScreen> {
+class _DriverAccountScreenState extends State<DriverAccountScreen> {
   final List accountButtons = [
     [CupertinoIcons.gear_alt_fill, 'الاعدادات'],
     [CupertinoIcons.person_2_fill, 'ادارة الحساب'],
@@ -120,23 +119,30 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: accountButtons.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 2.h),
-                    child: Row(
-                      children: [
-                        Icon(
-                          accountButtons[index][0],
-                          color: black,
-                          size: 3.h,
-                        ),
-                        SizedBox(
-                          width: 7.w,
-                        ),
-                        Text(
-                          accountButtons[index][1],
-                          style: AppTextStyles.Mbody16Bold,
-                        )
-                      ],
+                  return InkWell(
+                    onTap: () {
+                      if (index == (accountButtons.length) - 1) {
+                        AuthServices.logOutUser(context);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 2.h),
+                      child: Row(
+                        children: [
+                          Icon(
+                            accountButtons[index][0],
+                            color: black,
+                            size: 3.h,
+                          ),
+                          SizedBox(
+                            width: 7.w,
+                          ),
+                          Text(
+                            accountButtons[index][1],
+                            style: AppTextStyles.Mbody16Bold,
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }),

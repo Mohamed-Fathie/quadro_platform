@@ -71,17 +71,20 @@ class LogInScreen extends StatelessWidget {
             SizedBox(height: 2.5.h),
             Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                "نسيت كلمة المرور؟",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontFamily: 'Madhani-Arabic',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  color: black,
-                ),
+              child: InkWell( 
+                onTap: ()=> NavigationService().routeTo(RoutesConstants.ResetPassWordScreen), child: Text(
+                  "نسيت كلمة المرور؟",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontFamily: 'Madhani-Arabic',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    color: black,
+                  ),
+                ),),
+              
               ),
-            ),
+            
             SizedBox(height: 4.h),
             CustomElevatedButton(
               buttonTitle: 'تسجيل الدخول',

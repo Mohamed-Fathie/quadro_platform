@@ -60,23 +60,39 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BottomNavBarProvider>(
       builder: (context, tabProvider, child) {
-        return PersistentTabView(
-          controller: controller,
-          tabs: _navBarItems(tabProvider.currentTab),
-          avoidBottomPadding: true,
-          //onItemSelected: ,
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(
+              'Quadro',
+              style: AppTextStyles.heading20Bold,
+            ),
+          ),
+          body: PersistentTabView(
+            controller: controller,
+            tabs: _navBarItems(tabProvider.currentTab),
+            avoidBottomPadding: true,
+            //onItemSelected: ,
 
-          handleAndroidBackButtonPress: true,
-          resizeToAvoidBottomInset: true,
-          stateManagement: true,
+            handleAndroidBackButtonPress: true,
+            resizeToAvoidBottomInset: true,
+            stateManagement: true,
 
-          popActionScreens: PopActionScreensType.all,
+            popActionScreens: PopActionScreensType.all,
 
-          navBarBuilder: (navBarConfig) => Style6BottomNavBar(
-            navBarConfig: navBarConfig,
-            navBarDecoration: NavBarDecoration(
-              borderRadius: BorderRadius.circular(8.sp),
-              color: white,
+            navBarBuilder: (navBarConfig) => Style2BottomNavBar(
+              navBarConfig: navBarConfig,
+              navBarDecoration: NavBarDecoration(
+                borderRadius: BorderRadius.circular(8.sp),
+                color: white,
+              ),
+              // itemAnimationProperties: const ItemAnimation(
+              //     duration: Duration(microseconds: 200), curve: Curves.ease),
             ),
             itemAnimationProperties: const ItemAnimation(
                 duration: Duration(microseconds: 200), curve: Curves.ease),

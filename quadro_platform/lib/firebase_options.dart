@@ -47,14 +47,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB-94EQ41Ic8kEpNVBqsSbkJa_YBrsE7M0',
-    appId: '1:698030242237:web:4146289974ab5e6887bad4',
-    messagingSenderId: '698030242237',
-    projectId: 'quadro-204be',
-    authDomain: 'quadro-204be.firebaseapp.com',
-    storageBucket: 'quadro-204be.firebasestorage.app',
-    measurementId: 'G-HDB06MS76C',
-  );
+      apiKey: 'AIzaSyB-94EQ41Ic8kEpNVBqsSbkJa_YBrsE7M0',
+      appId: '1:698030242237:web:4146289974ab5e6887bad4',
+      messagingSenderId: '698030242237',
+      projectId: 'quadro-204be',
+      authDomain: 'quadro-204be.firebaseapp.com',
+      storageBucket: 'quadro-204be.firebasestorage.app',
+      measurementId: 'G-HDB06MS76C',
+      databaseURL: 'https://quadro-204be-default-rtdb.firebaseio.com');
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBy4vQeOdM4OZlqi6Cyj6oil43a6pi-Iqg',
