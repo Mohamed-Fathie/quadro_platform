@@ -45,16 +45,6 @@ class IdCardView extends StatelessWidget {
             userId: "88",
             url: url,
             onContinue: (context) {
-              MaintenanceRequestsRepository()
-                  .fetchRequests(
-                      "x6eQwPg4BkRlLaenwf9dM8QOqnC2", RequestType.workshop_id)
-                  .listen(
-                (event) {
-                  event.map(
-                    (e) => log(e.toString()),
-                  );
-                },
-              );
               NavigationService().routeTo(RoutesConstants.licens,
                   arguments: context.read<WorkshopAuthbloc>());
             },

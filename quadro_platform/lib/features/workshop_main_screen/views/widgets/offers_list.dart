@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/features/workshop_main_screen/models/offers_domain_model.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../../shared/utils/constans/colors.dart';
+import '../../../../shared/widgets/rounded_container.dart';
+import '../../bloc/main_screenbloc_bloc.dart';
+import 'service_templet.dart';
+
+class OffersList extends StatelessWidget {
+  const OffersList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final list = context.select((MainScreenBloc bloc) => bloc.state.offers);
+
+    return SizedBox(
+      height: 45.h,
+      child: BlocSelector<MainScreenBloc, MainScreenState, MainScreenStatus>(
+        selector: (state) {
+          return state.status;
+        },
+        builder: (context, state) {
+          if (state == MainScreenStatus.offerFailure) {
+            const Center(
+              child: Text(
+                "حدث خطاء في تحميل العروض",
+              ),
+            );
+          }
+
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: list == null
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Qcolors.primarycolor,
+                    ),
+                  )
+                : list.isEmpty
+                    ? RoundedContainer(
+                        width: 80.w,
+                        height: 35.h,
+                        child: Center(
+                          child: Text(
+                            "لا يوجد عروض حاليا",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.apply(color: Qcolors.primarycolor),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          final offer = list[index];
+                          return ServiceTemplet(
+                            isOffer: true,
+                            buttonTitle: "تفاصيل",
+                            offerStatus: offer.offerStatus.name,
+                            servicePrice: offer.servicePrice.toString(),
+                            navigatorCall: () {},
+                            carBrand: offer.request.carCompany.name,
+                            carModel: offer.request.carModel.name,
+                            dateCreated: offer.dateCreated,
+                            userName: offer.user.name,
+                          );
+                        },
+                      ),
+          );
+        },
+      ),
+    );
+  }
+}

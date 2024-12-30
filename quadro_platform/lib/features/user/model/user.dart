@@ -1,31 +1,31 @@
 import 'package:quadro_platform/shared/enum/user_role.dart';
 
-class User {
+class QuadroUser {
   final String id;
   final String name;
   final String email;
-  final String phone;
+  final String? phone;
   final UserRole? role;
-  final String pictureUrl;
+  final String? pictureUrl;
 
-  const User({
+  const QuadroUser({
     required this.id,
     required this.name,
     required this.email,
-    required this.phone,
+    this.phone,
     this.role,
-    required this.pictureUrl,
+    this.pictureUrl,
   });
 
-  /// Creates a User instance from a FirebaseAuth User object.
-  factory User.fromFirebaseAuth({
+  /// Creates a QuadroUser instance from a FirebaseAuth QuadroUser object.
+  factory QuadroUser.fromFirebaseAuth({
     required String id,
     required String? name,
     required String? email,
     required String? phone,
-    required String? pictureUrl,
+    String? pictureUrl,
   }) {
-    return User(
+    return QuadroUser(
       id: id,
       name: name ?? "",
       email: email ?? "",
@@ -36,26 +36,26 @@ class User {
   }
 
   // Factory to create an instance from JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] as String,
+  factory QuadroUser.fromJson(Map<String, dynamic> json) {
+    return QuadroUser(
+      id: json['user_id'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
-      phone: json['phone'] as String,
-      role: UserRole.values.byName(json['role']), // Parse enum by name
-      pictureUrl: json['picture_url'] as String,
+      phone: json['phone'] as String?,
+      role: null, // Parse enum by name
+      pictureUrl: json['profile_picture'] as String?,
     );
   }
 
   // Method to convert an instance to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'user_id': id,
       'name': name,
       'email': email,
       'phone': phone,
-      'role': role!.name, // Convert enum to string
-      'picture_url': pictureUrl,
+      'role': "", // Convert enum to string
+      'profile_picture': pictureUrl,
     };
   }
 }

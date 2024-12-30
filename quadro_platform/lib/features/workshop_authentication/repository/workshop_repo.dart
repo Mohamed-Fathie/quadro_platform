@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../shared/utils/hleper_function/list_splitter.dart';
 
@@ -55,5 +58,27 @@ class WorkshopRepository {
       (previousValue, element) =>
           {...previousValue as Map<String, Workshop>, ...element},
     );
+  }
+
+  //Cache User Data
+  Future<void> cacheUser(Workshop workshop) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = workshop.toJson();
+    await prefs.setString('cached_workshop', jsonEncode(userJson));
+  }
+
+//Retrieve Cached User Data
+  Future<Workshop> getCachedUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final workshopString = prefs.getString('cached_workshop');
+
+    final userJson = jsonDecode(workshopString!) as Map<String, dynamic>;
+    return Workshop.fromJson(userJson);
+  }
+
+  // Clear Cached User Data when log out or delete account
+  Future<void> clearCachedUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('cached_workshop');
   }
 }

@@ -8,7 +8,7 @@ import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 
 class MaintenanceRequestDomainModel extends Equatable {
   final String id;
-  final User user;
+  final QuadroUser user;
   final Workshop workshop;
   final CarBrand carCompany;
   final CarModels carModel;
@@ -34,7 +34,7 @@ class MaintenanceRequestDomainModel extends Equatable {
   // CopyWith Method
   MaintenanceRequestDomainModel copyWith({
     String? id,
-    User? user,
+    QuadroUser? user,
     Workshop? workshop,
     CarBrand? carCompany,
     CarModels? carModel,

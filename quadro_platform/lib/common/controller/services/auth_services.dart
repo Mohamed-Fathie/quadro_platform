@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -11,12 +12,15 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/view/driver_home_screen.dart';
+import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/id_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/main_bottom_navbar.dart';
+
+import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 
 class AuthServices {
   // ******************* loginUser function *****************//
@@ -162,7 +166,7 @@ class AuthServices {
           return Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                  child: const WorkshopRegisterationPage(),
+                  child: const WorkshopNavBar(),
                   type: PageTransitionType.bottomToTop),
               (route) => false);
         } else {
@@ -296,8 +300,8 @@ class AuthServices {
         drivingLicenseNumber: drivingLicenceNumberController.trim(),
         registeredDateTime: DateTime.now(),
       );
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
+      await ProfileDataCRUDServices()
+          .registerUserToDatabase(profileData: profileData, context: context);
     }
   }
 
@@ -362,8 +366,8 @@ class AuthServices {
         registeredDateTime: DateTime.now(),
       );
 
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
+      await ProfileDataCRUDServices()
+          .registerUserToDatabase(profileData: profileData, context: context);
     }
   }
 }

@@ -136,17 +136,20 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
     }
     try {
       emit(state.copyWith(status: WorkshopAuthStatus.loading));
-      await _workshopRepository.addWorkshop(
-        Workshop(
-          name: currentUser.name,
-          ownerId: currentUser.id,
-          description: state.description,
-          phone: currentUser.phone,
-          status: state.truePartsStatus,
-          carBrands: state.brands,
-          // location: location,
-        ),
+      final workshop = Workshop(
+        name: currentUser.name,
+        ownerId: currentUser.id,
+        description: state.description,
+        phone: "currentUser.phone",
+        status: state.truePartsStatus,
+        carBrands: state.brands,
       );
+      await _workshopRepository.addWorkshop(workshop
+          // location: location,
+
+          );
+      await _workshopRepository.cacheUser(workshop);
+      log(_workshopRepository.getCachedUser().toString());
       emit(state.copyWith(status: WorkshopAuthStatus.success));
     } on FirestoreReadWriteFailure catch (e) {
       emit(state.copyWith(

@@ -8,18 +8,11 @@ import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart'
 
 class OffersRepository {
   final FirebaseFirestore _firestore;
-  final WorkshopRepository _workshopRepository;
-  final MaintenanceRequestsRepository _maintenanceRequestsRepository;
   late CollectionReference offersRef;
 
   OffersRepository({
-    WorkshopRepository? workshopRepository,
-    MaintenanceRequestsRepository? maintenanceRequestsRepository,
     FirebaseFirestore? firestore,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _maintenanceRequestsRepository =
-            maintenanceRequestsRepository ?? MaintenanceRequestsRepository(),
-        _workshopRepository = workshopRepository ?? WorkshopRepository() {
+  }) : _firestore = firestore ?? FirebaseFirestore.instance {
     offersRef = _firestore.collection("Offers").withConverter<Offer>(
           fromFirestore: (snapshot, options) =>
               Offer.fromJson(snapshot.id, snapshot.data()!),
@@ -39,51 +32,6 @@ class OffersRepository {
                 )
                 .first,
           );
-    } on FirebaseException catch (e) {
-      throw FirestoreReadWriteFailure(e.code);
-    }
-  }
-
-  Stream<List<OffersDomainModel>> fetchOffers({
-    required String workshopId,
-    int? limit,
-  }) {
-    try {
-      Query query = offersRef.where('workshop_id', isEqualTo: workshopId);
-      if (limit != null) {
-        query = query.limit(limit);
-      }
-
-      return query.snapshots().asyncMap((snapshot) async {
-        final docs = snapshot.docs;
-
-        // Step 1: Collect all required IDs
-        final requestIds =
-            docs.map((doc) => (doc.data() as Offer).requestId).toSet();
-        final workshopIds =
-            docs.map((doc) => (doc.data() as Offer).workshopId).toSet();
-
-        // Step 2: Batch fetch related data
-        final workshops = await _workshopRepository.fetchWorkshops(workshopIds);
-        final requests = await _maintenanceRequestsRepository
-            .fetchMaintenanceRequests(requestIds);
-
-        // Step 3: Map to domain models
-        return docs.map((doc) {
-          final offer = doc.data() as Offer;
-          final workshop = workshops[offer.workshopId];
-          final request = requests[offer.requestId];
-          return OffersDomainModel(
-            workshop: workshop!,
-            request: request!,
-            servicePrice: offer.servicePrice,
-            guaranteePeriod: offer.guaranteePeriod,
-            partsStatus: offer.sparePartsStatus,
-            offerStatus: offer.status,
-            dateCreated: offer.dateCreated.toDate(),
-          );
-        }).toList();
-      });
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure(e.code);
     }

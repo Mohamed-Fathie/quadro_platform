@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
@@ -6,6 +7,8 @@ import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
 class OffersDomainModel extends Equatable {
   final Workshop workshop;
+  final QuadroUser user;
+
   final MaintenanceRequest request;
   final double servicePrice;
   final int guaranteePeriod;
@@ -15,6 +18,7 @@ class OffersDomainModel extends Equatable {
 
   const OffersDomainModel({
     required this.workshop,
+    required this.user,
     required this.request,
     required this.servicePrice,
     required this.guaranteePeriod,
@@ -26,6 +30,7 @@ class OffersDomainModel extends Equatable {
   // CopyWith Method
   OffersDomainModel copyWith({
     Workshop? workshop,
+    QuadroUser? user,
     MaintenanceRequest? request,
     double? servicePrice,
     int? guaranteePeriod,
@@ -41,6 +46,7 @@ class OffersDomainModel extends Equatable {
       partsStatus: partsStatus ?? this.partsStatus,
       offerStatus: offerStatus ?? this.offerStatus,
       dateCreated: dateCreated ?? this.dateCreated,
+      user: user ?? this.user,
     );
   }
 
@@ -67,5 +73,6 @@ class OffersDomainModel extends Equatable {
         partsStatus,
         offerStatus,
         dateCreated,
+        user
       ];
 }

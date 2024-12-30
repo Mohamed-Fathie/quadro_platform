@@ -2,27 +2,30 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quadro_platform/features/user/model/user.dart' as user;
+import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
+import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/user.dart';
 
 class UserRepository {
   final FirebaseAuth _auth;
   final FirebaseFirestore _firebaseFirestore;
-  late final CollectionReference<user.User> userRef;
+  late final CollectionReference<QuadroUser> userRef;
 
   UserRepository({FirebaseAuth? auth, FirebaseFirestore? firestore})
       : _auth = auth ?? FirebaseAuth.instance,
         _firebaseFirestore = firestore ?? FirebaseFirestore.instance {
-    userRef = _firebaseFirestore.collection("Users").withConverter<user.User>(
-          fromFirestore: (snapshot, _) => user.User.fromJson(snapshot.data()!),
+    userRef = _firebaseFirestore.collection("Users").withConverter<QuadroUser>(
+          fromFirestore: (snapshot, _) => QuadroUser.fromJson(snapshot.data()!),
           toFirestore: (user, _) => user.toJson(),
         );
   }
 
   /// Adds or updates a user in the database.
-  Future<void> addUser(user.User user) async {
+  Future<void> addUser(QuadroUser user) async {
     try {
       await userRef.doc(user.id).set(user);
       await cacheUser(user);
@@ -32,13 +35,26 @@ class UserRepository {
     }
   }
 
+  Future<void> addUserToFirebaseAuth(
+      String name, String email, String? phone, String imageUrl) async {
+    final user = _auth.currentUser!;
+
+    await user.updateProfile(displayName: name, photoURL: imageUrl);
+    await user.reload();
+    await addUser(QuadroUser.fromFirebaseAuth(
+        id: user.uid,
+        name: user.displayName,
+        email: user.email ?? "",
+        phone: phone));
+  }
+
   /// Gets the current user, if authenticated.
-  Future<user.User?> getCurrentUser() async {
+  Future<QuadroUser?> getCurrentUser() async {
     final firebaseAuthUser = _auth.currentUser;
     if (firebaseAuthUser == null) return null;
 
     try {
-      return user.User.fromFirebaseAuth(
+      return QuadroUser.fromFirebaseAuth(
           id: firebaseAuthUser.uid,
           name: firebaseAuthUser.displayName,
           email: firebaseAuthUser.email,
@@ -50,7 +66,7 @@ class UserRepository {
   }
 
   /// Retrieves a user by ID from Firestore.
-  Future<user.User> getUserById(String id) async {
+  Future<QuadroUser> getUserById(String id) async {
     try {
       final docSnapshot = await userRef.doc(id).get();
       return docSnapshot.data()!;
@@ -60,32 +76,20 @@ class UserRepository {
     }
   }
 
-  /// Updates specific fields of a user in Firestore.
-  Future<void> updateUser(String userId, Map<String, dynamic> updates) async {
-    try {
-      await userRef.doc(userId).update(updates);
-      // Update the cache after Firestore update
-      final cachedUser = await getUserById(userId);
-      await cacheUser(cachedUser);
-    } on FirebaseException catch (e) {
-      throw FirestoreReadWriteFailure.fromCode(e.code);
-    }
-  }
-
 //Cache User Data
-  Future<void> cacheUser(user.User user) async {
+  Future<void> cacheUser(QuadroUser user) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = user.toJson();
     await prefs.setString('cached_user', jsonEncode(userJson));
   }
 
   //Retrieve Cached User Data
-  Future<user.User?> getCachedUser() async {
+  Future<QuadroUser?> getCachedUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userString = prefs.getString('cached_user');
     if (userString != null) {
       final userJson = jsonDecode(userString) as Map<String, dynamic>;
-      return user.User.fromJson(userJson);
+      return QuadroUser.fromJson(userJson);
     }
     return null;
   }
@@ -97,10 +101,10 @@ class UserRepository {
   }
 
   /// map of user by their ids : helper function  to get all users related to specific maintenance requests
-  Future<Map<String, user.User>> fetchUsers(Set<String> userIds) async {
+  Future<Map<String, QuadroUser>> fetchUsers(Set<String> userIds) async {
     final List<List<String?>> chunks = splitIntoChunks(userIds.toList(), 10);
 
-    final List<Future<Map<String, user.User>>> futures = chunks.map(
+    final List<Future<Map<String, QuadroUser>>> futures = chunks.map(
       (chunk) async {
         final snapshot =
             await userRef.where(FieldPath.documentId, whereIn: chunk).get();
@@ -108,7 +112,7 @@ class UserRepository {
       },
     ).toList();
     final result = await Future.wait(futures);
-    return result.fold<Map<String, user.User>>(
+    return result.fold<Map<String, QuadroUser>>(
       {},
       (previousValue, element) => {...previousValue, ...element},
     );

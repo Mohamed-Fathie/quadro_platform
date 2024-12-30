@@ -26,6 +26,11 @@ class GlobalThemData {
 
 // text theme
   static final TextTheme text = TextTheme(
+      displayLarge: const TextStyle().copyWith(
+        fontWeight: FontWeight.bold,
+        fontSize: 35,
+        color: const Color(0xff0288a6),
+      ),
       headlineLarge: const TextStyle().copyWith(
         fontWeight: FontWeight.bold, // Bold font
         fontSize: 24,

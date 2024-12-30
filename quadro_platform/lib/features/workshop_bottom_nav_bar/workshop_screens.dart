@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:quadro_platform/features/workshop_main_screen/views/main_screen_page.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
 class WorkshopScreens {
@@ -8,9 +9,7 @@ class WorkshopScreens {
   List<PersistentTabConfig> buildScreens() {
     return [
       PersistentTabConfig(
-        screen: const Center(
-          child: Text("home"),
-        ),
+        screen: const MainScreenPage(),
         item: ItemConfig(
           title: "الرئيسية",
           icon: const Icon(
