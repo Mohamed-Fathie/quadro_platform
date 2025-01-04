@@ -3,7 +3,7 @@ import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
 class Offer {
-  final String id; // Auto-generated Document ID
+  final String? id; // Auto-generated Document ID
   final String workshopId; // Reference to Workshops/{UID}
   final String requestId; // Reference to MaintenanceRequests/{UID}
   final double servicePrice; // Service price as a number
@@ -13,7 +13,7 @@ class Offer {
   final Timestamp dateCreated; // Timestamp for creation
 
   Offer({
-    required this.id,
+    this.id,
     required this.workshopId,
     required this.requestId,
     required this.servicePrice,

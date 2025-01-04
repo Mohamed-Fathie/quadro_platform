@@ -39,14 +39,8 @@ class MainScreenPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 3.w),
           child: BlocProvider(
             create: (context) => MainScreenBloc(
-              WorkshopRepository(),
-              repositoryManager: RepositoryManager(
-                  offersRepository: OffersRepository(),
-                  userRepository: UserRepository(),
-                  workshopRepository: WorkshopRepository(),
-                  maintenanceRequestsRepository:
-                      MaintenanceRequestsRepository()),
-            )
+                context.read<WorkshopRepository>(),
+                repositoryManager: context.read<RepositoryManager>())
               ..add(MainScreenStarted())
               ..add(MainScreenRequestFetched())
               ..add(MainScreenOffersFetched()),

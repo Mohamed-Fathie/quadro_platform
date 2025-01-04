@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
-import 'package:quadro_platform/features/workshop_main_screen/models/offers_domain_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/offers.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
@@ -18,6 +17,14 @@ class OffersRepository {
               Offer.fromJson(snapshot.id, snapshot.data()!),
           toFirestore: (offer, options) => offer.toJson(),
         );
+  }
+  Future<String> addOfferToFirebase(Offer offer) async {
+    try {
+      final offerId = await offersRef.add(offer);
+      return offerId.id;
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure(e.code);
+    }
   }
 
   Future<Offer?> getOfferByRequestId({required String requestId}) async {

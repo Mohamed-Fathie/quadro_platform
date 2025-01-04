@@ -2,7 +2,13 @@
 
 part of 'authbloc_cubit.dart';
 
-enum WorkshopAuthStatus { initial, loading, success, failure }
+enum WorkshopAuthStatus {
+  initial,
+  loading,
+  success,
+  failure,
+  workshopAuthenticated
+}
 
 @immutable
 class WorkshopAuthblocState extends Equatable {

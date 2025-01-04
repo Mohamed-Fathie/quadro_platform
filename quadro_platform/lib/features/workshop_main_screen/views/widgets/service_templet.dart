@@ -40,126 +40,129 @@ class ServiceTemplet<T> extends StatelessWidget {
         RoundedContainer(
           width: 80.w,
           height: 35.h,
-          child: Column(
-            spacing: 20,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                textDirection: TextDirection.rtl,
-                children: [
-                  Text(
-                    " :العميل",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  RoundedContainer(
-                    height: 50,
-                    width: 50,
-                    child: Image.network(
-                      fit: BoxFit.cover,
-                      imageUrl ??
-                          "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(userName,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.apply(color: Qcolors.primarycolor)),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Row(
-                  spacing: 8,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              spacing: 20,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   textDirection: TextDirection.rtl,
                   children: [
                     Text(
-                      ": نوع المركبة",
+                      " :العميل",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    Text(carBrand,
-                        softWrap: true,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.apply(color: Qcolors.primarycolor)),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  spacing: 8,
-                  textDirection: TextDirection.rtl,
-                  children: [
-                    Text(
-                      ": موديل السيارة",
-                      style: Theme.of(context).textTheme.headlineMedium,
+                    RoundedContainer(
+                      height: 50,
+                      width: 50,
+                      child: Image.network(
+                        fit: BoxFit.cover,
+                        // imageUrl ??
+                        "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
+                      ),
                     ),
-                    Text(carModel,
-                        softWrap: true,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.apply(color: Qcolors.primarycolor)),
+                    Expanded(
+                      child: Text(userName,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: Qcolors.primarycolor)),
+                    ),
                   ],
                 ),
-              ),
-              servicePrice != null
-                  ? Expanded(
-                      child: Row(
-                        spacing: 8,
-                        textDirection: TextDirection.rtl,
-                        children: [
-                          Text(
-                            ":مبلغ الخدمة",
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          Text("$servicePrice LYD",
-                              softWrap: true,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.apply(color: Qcolors.primarycolor)),
-                        ],
+                Expanded(
+                  child: Row(
+                    spacing: 8,
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      Text(
+                        ": نوع المركبة",
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                    )
-                  : const SizedBox.shrink(),
-              offerStatus != null
-                  ? Expanded(
-                      flex: 2,
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              offerStatus!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.apply(color: Colors.blueAccent),
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomElevatedButton(
-                              buttonColor: Qcolors.primarycolor,
-                              buttonTitle: buttonTitle,
-                              onPressed: navigatorCall,
-                            ),
-                          ),
-                        ],
-                      ))
-                  : Expanded(
-                      flex: 2,
-                      child: CustomElevatedButton(
-                        buttonColor: Qcolors.primarycolor,
-                        buttonTitle: buttonTitle,
-                        onPressed: navigatorCall,
+                      Text(carBrand,
+                          softWrap: true,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: Qcolors.primarycolor)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    spacing: 8,
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      Text(
+                        ": موديل السيارة",
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                    )
-            ],
+                      Text(carModel,
+                          softWrap: true,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: Qcolors.primarycolor)),
+                    ],
+                  ),
+                ),
+                servicePrice != null
+                    ? Expanded(
+                        child: Row(
+                          spacing: 8,
+                          textDirection: TextDirection.rtl,
+                          children: [
+                            Text(
+                              ":مبلغ الخدمة",
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            Text("$servicePrice LYD",
+                                softWrap: true,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.apply(color: Qcolors.primarycolor)),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                offerStatus != null
+                    ? Expanded(
+                        flex: 2,
+                        child: Row(
+                          textDirection: TextDirection.rtl,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                offerStatus!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.apply(color: Colors.blueAccent),
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomElevatedButton(
+                                buttonColor: Qcolors.primarycolor,
+                                buttonTitle: buttonTitle,
+                                onPressed: navigatorCall,
+                              ),
+                            ),
+                          ],
+                        ))
+                    : Expanded(
+                        flex: 2,
+                        child: CustomElevatedButton(
+                          buttonColor: Qcolors.primarycolor,
+                          buttonTitle: buttonTitle,
+                          onPressed: navigatorCall,
+                        ),
+                      )
+              ],
+            ),
           ),
         ),
         Text(

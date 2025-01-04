@@ -12,6 +12,10 @@ import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 
+import '../../features/request_details_screen/veiw/details_screen_page.dart';
+import '../../features/sending_offers/veiw/sending_offer_page.dart';
+import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
@@ -37,6 +41,21 @@ class RouteGenerator {
       case RoutesConstants.loginLogic:
         return PageTransition(
             child: const LogInLogic(), type: PageTransitionType.bottomToTop);
+      case RoutesConstants.requestDetails:
+        final request = settings.arguments as MaintenanceRequestDomainModel;
+        return PageTransition(
+            child: DetailsScreenPage(
+              request: request,
+            ),
+            type: PageTransitionType.bottomToTop);
+      case RoutesConstants.sendOffer:
+        final request = settings.arguments as MaintenanceRequestDomainModel;
+
+        return PageTransition(
+            child: SendingOfferPage(
+              request: request,
+            ),
+            type: PageTransitionType.bottomToTop);
       case RoutesConstants.bottomNavBar:
         return PageTransition(
             child: UserBottomNavBar(), type: PageTransitionType.bottomToTop);

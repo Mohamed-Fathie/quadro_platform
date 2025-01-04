@@ -64,6 +64,10 @@ class WorkshopRegisterationView extends StatelessWidget {
               ),
             );
         }
+        if (state.status == WorkshopAuthStatus.workshopAuthenticated) {
+          NavigationService()
+              .replaceRoute(RoutesConstants.workshopBottomNavBar);
+        }
       },
       child: SingleChildScrollView(
         child: Column(

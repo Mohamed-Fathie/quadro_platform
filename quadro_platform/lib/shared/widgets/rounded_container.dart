@@ -25,7 +25,7 @@ class RoundedContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(40),
           color: isDark ? const Color(0xFF1A2A38) : Qcolors.buttonbackground,
         ),
-        padding: EdgeInsets.all(3.w),
+        // padding: EdgeInsets.all(3.w),
         child: child,
       ),
     );

@@ -8,6 +8,7 @@ class SectionHeader extends StatelessWidget {
   final bool? islarge;
   final bool? displayLarge;
   final bool? withButton;
+  final bool? withIcon;
   final CallbackNavigator? callback;
 
   const SectionHeader({
@@ -17,6 +18,7 @@ class SectionHeader extends StatelessWidget {
     this.displayLarge,
     this.withButton,
     this.callback,
+    this.withIcon,
   });
 
   @override
@@ -43,15 +45,30 @@ class SectionHeader extends StatelessWidget {
                                 color: Qcolors.primarycolor)))
               ],
             )
-          : Text(
-              text,
-              style: islarge != null
-                  ? Theme.of(context).textTheme.headlineLarge
-                  : displayLarge != null
-                      ? Theme.of(context).textTheme.displayLarge
-                      : Theme.of(context).textTheme.headlineMedium,
-              softWrap: true,
-            ),
+          : withIcon != null
+              ? Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Icon(
+                      size: 40,
+                      Icons.directions_car,
+                      color: Qcolors.primarycolor,
+                    ),
+                    Text(
+                      text,
+                      style: Theme.of(context).textTheme.displayLarge,
+                    )
+                  ],
+                )
+              : Text(
+                  text,
+                  style: islarge != null
+                      ? Theme.of(context).textTheme.headlineLarge
+                      : displayLarge != null
+                          ? Theme.of(context).textTheme.displayLarge
+                          : Theme.of(context).textTheme.headlineMedium,
+                  softWrap: true,
+                ),
     );
   }
 }

@@ -30,8 +30,6 @@ class SaveButton extends StatelessWidget {
                 buttonTitle: "حفظ اعدادات الحساب",
                 onPressed: () async {
                   await context.read<WorkshopAuthbloc>().saveData();
-                  NavigationService()
-                      .routeTo(RoutesConstants.workshopBottomNavBar);
                 },
               );
       },

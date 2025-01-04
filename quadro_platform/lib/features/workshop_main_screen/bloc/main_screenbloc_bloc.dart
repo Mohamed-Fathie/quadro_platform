@@ -7,7 +7,6 @@ import 'package:quadro_platform/features/workshop_authentication/models/firestor
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
-import 'package:quadro_platform/features/workshop_main_screen/models/offers_domain_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 part 'main_screenbloc_event.dart';
@@ -59,10 +58,10 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     try {
       await emit.forEach(
         _manager.fetchRequests(
-          id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
-          type: RequestType.workshop_id,
-          limit: 10,
-        ),
+            id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
+            type: RequestType.workshop_id,
+            limit: 10,
+            withOffer: true),
         onData: (list) =>
             state.copyWith(requests: list, status: MainScreenStatus.success),
         onError: (error, _) => throw error,
@@ -81,10 +80,11 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     // Listen to offers stream
     try {
       await emit.forEach(
-        _manager.fetchOffers(
-          workshopId: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
-          limit: 10,
-        ),
+        _manager.fetchRequests(
+            id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
+            type: RequestType.workshop_id,
+            limit: 10,
+            withOffer: false),
         onData: (list) =>
             state.copyWith(offers: list, status: MainScreenStatus.success),
         onError: (error, _) => throw error,

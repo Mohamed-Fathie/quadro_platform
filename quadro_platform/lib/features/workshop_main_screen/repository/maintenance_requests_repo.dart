@@ -43,6 +43,15 @@ class MaintenanceRequestsRepository {
     );
   }
 
+  Future<void> updateRequest(
+      {required String id, required Map<String, String> map}) async {
+    try {
+      await maintenanceRequestRef.doc(id).update(map);
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure.fromCode(e.code);
+    }
+  }
+
   Future<MaintenanceRequest> getMaintenanceRequestById(
       {required String id}) async {
     try {

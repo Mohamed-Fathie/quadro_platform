@@ -7,4 +7,6 @@ class RoutesConstants {
       'login_logic_screen'; // if the user is already sighned in the return to the main screen directly
   static const String bottomNavBar = 'bottomNavBar';
   static const String workshopBottomNavBar = 'workshopBottomNavBar';
+  static const String requestDetails = 'requestDetails';
+  static const String sendOffer = 'sendOffer';
 }

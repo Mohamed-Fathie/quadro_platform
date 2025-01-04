@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/features/workshop_main_screen/models/offers_domain_model.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../shared/routes/navigation_service.dart';
+import '../../../../shared/routes/routes_constants.dart';
 import '../../../../shared/utils/constans/colors.dart';
 import '../../../../shared/widgets/rounded_container.dart';
 import '../../bloc/main_screenbloc_bloc.dart';
@@ -62,12 +63,14 @@ class OffersList extends StatelessWidget {
                           return ServiceTemplet(
                             isOffer: true,
                             buttonTitle: "تفاصيل",
-                            offerStatus: offer.offerStatus.name,
-                            servicePrice: offer.servicePrice.toString(),
-                            navigatorCall: () {},
-                            carBrand: offer.request.carCompany.name,
-                            carModel: offer.request.carModel.name,
-                            dateCreated: offer.dateCreated,
+                            offerStatus: offer.offer!.status.name,
+                            servicePrice: offer.offer!.servicePrice.toString(),
+                            navigatorCall: () => NavigationService().routeTo(
+                                RoutesConstants.requestDetails,
+                                arguments: offer),
+                            carBrand: offer.carCompany.name,
+                            carModel: offer.carModel.name,
+                            dateCreated: offer.offer!.dateCreated.toDate(),
                             userName: offer.user.name,
                           );
                         },

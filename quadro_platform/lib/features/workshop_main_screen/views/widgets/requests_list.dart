@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/bloc/main_screenbloc_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/service_templet.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/rounded_container.dart';
 import 'package:sizer/sizer.dart';
@@ -60,7 +62,9 @@ class RequestsList extends StatelessWidget {
                           final request = list[index];
                           return ServiceTemplet(
                             buttonTitle: "تقديم عرض",
-                            navigatorCall: () {},
+                            navigatorCall: () => NavigationService().routeTo(
+                                RoutesConstants.requestDetails,
+                                arguments: request),
                             carBrand: request.carCompany.name,
                             carModel: request.carModel.name,
                             dateCreated: request.dateCreated,

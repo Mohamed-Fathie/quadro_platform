@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quadro_platform/features/request_details_screen/veiw/details_screen_page.dart';
 import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
 import 'package:quadro_platform/features/onboarding/view/widgets/on_boarding_screen.dart';
+import 'package:quadro_platform/features/sending_offers/veiw/sending_offer_page.dart';
 
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';

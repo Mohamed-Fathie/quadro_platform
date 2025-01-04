@@ -13,7 +13,6 @@ import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 
 import '../../user/model/user.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
-import '../models/offers_domain_model.dart';
 
 class RepositoryManager {
   final OffersRepository _offersRepository;
@@ -30,71 +29,58 @@ class RepositoryManager {
         _userRepository = userRepository,
         _workshopRepository = workshopRepository,
         _maintenanceRequestsRepository = maintenanceRequestsRepository;
+  Future<void> addOffer(Offer offer) async {
+    try {
+      final offerId = await _offersRepository.addOfferToFirebase(offer);
+      await _maintenanceRequestsRepository
+          .updateRequest(id: offer.requestId, map: {"offer_id": offerId});
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure(e.code);
+    }
+  }
 
   // fetch all maitenance requests or limit the number of requests
   Stream<List<MaintenanceRequestDomainModel>> fetchRequests({
     required String id,
     required RequestType type,
     int? limit,
+    required bool withOffer,
   }) {
     try {
       Query query = _maintenanceRequestsRepository.maintenanceRequestRef
-              .where(type.name, isEqualTo: id)
-          // .where("offer_id", isNull: false)
-          ;
+          .where(type.name, isEqualTo: id)
+          .where("offer_id", isNull: withOffer);
 
-      if (limit != null) {
-        query = query.limit(limit);
-      }
-
-      return query.snapshots().asyncMap((snapshot) async {
-        final docs = snapshot.docs;
-        final relatedData = await _fetchRelatedData(docs);
-
-        return docs.map((doc) {
-          final maintenanceRequest = doc.data() as MaintenanceRequest;
-          return _mapToMaintenanceDomainModel(
-            doc.id,
-            maintenanceRequest,
-            relatedData,
-          );
-        }).toList();
-      });
+      if (limit != null) query = query.limit(limit);
+      return _convertToDomainModelStream(query, withOffer);
     } on FirebaseException catch (e) {
-      throw FirestoreReadWriteFailure.fromCode(e.code);
+      throw FirestoreReadWriteFailure.fromCode(
+        e.code,
+      );
     }
   }
 
-  Stream<List<OffersDomainModel>> fetchOffers({
-    required String workshopId,
-    int? limit,
-  }) {
-    try {
-      Query query = _offersRepository.offersRef
-          .where('workshop_id', isEqualTo: workshopId);
-
-      if (limit != null) {
-        query = query.limit(limit);
-      }
-
-      return query.snapshots().asyncMap((snapshot) async {
-        final docs = snapshot.docs;
-        final relatedData = await _fetchOfferRelatedData(docs);
-
-        return docs.map((doc) {
-          final offer = doc.data() as Offer;
-          return _mapToOfferDomainModel(offer, relatedData);
-        }).toList();
-      });
-    } on FirebaseException catch (e) {
-      throw FirestoreReadWriteFailure(e.code);
-    }
+  Stream<List<MaintenanceRequestDomainModel>> _convertToDomainModelStream(
+    Query query,
+    bool withOffer,
+  ) {
+    return query.snapshots().asyncMap((snapshot) async {
+      final docs = snapshot.docs;
+      final relatedData = await _fetchRelatedData(docs, withOffer);
+      return docs.map((doc) {
+        final maintenanceRequest = doc.data() as MaintenanceRequest;
+        return _mapToMaintenanceDomainModel(
+          doc.id,
+          maintenanceRequest,
+          relatedData,
+        );
+      }).toList();
+    });
   }
 
-  /// Map to MaintenanceRequestDomainModel
+  /// Map to MaintenanceRequestDomainModel for offers
   MaintenanceRequestDomainModel _mapToMaintenanceDomainModel(
       String id, MaintenanceRequest request, _RelatedData relatedData) {
-    log(id);
     return MaintenanceRequestDomainModel(
       user: relatedData.users[request.vehicleOwnerId]!,
       id: id,
@@ -104,65 +90,37 @@ class RepositoryManager {
       description: request.description,
       requestStatus: request.status,
       dateCreated: request.dateCreated.toDate(),
-      offer: relatedData.offers[request.offerId],
+      offer: relatedData.offers?[request.offerId],
     );
-  }
-
-  /// Map to OffersDomainModel
-  OffersDomainModel _mapToOfferDomainModel(
-      Offer offer, _OfferRelatedData data) {
-    final request = data.requests[offer.requestId]!;
-    final user = data.users[request.vehicleOwnerId]!;
-    log(offer.toJson().toString());
-    return OffersDomainModel(
-      user: user,
-      workshop: data.workshops[offer.workshopId]!,
-      request: request,
-      servicePrice: offer.servicePrice,
-      guaranteePeriod: offer.guaranteePeriod,
-      partsStatus: offer.sparePartsStatus,
-      offerStatus: offer.status,
-      dateCreated: offer.dateCreated.toDate(),
-    );
-  }
-
-  /// Fetch related data for offers
-  Future<_OfferRelatedData> _fetchOfferRelatedData(
-      List<QueryDocumentSnapshot> docs) async {
-    final requestIds =
-        docs.map((doc) => (doc.data() as Offer).requestId).toSet();
-    final workshopIds =
-        docs.map((doc) => (doc.data() as Offer).workshopId).toSet();
-    final requests = await _maintenanceRequestsRepository
-        .fetchMaintenanceRequests(requestIds);
-    final userIds = requests.values
-        .map(
-          (e) => e.vehicleOwnerId,
-        )
-        .toSet();
-    final users = await _userRepository.fetchUsers(userIds);
-
-    final workshops = await _workshopRepository.fetchWorkshops(workshopIds);
-
-    return _OfferRelatedData(workshops, requests, users);
   }
 
   /// Fetch related data for maintenance requests
   Future<_RelatedData> _fetchRelatedData(
-      List<QueryDocumentSnapshot> docs) async {
-    final userIds = docs
-        .map((doc) => (doc.data() as MaintenanceRequest).vehicleOwnerId)
-        .toSet();
-    final workshopIds = docs
-        .map((doc) => (doc.data() as MaintenanceRequest).workshopId)
-        .toSet();
-    final offerIds =
-        docs.map((doc) => (doc.data() as MaintenanceRequest).offerId).toSet();
+      List<QueryDocumentSnapshot> docs, bool withOffers) async {
+    // Extract unique user and workshop IDs
+    final userIds = {
+      for (var doc in docs) (doc.data() as MaintenanceRequest).vehicleOwnerId
+    };
+    final workshopIds = {
+      for (var doc in docs) (doc.data() as MaintenanceRequest).workshopId
+    };
 
+    // Initialize offers only if needed
+    final Map<String, Offer?>? offers;
+    if (withOffers) {
+      offers = null;
+    } else {
+      final offerIds = {
+        for (var doc in docs) (doc.data() as MaintenanceRequest).offerId
+      };
+      offers = await _offersRepository.fetchOffersBySet(offerIds);
+    }
+
+    // Fetch related data
     final users = await _userRepository.fetchUsers(userIds);
     final workshops = await _workshopRepository.fetchWorkshops(workshopIds);
-    final offers = await _offersRepository.fetchOffersBySet(offerIds);
 
+    // Return consolidated data
     return _RelatedData(users, workshops, offers);
   }
 }
@@ -171,15 +129,90 @@ class RepositoryManager {
 class _RelatedData {
   final Map<String, QuadroUser> users;
   final Map<String, Workshop> workshops;
-  final Map<String, Offer?> offers;
+  final Map<String, Offer?>? offers;
 
-  _RelatedData(this.users, this.workshops, this.offers);
+  _RelatedData(
+    this.users,
+    this.workshops,
+    this.offers,
+  );
 }
 
-class _OfferRelatedData {
-  final Map<String, Workshop> workshops;
-  final Map<String, MaintenanceRequest> requests;
-  final Map<String, QuadroUser> users;
+// import 'package:equatable/equatable.dart';
+// import 'package:quadro_platform/features/user/model/user.dart';
+// import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
+// import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
+// import 'package:quadro_platform/shared/enum/offer_status.dart';
+// import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
-  _OfferRelatedData(this.workshops, this.requests, this.users);
-}
+// class OffersDomainModel extends Equatable {
+//   final Workshop workshop;
+//   final QuadroUser user;
+
+//   final MaintenanceRequest request;
+//   final double servicePrice;
+//   final int guaranteePeriod;
+//   final SparePartsStatus partsStatus;
+//   final OfferStatus offerStatus;
+//   final DateTime dateCreated;
+
+//   const OffersDomainModel({
+//     required this.workshop,
+//     required this.user,
+//     required this.request,
+//     required this.servicePrice,
+//     required this.guaranteePeriod,
+//     required this.partsStatus,
+//     required this.offerStatus,
+//     required this.dateCreated,
+//   });
+
+//   // CopyWith Method
+//   OffersDomainModel copyWith({
+//     Workshop? workshop,
+//     QuadroUser? user,
+//     MaintenanceRequest? request,
+//     double? servicePrice,
+//     int? guaranteePeriod,
+//     SparePartsStatus? partsStatus,
+//     OfferStatus? offerStatus,
+//     DateTime? dateCreated,
+//   }) {
+//     return OffersDomainModel(
+//       workshop: workshop ?? this.workshop,
+//       request: request ?? this.request,
+//       servicePrice: servicePrice ?? this.servicePrice,
+//       guaranteePeriod: guaranteePeriod ?? this.guaranteePeriod,
+//       partsStatus: partsStatus ?? this.partsStatus,
+//       offerStatus: offerStatus ?? this.offerStatus,
+//       dateCreated: dateCreated ?? this.dateCreated,
+//       user: user ?? this.user,
+//     );
+//   }
+
+//   // toString Method
+//   @override
+//   String toString() {
+//     return 'OffersDomainModel('
+//         'workshop: ${workshop.toString()}, '
+//         'request: ${request.toString()}, '
+//         'servicePrice: $servicePrice, '
+//         'guaranteePeriod: $guaranteePeriod, '
+//         'partsStatus: $partsStatus, '
+//         'offerStatus: $offerStatus, '
+//         'dateCreated: $dateCreated)';
+//   }
+
+//   // Equatable Props
+//   @override
+//   List<Object?> get props => [
+//         workshop,
+//         request,
+//         servicePrice,
+//         guaranteePeriod,
+//         partsStatus,
+//         offerStatus,
+//         dateCreated,
+//         user
+//       ];
+// }

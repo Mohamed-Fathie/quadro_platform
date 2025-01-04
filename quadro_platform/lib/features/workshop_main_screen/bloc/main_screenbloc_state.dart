@@ -13,7 +13,7 @@ enum MainScreenStatus {
 @immutable
 class MainScreenState extends Equatable {
   final MainScreenStatus status;
-  final List<OffersDomainModel>? offers;
+  final List<MaintenanceRequestDomainModel>? offers;
   final List<MaintenanceRequestDomainModel>? requests;
   final Workshop? workshop;
   final String errorMessage;
@@ -28,7 +28,7 @@ class MainScreenState extends Equatable {
 
   MainScreenState copyWith({
     MainScreenStatus? status,
-    List<OffersDomainModel>? offers,
+    List<MaintenanceRequestDomainModel>? offers,
     List<MaintenanceRequestDomainModel>? requests,
     Workshop? workshop,
     String? errorMessage,
