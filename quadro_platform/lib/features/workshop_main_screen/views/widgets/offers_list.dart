@@ -33,49 +33,46 @@ class OffersList extends StatelessWidget {
             );
           }
 
-          return Directionality(
-            textDirection: TextDirection.rtl,
-            child: list == null
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Qcolors.primarycolor,
-                    ),
-                  )
-                : list.isEmpty
-                    ? RoundedContainer(
-                        width: 80.w,
-                        height: 35.h,
-                        child: Center(
-                          child: Text(
-                            "لا يوجد عروض حاليا",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.apply(color: Qcolors.primarycolor),
-                          ),
+          return list == null
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Qcolors.primarycolor,
+                  ),
+                )
+              : list.isEmpty
+                  ? RoundedContainer(
+                      width: 80.w,
+                      height: 35.h,
+                      child: Center(
+                        child: Text(
+                          "لا يوجد عروض حاليا",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: Qcolors.primarycolor),
                         ),
-                      )
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          final offer = list[index];
-                          return ServiceTemplet(
-                            isOffer: true,
-                            buttonTitle: "تفاصيل",
-                            offerStatus: offer.offer!.status.name,
-                            servicePrice: offer.offer!.servicePrice.toString(),
-                            navigatorCall: () => NavigationService().routeTo(
-                                RoutesConstants.requestDetails,
-                                arguments: offer),
-                            carBrand: offer.carCompany.name,
-                            carModel: offer.carModel.name,
-                            dateCreated: offer.offer!.dateCreated.toDate(),
-                            userName: offer.user.name,
-                          );
-                        },
                       ),
-          );
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        final offer = list[index];
+                        return ServiceTemplet(
+                          isOffer: true,
+                          buttonTitle: "تفاصيل",
+                          offerStatus: offer.offer!.status.name,
+                          servicePrice: offer.offer!.servicePrice.toString(),
+                          navigatorCall: () => NavigationService().routeTo(
+                              RoutesConstants.requestDetails,
+                              arguments: offer),
+                          carBrand: offer.carCompany.name,
+                          carModel: offer.carModel.name,
+                          dateCreated: offer.offer!.dateCreated.toDate(),
+                          userName: offer.user.name,
+                        );
+                      },
+                    );
         },
       ),
     );

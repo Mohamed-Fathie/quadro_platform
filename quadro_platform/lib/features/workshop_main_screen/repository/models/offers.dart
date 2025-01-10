@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 
 class Offer {
   final String? id; // Auto-generated Document ID

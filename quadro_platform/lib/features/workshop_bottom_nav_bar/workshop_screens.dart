@@ -3,6 +3,8 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/main_screen_page.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
+import '../workshop_profile/view/workshop_profile_page.dart';
+
 class WorkshopScreens {
   final PersistentTabController controller =
       PersistentTabController(initialIndex: 0);
@@ -38,9 +40,7 @@ class WorkshopScreens {
               icon: const Icon(Icons.local_offer_rounded),
               title: "عروض")),
       PersistentTabConfig(
-          screen: const Center(
-            child: Text("profile"),
-          ),
+          screen: const WorkshopProfilePage(),
           item: ItemConfig(
               activeForegroundColor: Qcolors.primarycolor,
               icon: const Icon(Icons.person),

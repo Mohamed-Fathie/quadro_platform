@@ -100,7 +100,7 @@ class UserRepository {
     await prefs.remove('cached_user');
   }
 
-  /// map of user by their ids : helper function  to get all users related to specific maintenance requests
+  /// map of user by their ids : helper function  to get all users related to specific  requests
   Future<Map<String, QuadroUser>> fetchUsers(Set<String> userIds) async {
     final List<List<String?>> chunks = splitIntoChunks(userIds.toList(), 10);
 

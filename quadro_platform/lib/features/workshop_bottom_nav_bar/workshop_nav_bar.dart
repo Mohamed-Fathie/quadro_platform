@@ -7,6 +7,7 @@ import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_screen
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/offers_repository.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
+import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/utils/constans/helper_functions.dart';
 
 import '../workshop_authentication/repository/workshop_repo.dart';
@@ -24,37 +25,35 @@ class WorkshopNavBar extends StatelessWidget {
         ),
         RepositoryProvider<RepositoryManager>(
           create: (context) => RepositoryManager(
+              reviewsRepository: ReviewsRepository(),
               maintenanceRequestsRepository: MaintenanceRequestsRepository(),
               offersRepository: OffersRepository(),
               userRepository: UserRepository(),
               workshopRepository: WorkshopRepository()),
         )
       ],
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: PersistentTabView(
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            duration: Duration(milliseconds: 700),
-            curve: Curves.ease,
-          ),
-          controller: WorkshopScreens().controller,
-          tabs: WorkshopScreens().buildScreens(),
-          navBarBuilder: (navBarConfig) => Style8BottomNavBar(
-            navBarConfig: navBarConfig,
-            navBarDecoration: NavBarDecoration(
-              color: isDark ? const Color(0xFF1F1929) : white,
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
+      child: PersistentTabView(
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          duration: Duration(milliseconds: 700),
+          curve: Curves.ease,
+        ),
+        controller: WorkshopScreens().controller,
+        tabs: WorkshopScreens().buildScreens(),
+        navBarBuilder: (navBarConfig) => Style8BottomNavBar(
+          navBarConfig: navBarConfig,
+          navBarDecoration: NavBarDecoration(
+            color: isDark ? const Color(0xFF1F1929) : white,
+            borderRadius: BorderRadius.circular(
+              10,
             ),
           ),
-          handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset:
-              true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
-          stateManagement: true, // Default is true.
-          backgroundColor: Colors.grey.shade900,
-          navBarHeight: kBottomNavigationBarHeight,
         ),
+        handleAndroidBackButtonPress: true, // Default is true.
+        resizeToAvoidBottomInset:
+            true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
+        stateManagement: true, // Default is true.
+        backgroundColor: Colors.grey.shade900,
+        navBarHeight: kBottomNavigationBarHeight,
       ),
     );
   }

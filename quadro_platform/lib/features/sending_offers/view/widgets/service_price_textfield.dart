@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/features/sending_offers/veiw/widgets/custom_textField.dart';
+import 'package:quadro_platform/features/sending_offers/view/widgets/custom_textField.dart';
 
 import '../../cubit/sending_offer_cubit.dart';
 

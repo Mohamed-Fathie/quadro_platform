@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/widgets/document_upload_veiw.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/widgets/document_upload_veiw.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 
 import 'package:quadro_platform/shared/enum/image_type.dart';

@@ -17,20 +17,26 @@ class SparePartsRidosButton extends StatelessWidget {
       (SendingOfferCubit cubit) => cubit.state.partsStatus,
     );
     return Wrap(
-      textDirection: TextDirection.rtl,
       children: SparePartsStatus.values
           .map(
             (status) => RoundedContainer(
-                width: 40.w,
-                height: 6.h,
-                child: RadioListTile<SparePartsStatus>(
-                    title: Text(
-                      status.label,
-                      style: const TextStyle(color: Qcolors.primarycolor),
-                    ),
-                    value: status,
-                    groupValue: currentstatus,
-                    onChanged: cubit.onSparePartsStatus)),
+              width: 40.w,
+              height: 6.h,
+              child: RadioListTile<SparePartsStatus>(
+                title: Text(
+                  status.label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(color: Qcolors.primarycolor),
+                ),
+                value: status,
+                groupValue: currentstatus,
+                onChanged: cubit.onSparePartsStatus,
+                controlAffinity: ListTileControlAffinity
+                    .trailing, // Place radios to the left
+              ),
+            ),
           )
           .toList(),
     );

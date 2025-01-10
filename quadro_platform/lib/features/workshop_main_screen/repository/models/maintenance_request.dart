@@ -2,7 +2,7 @@ import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/car_models.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 
 class MaintenanceRequest {
   final String id; // Document ID

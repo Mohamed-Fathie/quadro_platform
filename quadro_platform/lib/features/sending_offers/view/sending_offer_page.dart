@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/sending_offers/cubit/sending_offer_cubit.dart';
-import 'package:quadro_platform/features/sending_offers/veiw/widgets/service_price_textField.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
-import 'package:quadro_platform/shared/routes/navigation_service.dart';
-import 'package:quadro_platform/shared/routes/routes_constants.dart';
+import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
@@ -17,6 +15,7 @@ import '../../../shared/utils/constans/colors.dart';
 import '../../../shared/widgets/overlay_dialog/overlay_sending_offer.dart';
 import '../../workshop_main_screen/repository/offers_repository.dart';
 import '../../workshop_main_screen/repository/repository_manager.dart';
+import '../view/widgets/service_price_textField.dart';
 import 'widgets/guarantee_period.dart';
 import 'widgets/spare_parts_status.dart';
 
@@ -42,6 +41,7 @@ class SendingOfferPage extends StatelessWidget {
         ),
         body: BlocProvider(
           create: (context) => SendingOfferCubit(RepositoryManager(
+              reviewsRepository: ReviewsRepository(),
               maintenanceRequestsRepository: MaintenanceRequestsRepository(),
               offersRepository: OffersRepository(),
               userRepository: UserRepository(),
@@ -82,12 +82,13 @@ class SendingOfferView extends StatelessWidget {
       },
       child: SafeArea(
           child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(4.w),
           child: Column(
             spacing: 5.h,
             children: [
-              const VerticalSpacing(height: 10),
+              const SizedBox.shrink(),
               const SectionHeader(
                 text: "قم باظافة تفاصيل عرضك",
                 islarge: true,

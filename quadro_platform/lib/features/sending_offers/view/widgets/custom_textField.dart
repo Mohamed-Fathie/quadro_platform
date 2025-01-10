@@ -26,15 +26,9 @@ class CustomTextfield extends StatelessWidget {
       keyboardType: const TextInputType.numberWithOptions(),
       textDirection: TextDirection.rtl,
       decoration: InputDecoration(
-        error: errorMessage != null
-            ? Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  errorMessage!,
-                ),
-              )
-            : null,
-        prefixIcon: Padding(
+        errorText: errorMessage,
+        errorStyle: const TextStyle(fontSize: 15),
+        suffixIcon: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
             prefixIcons,

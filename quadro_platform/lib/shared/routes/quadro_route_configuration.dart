@@ -4,16 +4,16 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/trade_license.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_authenitication_page.dart';
-import 'package:quadro_platform/features/workshop_authentication/veiws/workshop_registeration_page.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/trade_license.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/workshop_registeration_page.dart';
 import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 
 import '../../features/request_details_screen/veiw/details_screen_page.dart';
-import '../../features/sending_offers/veiw/sending_offer_page.dart';
+import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
 
 class RouteGenerator {

@@ -9,24 +9,30 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/mainten
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/offers.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/offers_repository.dart';
+import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 
 import '../../user/model/user.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
+import '../../workshop_profile/model/Review_Domain.dart';
 
 class RepositoryManager {
   final OffersRepository _offersRepository;
   final UserRepository _userRepository;
   final WorkshopRepository _workshopRepository;
   final MaintenanceRequestsRepository _maintenanceRequestsRepository;
+  final ReviewsRepository reviewsRepository;
 
   RepositoryManager(
       {required OffersRepository offersRepository,
       required UserRepository userRepository,
+      required ReviewsRepository reviewsRepository,
       required WorkshopRepository workshopRepository,
       required MaintenanceRequestsRepository maintenanceRequestsRepository})
       : _offersRepository = offersRepository,
         _userRepository = userRepository,
+        // ignore: prefer_initializing_formals
+        reviewsRepository = reviewsRepository,
         _workshopRepository = workshopRepository,
         _maintenanceRequestsRepository = maintenanceRequestsRepository;
   Future<void> addOffer(Offer offer) async {
@@ -57,6 +63,31 @@ class RepositoryManager {
       throw FirestoreReadWriteFailure.fromCode(
         e.code,
       );
+    }
+  }
+
+  Future<List<ReviewDomainModel>> getReviews(
+      {required String workshopId}) async {
+    try {
+      reviewsRepository.setWorkshopId(workshopId);
+      final reviews = await reviewsRepository.getReviews();
+      final user = await _userRepository.fetchUsers(reviews
+          .map(
+            (e) => e.userId,
+          )
+          .toSet());
+      return reviews.map((review) {
+        final reviewUser = user[review.userId]!;
+        return ReviewDomainModel(
+            id: review.id,
+            user: reviewUser,
+            rating: review.rating,
+            reviewComment: review.reviewComment ?? "",
+            workshopComment: review.workshopComment,
+            dateCreated: review.dateCreated);
+      }).toList();
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure(e.code);
     }
   }
 
@@ -137,82 +168,3 @@ class _RelatedData {
     this.offers,
   );
 }
-
-// import 'package:equatable/equatable.dart';
-// import 'package:quadro_platform/features/user/model/user.dart';
-// import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
-// import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
-// import 'package:quadro_platform/shared/enum/offer_status.dart';
-// import 'package:quadro_platform/shared/enum/spare_parts.dart';
-
-// class OffersDomainModel extends Equatable {
-//   final Workshop workshop;
-//   final QuadroUser user;
-
-//   final MaintenanceRequest request;
-//   final double servicePrice;
-//   final int guaranteePeriod;
-//   final SparePartsStatus partsStatus;
-//   final OfferStatus offerStatus;
-//   final DateTime dateCreated;
-
-//   const OffersDomainModel({
-//     required this.workshop,
-//     required this.user,
-//     required this.request,
-//     required this.servicePrice,
-//     required this.guaranteePeriod,
-//     required this.partsStatus,
-//     required this.offerStatus,
-//     required this.dateCreated,
-//   });
-
-//   // CopyWith Method
-//   OffersDomainModel copyWith({
-//     Workshop? workshop,
-//     QuadroUser? user,
-//     MaintenanceRequest? request,
-//     double? servicePrice,
-//     int? guaranteePeriod,
-//     SparePartsStatus? partsStatus,
-//     OfferStatus? offerStatus,
-//     DateTime? dateCreated,
-//   }) {
-//     return OffersDomainModel(
-//       workshop: workshop ?? this.workshop,
-//       request: request ?? this.request,
-//       servicePrice: servicePrice ?? this.servicePrice,
-//       guaranteePeriod: guaranteePeriod ?? this.guaranteePeriod,
-//       partsStatus: partsStatus ?? this.partsStatus,
-//       offerStatus: offerStatus ?? this.offerStatus,
-//       dateCreated: dateCreated ?? this.dateCreated,
-//       user: user ?? this.user,
-//     );
-//   }
-
-//   // toString Method
-//   @override
-//   String toString() {
-//     return 'OffersDomainModel('
-//         'workshop: ${workshop.toString()}, '
-//         'request: ${request.toString()}, '
-//         'servicePrice: $servicePrice, '
-//         'guaranteePeriod: $guaranteePeriod, '
-//         'partsStatus: $partsStatus, '
-//         'offerStatus: $offerStatus, '
-//         'dateCreated: $dateCreated)';
-//   }
-
-//   // Equatable Props
-//   @override
-//   List<Object?> get props => [
-//         workshop,
-//         request,
-//         servicePrice,
-//         guaranteePeriod,
-//         partsStatus,
-//         offerStatus,
-//         dateCreated,
-//         user
-//       ];
-// }

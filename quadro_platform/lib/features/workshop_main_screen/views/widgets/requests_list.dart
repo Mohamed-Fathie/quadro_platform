@@ -33,46 +33,43 @@ class RequestsList extends StatelessWidget {
             );
           }
 
-          return Directionality(
-            textDirection: TextDirection.rtl,
-            child: list == null
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Qcolors.primarycolor,
-                    ),
-                  )
-                : list.isEmpty
-                    ? RoundedContainer(
-                        width: 80.w,
-                        height: 35.h,
-                        child: Center(
-                          child: Text(
-                            "لا يوجد طلبات حاليا",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.apply(color: Qcolors.primarycolor),
-                          ),
+          return list == null
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Qcolors.primarycolor,
+                  ),
+                )
+              : list.isEmpty
+                  ? RoundedContainer(
+                      width: 80.w,
+                      height: 35.h,
+                      child: Center(
+                        child: Text(
+                          "لا يوجد طلبات حاليا",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(color: Qcolors.primarycolor),
                         ),
-                      )
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          final request = list[index];
-                          return ServiceTemplet(
-                            buttonTitle: "تقديم عرض",
-                            navigatorCall: () => NavigationService().routeTo(
-                                RoutesConstants.requestDetails,
-                                arguments: request),
-                            carBrand: request.carCompany.name,
-                            carModel: request.carModel.name,
-                            dateCreated: request.dateCreated,
-                            userName: request.user.name,
-                          );
-                        },
                       ),
-          );
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        final request = list[index];
+                        return ServiceTemplet(
+                          buttonTitle: "تقديم عرض",
+                          navigatorCall: () => NavigationService().routeTo(
+                              RoutesConstants.requestDetails,
+                              arguments: request),
+                          carBrand: request.carCompany.name,
+                          carModel: request.carModel.name,
+                          dateCreated: request.dateCreated,
+                          userName: request.user.name,
+                        );
+                      },
+                    );
         },
       ),
     );

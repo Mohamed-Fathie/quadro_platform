@@ -47,10 +47,9 @@ class ServiceTemplet<T> extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
-                  textDirection: TextDirection.rtl,
                   children: [
                     Text(
-                      " :العميل",
+                      "العميل :",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     RoundedContainer(
@@ -76,10 +75,9 @@ class ServiceTemplet<T> extends StatelessWidget {
                 Expanded(
                   child: Row(
                     spacing: 8,
-                    textDirection: TextDirection.rtl,
                     children: [
                       Text(
-                        ": نوع المركبة",
+                        "نوع المركبة :",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(carBrand,
@@ -94,10 +92,9 @@ class ServiceTemplet<T> extends StatelessWidget {
                 Expanded(
                   child: Row(
                     spacing: 8,
-                    textDirection: TextDirection.rtl,
                     children: [
                       Text(
-                        ": موديل السيارة",
+                        "موديل السيارة :",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(carModel,
@@ -116,7 +113,7 @@ class ServiceTemplet<T> extends StatelessWidget {
                           textDirection: TextDirection.rtl,
                           children: [
                             Text(
-                              ":مبلغ الخدمة",
+                              "مبلغ الخدمة :",
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
                             Text("$servicePrice LYD",
