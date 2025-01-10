@@ -17,21 +17,21 @@ class OfferDetails extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SectionHeader(
-          text: ": تفاصيل العرض ",
+          text: "تفاصيل العرض :",
           displayLarge: true,
         ),
         SectionRow(
-            label: ": مبلغ الصيانة",
+            label: "مبلغ الصيانة :",
             value: "${offer.servicePrice.toString()}   LYD"),
         SectionRow(
-            label: ": مدة الضمان",
+            label: "مدة الضمان :",
             value: "${offer.guaranteePeriod.toString()}   يوم  "),
         SectionRow(
-            label: ": حالة القطع التي ستستخدم للصيانة",
+            label: "حالة القطع التي ستستخدم للصيانة :",
             value: offer.sparePartsStatus.name),
-        SectionRow(label: ": حالة العرض", value: offer.status.name),
+        SectionRow(label: "حالة العرض :", value: offer.status.name),
         SectionRow(
-            label: ": تاريخ انشاء العرض",
+            label: "تاريخ انشاء العرض :",
             value: offer.dateCreated.toDate().formatInArabic()),
         SizedBox(
           height: 10.h,
