@@ -7,7 +7,7 @@ import 'package:sizer/sizer.dart';
 
 typedef CallbackNavigator = void Function();
 
-class ServiceTemplet<T> extends StatelessWidget {
+class RequestTemplet<T> extends StatelessWidget {
   final String? imageUrl;
   final String userName;
   final String carBrand;
@@ -18,8 +18,9 @@ class ServiceTemplet<T> extends StatelessWidget {
   final CallbackNavigator navigatorCall;
   final String? offerStatus;
   final bool? isOffer;
+  final double? width;
 //
-  const ServiceTemplet(
+  const RequestTemplet(
       {super.key,
       this.imageUrl,
       required this.userName,
@@ -30,7 +31,8 @@ class ServiceTemplet<T> extends StatelessWidget {
       required this.buttonTitle,
       required this.navigatorCall,
       this.offerStatus,
-      this.isOffer});
+      this.isOffer,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class ServiceTemplet<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         RoundedContainer(
-          width: 80.w,
+          width: width ?? 80.w,
           height: 35.h,
           child: Padding(
             padding: const EdgeInsets.all(10.0),

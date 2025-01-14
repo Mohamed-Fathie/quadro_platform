@@ -11,7 +11,9 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/models/
 import 'package:quadro_platform/features/workshop_main_screen/repository/offers_repository.dart';
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
+import 'package:quadro_platform/shared/enum/offer_status.dart';
 
+import '../../../shared/enum/offers_filter.dart';
 import '../../user/model/user.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_profile/model/Review_Domain.dart';
@@ -66,6 +68,90 @@ class RepositoryManager {
     }
   }
 
+// get either offers or requests
+  Future<List<MaintenanceRequestDomainModel>> getRequestslist({
+    required String id,
+    required RequestType type,
+  }) async {
+    final query = await _maintenanceRequestsRepository.maintenanceRequestRef
+        .where(type.name, isEqualTo: id)
+        .where("offer_id", isNull: true)
+        .get();
+    final docs = query.docs;
+    final relatedData = await _fetchRelatedData(docs, true);
+    return docs.map(
+      (doc) {
+        final request = doc.data();
+        return _mapToMaintenanceDomainModel(doc.id, request, relatedData);
+      },
+    ).toList();
+  }
+
+  Future<Map<OffersFilter, List<MaintenanceRequestDomainModel>>> getoffers({
+    required String id,
+    required RequestType type,
+  }) async {
+    final query = await _maintenanceRequestsRepository.maintenanceRequestRef
+        .where(type.name, isEqualTo: id)
+        .where("offer_id", isNull: false)
+        .get();
+
+    final docs = query.docs;
+    final relatedData = await _fetchRelatedData(docs, false);
+
+    // Initialize offers map with empty lists
+    final Map<OffersFilter, List<MaintenanceRequestDomainModel>> offersMap = {
+      OffersFilter.all: [],
+      OffersFilter.pending: [],
+      OffersFilter.inprogress: [],
+    };
+
+    // Map document IDs to their snapshots
+    final docMap = {
+      for (var doc in docs) (doc.data()).offerId: doc,
+    };
+
+    // Helper to add grouped offers to the map
+    void addGroupedOffers(
+      Map<String, Offer> offersByStatus,
+      OffersFilter status,
+    ) {
+      offersByStatus.forEach((key, offer) {
+        final requestDoc = docMap[offer.id];
+        if (requestDoc != null) {
+          final request = requestDoc.data();
+          offersMap[status]?.add(
+            MaintenanceRequestDomainModel(
+              id: requestDoc.id,
+              user: relatedData.users[request.vehicleOwnerId]!,
+              workshop: relatedData.workshops[request.workshopId]!,
+              carCompany: request.carCompany,
+              carModel: request.carModel,
+              description: request.description,
+              requestStatus: request.status,
+              dateCreated: request.dateCreated.toDate(),
+              offer: offer,
+            ),
+          );
+        }
+      });
+    }
+
+    // Add grouped offers for each status
+    addGroupedOffers(relatedData.groupedOffers?[OfferStatus.pending] ?? {},
+        OffersFilter.pending);
+    addGroupedOffers(relatedData.groupedOffers?[OfferStatus.inprogress] ?? {},
+        OffersFilter.inprogress);
+
+    // Aggregate all offers into OfferStatus.all
+    offersMap[OffersFilter.all] = [
+      ...offersMap[OffersFilter.pending]!,
+      ...offersMap[OffersFilter.inprogress]!,
+    ];
+
+    return offersMap;
+  }
+
   Future<List<ReviewDomainModel>> getReviews(
       {required String workshopId}) async {
     try {
@@ -111,7 +197,10 @@ class RepositoryManager {
 
   /// Map to MaintenanceRequestDomainModel for offers
   MaintenanceRequestDomainModel _mapToMaintenanceDomainModel(
-      String id, MaintenanceRequest request, _RelatedData relatedData) {
+    String id,
+    MaintenanceRequest request,
+    _RelatedData relatedData,
+  ) {
     return MaintenanceRequestDomainModel(
       user: relatedData.users[request.vehicleOwnerId]!,
       id: id,
@@ -138,13 +227,18 @@ class RepositoryManager {
 
     // Initialize offers only if needed
     final Map<String, Offer?>? offers;
+    final Map<OfferStatus, Map<String, Offer>>? groupedOffers;
     if (withOffers) {
       offers = null;
+      groupedOffers = null;
     } else {
       final offerIds = {
         for (var doc in docs) (doc.data() as MaintenanceRequest).offerId
       };
-      offers = await _offersRepository.fetchOffersBySet(offerIds);
+
+      final offersMap = await _offersRepository.fetchOffersBySet(offerIds);
+      offers = offersMap['allOffers'] as Map<String, Offer?>;
+      groupedOffers = offersMap['groupedByStatus'];
     }
 
     // Fetch related data
@@ -152,7 +246,7 @@ class RepositoryManager {
     final workshops = await _workshopRepository.fetchWorkshops(workshopIds);
 
     // Return consolidated data
-    return _RelatedData(users, workshops, offers);
+    return _RelatedData(groupedOffers, users, workshops, offers);
   }
 }
 
@@ -161,8 +255,10 @@ class _RelatedData {
   final Map<String, QuadroUser> users;
   final Map<String, Workshop> workshops;
   final Map<String, Offer?>? offers;
+  final Map<OfferStatus, Map<String, Offer>>? groupedOffers;
 
   _RelatedData(
+    this.groupedOffers,
     this.users,
     this.workshops,
     this.offers,

@@ -3,6 +3,7 @@ import 'package:quadro_platform/features/workshop_authentication/models/firestor
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/offers.dart';
+import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
 
 class OffersRepository {
@@ -44,7 +45,7 @@ class OffersRepository {
     }
   }
 
-  Future<Map<String, Offer?>> fetchOffersBySet(Set<String?> offerIds) async {
+  Future<Map<String, dynamic>> fetchOffersBySet(Set<String?> offerIds) async {
     // Filter out null values
     final List<String?> validOfferIds =
         offerIds.where((id) => id != null).toList();
@@ -70,9 +71,37 @@ class OffersRepository {
         await Future.wait(fetchFutures);
 
     // Merge all maps into a single map
-    return fetchedChunks.fold<Map<String, Offer?>>(
+    final Map<String, Offer?> allOffers =
+        fetchedChunks.fold<Map<String, Offer?>>(
       {},
       (accumulator, currentChunk) => {...accumulator, ...currentChunk},
     );
+
+    // Group offers by status
+    final Map<OfferStatus, Map<String, Offer>> groupedByStatus = {
+      OfferStatus.pending: {},
+      OfferStatus.inprogress: {},
+    };
+
+    for (final offer in allOffers.values) {
+      if (offer != null) {
+        switch (offer.status) {
+          case OfferStatus.pending:
+            groupedByStatus[OfferStatus.pending]![offer.id ?? ""] = offer;
+            break;
+          case OfferStatus.inprogress:
+            groupedByStatus[OfferStatus.inprogress]![offer.id ?? ""] = offer;
+            break;
+          default:
+            // Optionally handle other statuses
+            break;
+        }
+      }
+    }
+
+    return {
+      'allOffers': allOffers,
+      'groupedByStatus': groupedByStatus,
+    };
   }
 }

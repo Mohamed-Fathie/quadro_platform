@@ -7,7 +7,7 @@ import '../../../../shared/routes/routes_constants.dart';
 import '../../../../shared/utils/constans/colors.dart';
 import '../../../../shared/widgets/rounded_container.dart';
 import '../../bloc/main_screenbloc_bloc.dart';
-import 'service_templet.dart';
+import '../../../../shared/widgets/request_templet.dart';
 
 class OffersList extends StatelessWidget {
   const OffersList({
@@ -58,7 +58,7 @@ class OffersList extends StatelessWidget {
                       itemCount: list.length,
                       itemBuilder: (context, index) {
                         final offer = list[index];
-                        return ServiceTemplet(
+                        return RequestTemplet(
                           isOffer: true,
                           buttonTitle: "تفاصيل",
                           offerStatus: offer.offer!.status.name,

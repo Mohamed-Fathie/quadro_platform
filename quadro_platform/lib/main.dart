@@ -29,6 +29,8 @@ import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
 import 'package:sizer/sizer.dart';
 
+import 'features/worskshop_offers_screen/view/workshop_offers_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

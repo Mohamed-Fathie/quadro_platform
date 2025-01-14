@@ -1,9 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+//request => pending ,sent => offer.pending ,
 enum MaitenanceRequestStatus {
-  pending,
-  underMaintenance,
-  completed,
+  pending, //1
+  offerSent, //2
   rejected,
 }
 
