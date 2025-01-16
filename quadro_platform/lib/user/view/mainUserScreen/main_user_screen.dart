@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../features/workshop_authentication/views/workshop_authenitication_page.dart';
 
 class MainUserScreen extends StatelessWidget {
   const MainUserScreen({super.key});
@@ -77,7 +78,16 @@ class MainUserScreen extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: (){},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const WorkshopRegisterationPage();
+                    },
+                  ),
+                );
+              },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 1.h),
                 padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.5.w),
@@ -103,7 +113,8 @@ class MainUserScreen extends StatelessWidget {
                     ),
                     Text(
                       'طلب خدمة صيانة سيارة',
-                      style: AppTextStyles.Mheading22Bold.copyWith(color: white),
+                      style:
+                          AppTextStyles.Mheading22Bold.copyWith(color: white),
                     ),
                   ],
                 ),

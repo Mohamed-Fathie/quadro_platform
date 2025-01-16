@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
-import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
-import 'package:quadro_platform/user/view/account/user_account_screen.dart';
-import 'package:quadro_platform/user/view/riderActivityScreen/rider_activity_screen.dart';
-import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
+import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/driver/view/DriverAccountScreen/driver_account_screen.dart';
+import 'package:quadro_platform/driver/view/DriverActivityScreen/driver_activity_screen.dart';
+import 'package:quadro_platform/driver/view/DriverHomeScreen/driver_home_screen.dart';
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
-class UserBottomNavBar extends StatelessWidget {
-  UserBottomNavBar({super.key});
+class DriverBottomNavBar extends StatelessWidget {
+  DriverBottomNavBar({super.key});
 
   List<PersistentTabConfig> _navBarItems(int currentTab) {
     return [
       PersistentTabConfig(
-        screen: const RiderHomeScreen(),
+        screen:  DriverHomeScreen(),
         item: ItemConfig(
           icon: Icon(currentTab == 0
               ? CupertinoIcons.house_fill
@@ -27,14 +26,8 @@ class UserBottomNavBar extends StatelessWidget {
           activeForegroundColor: teal,
         ),
       ),
-      // PersistentTabConfig(
-      //   icon: Icon(
-      //       currentTab == 0 ? CupertinoIcons.car_fill : CupertinoIcons.car),
-      //   title: 'Maintanence',
-      //   activeForegroundColor: green200,
-      // ),
       PersistentTabConfig(
-        screen: const RiderActivityScreen(),
+        screen: const DriverActivityScreen(),
         item: ItemConfig(
           icon: Icon(currentTab == 0
               ? CupertinoIcons.square_list_fill
@@ -44,7 +37,7 @@ class UserBottomNavBar extends StatelessWidget {
         ),
       ),
       PersistentTabConfig(
-        screen: UserAccountScreen(),
+        screen: DriverAccountScreen(),
         item: ItemConfig(
           icon: Icon(currentTab == 0
               ? CupertinoIcons.person_fill
@@ -59,42 +52,29 @@ class UserBottomNavBar extends StatelessWidget {
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
   @override
   Widget build(BuildContext context) {
-    return Consumer<BottomNavBarProvider>(
+    return Consumer<BottomNavBarDriverProvider>(
       builder: (context, tabProvider, child) {
         return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: Text(
-              'Quadro',
-              style: AppTextStyles.heading20Bold,
-            ),
-          ),
+         
           body: PersistentTabView(
             controller: controller,
             tabs: _navBarItems(tabProvider.currentTab),
             avoidBottomPadding: true,
-            //onItemSelected: ,
-
             handleAndroidBackButtonPress: true,
             resizeToAvoidBottomInset: true,
             stateManagement: true,
-
             popActionScreens: PopActionScreensType.all,
-
-            navBarBuilder: (navBarConfig) => Style2BottomNavBar(
-              navBarConfig: navBarConfig,
-              navBarDecoration: NavBarDecoration(
-                borderRadius: BorderRadius.circular(8.sp),
-                color: white,
-              ),
-              // itemAnimationProperties: const ItemAnimation(
-              //     duration: Duration(microseconds: 200), curve: Curves.ease),
-            ),
+            navBarBuilder: (navBarConfig) {
+              return Style2BottomNavBar(
+                navBarConfig: navBarConfig,
+                navBarDecoration: NavBarDecoration(
+                  borderRadius: BorderRadius.circular(8.sp),
+                  color: white,
+                ),
+                // itemAnimationProperties: const ItemAnimation(
+                //     duration: Duration(microseconds: 200), curve: Curves.ease),
+              );
+            },
           ),
         );
       },

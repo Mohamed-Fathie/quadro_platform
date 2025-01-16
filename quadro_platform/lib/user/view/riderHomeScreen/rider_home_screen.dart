@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:quadro_platform/shared/widgets/trip_records.dart';
 import 'package:quadro_platform/shared/widgets/where_to.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
+import 'package:quadro_platform/user/view/pichupAndDropLocation/pickup_drop_location_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class RiderHomeScreen extends StatelessWidget {
@@ -25,7 +27,14 @@ class RiderHomeScreen extends StatelessWidget {
         shrinkWrap: true,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                    child: PickupAndDropLocationScreen(),
+                    type: PageTransitionType.leftToRight),
+              );
+            },
             child: const WhereTo(),
           ),
           SizedBox(

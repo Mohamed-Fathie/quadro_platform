@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,13 +11,7 @@ import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
-import '../../../features/user/model/user.dart';
-import '../../../features/user/repository/user_repository.dart';
-
 class ProfileDataCRUDServices {
-  final repository =
-      UserRepository(auth: auth, firestore: FirebaseFirestore.instance);
-
   static getProfileDataFromRealTimeDatabase(String userID) async {
     try {
       final snapshot = await realTimeDatabaseRef.child('User/$userID').get();
@@ -48,9 +41,8 @@ class ProfileDataCRUDServices {
     }
   }
 
-  registerUserToDatabase(
-      {required ProfileDataModel profileData,
-      required BuildContext context}) async {
+  static registerUserToDatabase(
+      {required ProfileDataModel profileData, required BuildContext context}) {
     // if (auth.currentUser == null) {
     //   Navigator.pushAndRemoveUntil(
     //       context,
@@ -58,11 +50,7 @@ class ProfileDataCRUDServices {
     //           child: const LogInScreen(), type: PageTransitionType.bottomToTop),
     //       (route) => false);
     // }
-    await repository.addUserToFirebaseAuth(
-        profileData.name!,
-        profileData.email!,
-        profileData.mobileNumber,
-        profileData.profilePicUrl!);
+
     realTimeDatabaseRef
         .child('User/${auth.currentUser!.uid}')
         .set(profileData.toMap())

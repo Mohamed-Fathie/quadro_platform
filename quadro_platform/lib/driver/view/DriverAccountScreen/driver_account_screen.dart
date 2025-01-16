@@ -7,14 +7,14 @@ import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:sizer/sizer.dart';
 
-class UserAccountScreen extends StatefulWidget {
-  UserAccountScreen({super.key});
+class DriverAccountScreen extends StatefulWidget {
+  const DriverAccountScreen({super.key});
 
   @override
-  State<UserAccountScreen> createState() => _UserAccountScreenState();
+  State<DriverAccountScreen> createState() => _DriverAccountScreenState();
 }
 
-class _UserAccountScreenState extends State<UserAccountScreen> {
+class _DriverAccountScreenState extends State<DriverAccountScreen> {
   final List accountButtons = [
     [CupertinoIcons.gear_alt_fill, 'الاعدادات'],
     [CupertinoIcons.person_2_fill, 'ادارة الحساب'],

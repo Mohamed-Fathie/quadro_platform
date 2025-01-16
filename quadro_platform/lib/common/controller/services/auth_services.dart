@@ -1,9 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
 import 'package:quadro_platform/common/controller/services/image_services.dart';
 import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
@@ -11,16 +12,12 @@ import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
-import 'package:quadro_platform/driver/view/driver_home_screen.dart';
-import 'package:quadro_platform/features/user/repository/user_repository.dart';
-import 'package:quadro_platform/features/workshop_authentication/views/id_screen.dart';
-import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
+import 'package:quadro_platform/driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
-import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/main_bottom_navbar.dart';
 
-import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
+import '../../../features/workshop_authentication/views/workshop_authenitication_page.dart';
 
 class AuthServices {
   // ******************* loginUser function *****************//
@@ -148,7 +145,7 @@ class AuthServices {
 
 // ******************* checkUser function *****************//
 
-  static checkUser(context) async {
+  static checkUser(BuildContext context) async {
     try {
       bool userIsRegistered =
           await ProfileDataCRUDServices.checkForRegisteredUser(context);
@@ -156,20 +153,24 @@ class AuthServices {
         String userIsTowingDriver =
             await ProfileDataCRUDServices.userIsTowingDriver(context);
         if (userIsTowingDriver == 'التسجيل كصاحب ساحبة') {
+          context.read<ProfileDataProvider>().getProfileData();
           Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                  child: const DriverHomeScreen(),
+                  child: DriverBottomNavBar(),
                   type: PageTransitionType.bottomToTop),
               (route) => false);
         } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
+          context.read<ProfileDataProvider>().getProfileData();
+
           return Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                  child: const WorkshopNavBar(),
+                  child: const WorkshopRegisterationPage(),
                   type: PageTransitionType.bottomToTop),
               (route) => false);
         } else {
+          context.read<ProfileDataProvider>().getProfileData();
           Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
@@ -190,14 +191,14 @@ class AuthServices {
       log('userCheck error : $e');
       log('Stack Trace: $stackTrace');
       ToastService.sendScaffoldAlert(
-          msg: 'حدث خطأ , حاول مجددا بعد قليل',
+          msg: '!!حدث خطأ , حاول مجددا بعد قليل',
           toastStatus: 'WARNING',
           context: context);
     }
   }
 
 // ******************* logOutUser function *****************//
-  static logOutUser(context) {
+  static logOutUser(BuildContext context) {
     auth.signOut();
     NavigationService().routeTo(RoutesConstants.loginLogic);
   }
@@ -300,8 +301,8 @@ class AuthServices {
         drivingLicenseNumber: drivingLicenceNumberController.trim(),
         registeredDateTime: DateTime.now(),
       );
-      await ProfileDataCRUDServices()
-          .registerUserToDatabase(profileData: profileData, context: context);
+      await ProfileDataCRUDServices.registerUserToDatabase(
+          profileData: profileData, context: context);
     }
   }
 
@@ -366,8 +367,47 @@ class AuthServices {
         registeredDateTime: DateTime.now(),
       );
 
-      await ProfileDataCRUDServices()
-          .registerUserToDatabase(profileData: profileData, context: context);
+      await ProfileDataCRUDServices.registerUserToDatabase(
+          profileData: profileData, context: context);
     }
+  }
+
+  static resetPassword({required String emailController, required context}) {
+    if (emailController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال بريدك الالكتروني',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+      return;
+    }
+    auth.sendPasswordResetEmail(email: emailController).then((value) {
+      log("تم إرسال رابط إعادة التعيين");
+      ToastService.sendScaffoldAlert(
+        msg:
+            'تم ارسال رابط تعيين كلمة المرور الجديدة على بريدك الالكتروني ، الرجاء التحقق من بريدك الالكتروني',
+        toastStatus: 'SUCCESS',
+        context: context,
+      );
+      NavigationService().goBack();
+    }).catchError((error) {
+      String errorMessage = 'حدث خطأ، يرجى المحاولة لاحقًا.';
+      if (error is FirebaseAuthException) {
+        switch (error.code) {
+          case 'invalid-email':
+            errorMessage = 'البريد الإلكتروني الذي أدخلته غير صالح.';
+            break;
+          case 'user-not-found':
+            errorMessage = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+            break;
+        }
+      }
+      ToastService.sendScaffoldAlert(
+        msg: errorMessage,
+        toastStatus: 'WARNING',
+        context: context,
+      );
+      log("حدث خطأ: $error");
+    });
   }
 }

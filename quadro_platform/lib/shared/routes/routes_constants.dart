@@ -9,4 +9,5 @@ class RoutesConstants {
   static const String workshopBottomNavBar = 'workshopBottomNavBar';
   static const String requestDetails = 'requestDetails';
   static const String sendOffer = 'sendOffer';
+  static const String resetPassWordScreen = 'ResetPassWordScreen';
 }

@@ -3,6 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/controller/provider/location_provider.dart';
+import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
+import 'package:quadro_platform/driver/controller/provider/driver_maps_provider.dart';
 import 'package:quadro_platform/features/request_details_screen/veiw/details_screen_page.dart';
 import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
 import 'package:quadro_platform/features/onboarding/view/widgets/on_boarding_screen.dart';
@@ -52,6 +58,21 @@ class Quadro extends StatelessWidget {
             ChangeNotifierProvider<BottomNavBarProvider>(
               create: (_) => BottomNavBarProvider(),
             ),
+            ChangeNotifierProvider<LocationProvider>(
+              create: (_) => LocationProvider(),
+            ),
+            ChangeNotifierProvider<ProfileDataProvider>(
+              create: (_) => ProfileDataProvider(),
+            ),
+            ChangeNotifierProvider<BottomNavBarDriverProvider>(
+              create: (_) => BottomNavBarDriverProvider(),
+            ),
+            ChangeNotifierProvider<DriverMapsProvider>(
+              create: (_) => DriverMapsProvider(),
+            ),
+            ChangeNotifierProvider<DriverLocationProvider>(
+              create: (_) => DriverLocationProvider(),
+            ),
           ],
           child: MaterialApp(
             locale: const Locale('ar'),
@@ -67,7 +88,7 @@ class Quadro extends StatelessWidget {
             theme: GlobalThemData.lightThemeData,
             darkTheme: GlobalThemData.darkThemeData,
             themeMode: ThemeMode.system,
-            home: const OnBoardingPage(),
+            home: const LogInLogic(),
           ),
         );
       },
