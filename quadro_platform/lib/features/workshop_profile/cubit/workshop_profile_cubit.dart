@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_profile/model/Review_Domain.dart';
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
+import 'package:quadro_platform/shared/enum/workshop_profile_menu.dart';
 
+import '../../../common/controller/services/auth_services.dart';
 import '../../workshop_authentication/models/firestore_exceptions.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_authentication/repository/workshop_repo.dart';
@@ -26,6 +28,13 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
           reviewslist: [],
           status: WorkshopProfileStatus.loading,
         ));
+  void onSelectedMenu(WorkshopProfileMenu clecked) {
+    switch (clecked) {
+      case WorkshopProfileMenu.logout:
+        AuthServices.logOutUser();
+      case WorkshopProfileMenu.edit:
+    }
+  }
 
   Future<void> initialize() async {
     try {

@@ -18,6 +18,7 @@ import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/main_bottom_navbar.dart';
 
 import '../../../features/workshop_authentication/views/workshop_authenitication_page.dart';
+import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 
 class AuthServices {
   // ******************* loginUser function *****************//
@@ -166,7 +167,7 @@ class AuthServices {
           return Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                  child: const WorkshopRegisterationPage(),
+                  child: const WorkshopNavBar(),
                   type: PageTransitionType.bottomToTop),
               (route) => false);
         } else {
@@ -198,9 +199,9 @@ class AuthServices {
   }
 
 // ******************* logOutUser function *****************//
-  static logOutUser(BuildContext context) {
+  static logOutUser() {
     auth.signOut();
-    NavigationService().routeTo(RoutesConstants.loginLogic);
+    NavigationService().clearAndNavigateTo(RoutesConstants.loginLogic);
   }
 
   static registerTowingDriver(

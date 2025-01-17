@@ -7,6 +7,7 @@ enum WorkshopProfileStatus {
   fetchreviewloading,
   fetchreviewsuccess,
   sendingLoading,
+  logout,
 }
 
 @immutable

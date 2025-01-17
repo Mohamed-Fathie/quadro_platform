@@ -122,7 +122,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                   return InkWell(
                     onTap: () {
                       if (index == (accountButtons.length) - 1) {
-                        AuthServices.logOutUser(context);
+                        AuthServices.logOutUser();
                       }
                     },
                     child: Container(

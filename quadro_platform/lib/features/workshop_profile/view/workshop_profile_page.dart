@@ -4,9 +4,11 @@ import 'package:quadro_platform/features/workshop_authentication/models/workshop
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_profile/cubit/workshop_profile_cubit.dart';
+import 'package:quadro_platform/shared/enum/workshop_profile_menu.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
+import 'widgets/popup_menu_button.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/tab_bar.dart';
 import 'widgets/tabs_views.dart';
@@ -79,6 +81,7 @@ class WorkshopProfileView extends StatelessWidget {
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
+                    leading: const WorkshopPopupMenuButton(),
                     expandedHeight: 35.h,
                     flexibleSpace: FlexibleSpaceBar(
                         background: Image.network(
