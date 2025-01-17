@@ -7,11 +7,13 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_maps_provider.dart';
+import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
-import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -19,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const Quadro());
 }
 
@@ -49,6 +52,12 @@ class Quadro extends StatelessWidget {
             ChangeNotifierProvider<DriverLocationProvider>(
               create: (_) => DriverLocationProvider(),
             ),
+            ChangeNotifierProvider<RideRequestProvider>(
+              create: (_) => RideRequestProvider(),
+            ),
+            ChangeNotifierProvider<DriverRideRequestProvider>(
+              create: (_) => DriverRideRequestProvider(),
+            ),
           ],
           child: MaterialApp(
             navigatorKey: NavigationService().navigatorKey,
@@ -57,7 +66,7 @@ class Quadro extends StatelessWidget {
             theme: GlobalThemData.lightThemeData,
             darkTheme: GlobalThemData.darkThemeData,
             themeMode: ThemeMode.system,
-            home: LogInLogic(),
+            home: const LogInLogic(),
           ),
         );
       },

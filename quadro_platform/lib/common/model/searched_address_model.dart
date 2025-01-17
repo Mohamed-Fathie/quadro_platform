@@ -2,15 +2,14 @@ import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class SearchedAddressModel {
-  String? mainName;
-  String? secondaryName;
-  String? placeID;
+  String mainName;
+  String secondaryName;
+  String placeID;
   SearchedAddressModel({
-    this.mainName,
-    this.secondaryName,
-    this.placeID,
+    required this.mainName,
+    required this.secondaryName,
+    required this.placeID,
   });
-
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -22,13 +21,14 @@ class SearchedAddressModel {
 
   factory SearchedAddressModel.fromMap(Map<String, dynamic> map) {
     return SearchedAddressModel(
-      mainName: map['mainName'] != null ? map['mainName'] as String : null,
-      secondaryName: map['secondaryName'] != null ? map['secondaryName'] as String : null,
-      placeID: map['placeID'] != null ? map['placeID'] as String : null,
+      mainName: map['mainName'] as String,
+      secondaryName: map['secondaryName'] as String,
+      placeID: map['placeID'] as String,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SearchedAddressModel.fromJson(String source) => SearchedAddressModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory SearchedAddressModel.fromJson(String source) =>
+      SearchedAddressModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
