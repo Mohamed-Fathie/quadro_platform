@@ -26,7 +26,7 @@ class OffersList extends StatelessWidget {
         return SharedRequestsList(
           isOffer: true,
           requestType: RequestType.workshop_id,
-          requests: list ?? [],
+          requests: list,
           status: status,
           noRequestsMessage: "لا يوجد طلبات حاليا",
           errorMessage: "حدث خطاء في تحميل الطلبات",

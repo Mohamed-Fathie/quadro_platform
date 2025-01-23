@@ -6,6 +6,8 @@ import 'package:quadro_platform/features/workshop_authentication/repository/work
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:sizer/sizer.dart';
@@ -123,13 +125,12 @@ class SendingOfferView extends StatelessWidget {
                     );
                   }
                   return CustomElevatedButton(
-                    buttonColor: Qcolors.primarycolor,
-                    buttonTitle: "ارسل العرض",
-                    onPressed: () => context
-                        .read<SendingOfferCubit>()
-                        .sendOffer(
-                            requestId: requestId, workshopId: workshopId),
-                  );
+                      buttonColor: Qcolors.primarycolor,
+                      buttonTitle: "ارسل العرض",
+                      onPressed: () {
+                        context.read<SendingOfferCubit>().sendOffer(
+                            requestId: requestId, workshopId: workshopId);
+                      });
                 },
               )
             ],

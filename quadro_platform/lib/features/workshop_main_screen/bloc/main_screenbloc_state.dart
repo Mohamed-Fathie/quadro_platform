@@ -20,7 +20,7 @@ class MainScreenState extends Equatable {
 
   const MainScreenState({
     this.errorMessage = "",
-    this.status = MainScreenStatus.initial,
+    this.status = MainScreenStatus.reqestloading,
     this.offers,
     this.requests,
     this.workshop,

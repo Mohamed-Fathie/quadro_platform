@@ -29,10 +29,6 @@ class OverlaySendingOffer {
 
     overlay = OverlayEntry(
       builder: (context) {
-        final isDark = QhelperFucntions().isDarkMode(context);
-        Color currentColor =
-            isDark ? const Color(0xFFE4F4F7) : const Color(0xFF1A2A38);
-
         return Material(
           color: Colors.transparent,
           child: Center(
@@ -56,7 +52,7 @@ class OverlaySendingOffer {
                         const SizedBox(height: 10),
                         Icon(
                           Icons.car_repair,
-                          color: currentColor,
+                          color: const Color(0xFFE4F4F7),
                           size: 30.h,
                         ),
                         const SizedBox(height: 10),
@@ -72,12 +68,12 @@ class OverlaySendingOffer {
                           height: 20,
                         ),
                         CustomElevatedButton(
-                          buttonColor: currentColor,
+                          buttonColor: const Color(0xFFE4F4F7),
                           buttonTitle: "عودة للرئيسية",
                           onPressed: () {
                             overlay.remove();
-                            NavigationService().replaceRoute(
-                                RoutesConstants.workshopBottomNavBar);
+                            NavigationService().goBack();
+                            NavigationService().goBack();
                           },
                           icon: Icons.arrow_back,
                           iconColor: Qcolors.primarycolor,

@@ -28,8 +28,8 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
       : _manager = repositoryManager,
         super(const MainUserScreenState(
             errorMessage: null,
-            requests: [],
-            status: MainUserScreenStatus.loading,
+            requests: null,
+            status: MainUserScreenStatus.reqestloading,
             userName: null)) {
     on<MainScreenStarted>(_onMainScreenStarted);
     on<MainScreenRequestFetched>(_onMainScreenRequestFetched);

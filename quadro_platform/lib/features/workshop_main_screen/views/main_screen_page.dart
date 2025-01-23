@@ -30,18 +30,16 @@ class MainScreenPage extends StatelessWidget {
       appBar: GradientAppBar(
         notificationCallBack: () {},
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.w),
-          child: BlocProvider(
-            create: (context) => MainScreenBloc(
-                context.read<WorkshopRepository>(),
-                repositoryManager: context.read<RepositoryManager>())
-              ..add(MainScreenStarted())
-              ..add(MainScreenRequestFetched())
-              ..add(MainScreenOffersFetched()),
-            child: const MainScreenView(),
-          ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4.w),
+        child: BlocProvider(
+          create: (context) => MainScreenBloc(
+              context.read<WorkshopRepository>(),
+              repositoryManager: context.read<RepositoryManager>())
+            ..add(MainScreenStarted())
+            ..add(MainScreenRequestFetched())
+            ..add(MainScreenOffersFetched()),
+          child: const MainScreenView(),
         ),
       ),
     );

@@ -24,6 +24,8 @@ class RouteGenerator {
     switch (settings.name) {
       case RoutesConstants.login:
         return _materialRoute(const LogInScreen());
+      case RoutesConstants.workshopBottomNavBar:
+        return _materialRoute(const WorkshopNavBar());
 
       case RoutesConstants.signUp:
         return _materialRoute(const RegistrationScreen());
@@ -79,9 +81,6 @@ class RouteGenerator {
           UserBottomNavBar(),
           PageTransitionType.bottomToTop,
         );
-
-      case RoutesConstants.workshopBottomNavBar:
-        return _materialRoute(const WorkshopNavBar());
 
       case RoutesConstants.resetPassWordScreen:
         return _pageTransition(

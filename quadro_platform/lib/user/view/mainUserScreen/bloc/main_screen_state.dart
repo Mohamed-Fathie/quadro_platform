@@ -11,15 +11,12 @@ enum MainUserScreenStatus {
 @immutable
 final class MainUserScreenState extends Equatable {
   final MainUserScreenStatus status;
-  final List<MaintenanceRequestDomainModel> requests;
+  final List<MaintenanceRequestDomainModel>? requests;
   final String? errorMessage;
   final String? userName;
 
   const MainUserScreenState(
-      {required this.status,
-      required this.requests,
-      this.errorMessage,
-      this.userName});
+      {required this.status, this.requests, this.errorMessage, this.userName});
   MainUserScreenState copyWith({
     MainUserScreenStatus? status,
     List<MaintenanceRequestDomainModel>? requests,

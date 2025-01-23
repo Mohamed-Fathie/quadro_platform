@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/worskshop_offers_screen/cubit/workshop_offers_cubit.dart';
-import 'package:quadro_platform/features/worskshop_offers_screen/view/widgets/list_of_offers.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';

@@ -42,7 +42,7 @@ class WorkshopNavBar extends StatelessWidget {
         navBarBuilder: (navBarConfig) => Style8BottomNavBar(
           navBarConfig: navBarConfig,
           navBarDecoration: NavBarDecoration(
-            color: isDark ? Color(0xFF1F1929) : white,
+            color: isDark ? const Color(0xFF1F1929) : white,
             borderRadius: BorderRadius.circular(
               10,
             ),

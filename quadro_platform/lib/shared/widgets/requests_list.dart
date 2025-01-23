@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
@@ -9,7 +10,7 @@ import 'request_templet.dart';
 import 'rounded_container.dart';
 
 class SharedRequestsList extends StatelessWidget {
-  final List<MaintenanceRequestDomainModel> requests;
+  final List<MaintenanceRequestDomainModel>? requests;
   final RequestStatus status;
   final String noRequestsMessage;
   final String errorMessage;
@@ -58,64 +59,69 @@ class SharedRequestsList extends StatelessWidget {
             return const GradientCircularProgress();
           }
 
-          return requests.isEmpty
-              ? RoundedContainer(
-                  width: 80.w,
-                  height: 35.h,
-                  child: Center(
-                    child: Text(
-                      noRequestsMessage,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.apply(color: buttonColor),
-                    ),
-                  ),
-                )
-              : isOffer != null
-                  ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: requests.length,
-                      itemBuilder: (context, index) {
-                        final offer = requests[index];
-                        return RequestTemplet(
-                          requestType: RequestType.workshop_id,
-                          isOffer: true,
-                          buttonTitle: "تفاصيل",
-                          offerStatus: offer.offer!.status.name,
-                          servicePrice: offer.offer!.servicePrice.toString(),
-                          navigatorCall: () => onRequestDetails(
-                            offer,
-                            requestType,
-                          ),
-                          carBrand: offer.carCompany.name,
-                          carModel: offer.carModel.name,
-                          dateCreated: offer.offer!.dateCreated.toDate(),
-                          userName: offer.user.name,
-                        );
-                      },
+          return requests == null
+              ? const GradientCircularProgress()
+              : requests!.isEmpty
+                  ? RoundedContainer(
+                      width: 80.w,
+                      height: 35.h,
+                      child: Center(
+                        child: Text(
+                          noRequestsMessage,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.apply(
+                                  color: Qcolors.getColorForRequestType(
+                                      requestType)),
+                        ),
+                      ),
                     )
-                  : ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: requests.length,
-                      itemBuilder: (context, index) {
-                        final request = requests[index];
-                        return RequestTemplet(
-                          requestType: requestType,
-                          buttonColore: buttonColor,
-                          background: backgroundColor,
-                          buttonTitle: buttonTitle,
-                          navigatorCall: () => onRequestDetails(
-                            request,
-                            requestType,
-                          ),
-                          carBrand: request.carCompany.name,
-                          carModel: request.carModel.name,
-                          dateCreated: request.dateCreated,
-                          userName: request.user.name,
+                  : isOffer != null
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: requests!.length,
+                          itemBuilder: (context, index) {
+                            final offer = requests![index];
+                            return RequestTemplet(
+                              requestType: RequestType.workshop_id,
+                              isOffer: true,
+                              buttonTitle: "تفاصيل",
+                              offerStatus: offer.offer!.status.name,
+                              servicePrice:
+                                  offer.offer!.servicePrice.toString(),
+                              navigatorCall: () => onRequestDetails(
+                                offer,
+                                requestType,
+                              ),
+                              carBrand: offer.carCompany.name,
+                              carModel: offer.carModel.name,
+                              dateCreated: offer.offer!.dateCreated.toDate(),
+                              userName: offer.user.name,
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: requests!.length,
+                          itemBuilder: (context, index) {
+                            final request = requests![index];
+                            return RequestTemplet(
+                              requestType: requestType,
+                              buttonColore: buttonColor,
+                              background: backgroundColor,
+                              buttonTitle: buttonTitle,
+                              navigatorCall: () => onRequestDetails(
+                                request,
+                                requestType,
+                              ),
+                              carBrand: request.carCompany.name,
+                              carModel: request.carModel.name,
+                              dateCreated: request.dateCreated,
+                              userName: request.user.name,
+                            );
+                          },
                         );
-                      },
-                    );
         },
       ),
     );
