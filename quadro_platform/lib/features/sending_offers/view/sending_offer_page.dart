@@ -8,9 +8,9 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/mainten
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
-import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../shared/enum/maitenance_request_status.dart';
 import '../../../shared/utils/constans/colors.dart';
 import '../../../shared/widgets/overlay_dialog/overlay_sending_offer.dart';
 import '../../workshop_main_screen/repository/offers_repository.dart';
@@ -90,18 +90,22 @@ class SendingOfferView extends StatelessWidget {
             children: [
               const SizedBox.shrink(),
               const SectionHeader(
+                requestType: RequestType.workshop_id,
                 text: "قم باظافة تفاصيل عرضك",
                 islarge: true,
               ),
               const SectionHeader(
+                requestType: RequestType.workshop_id,
                 text: "مبلغ الخدمة",
               ),
               const ServicePriceTextfield(),
               const SectionHeader(
+                requestType: RequestType.workshop_id,
                 text: "مدة الضمان (عدد الايام)",
               ),
               const GuaranteePeriod(),
               const SectionHeader(
+                requestType: RequestType.workshop_id,
                 text: "حالة القطع التي ستستخدم للصيانة",
               ),
               const SparePartsRidosButton(),

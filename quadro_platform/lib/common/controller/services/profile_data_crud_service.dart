@@ -10,6 +10,8 @@ import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/constants/constants.dart';
+import 'package:quadro_platform/features/user/model/user.dart';
+import 'package:quadro_platform/features/user/repository/user_repository.dart';
 
 class ProfileDataCRUDServices {
   static getProfileDataFromRealTimeDatabase(String userID) async {
@@ -42,7 +44,8 @@ class ProfileDataCRUDServices {
   }
 
   static registerUserToDatabase(
-      {required ProfileDataModel profileData, required BuildContext context}) {
+      {required ProfileDataModel profileData,
+      required BuildContext context}) async {
     // if (auth.currentUser == null) {
     //   Navigator.pushAndRemoveUntil(
     //       context,
@@ -50,7 +53,12 @@ class ProfileDataCRUDServices {
     //           child: const LogInScreen(), type: PageTransitionType.bottomToTop),
     //       (route) => false);
     // }
-
+    await UserRepository().addUser(QuadroUser(
+        id: auth.currentUser!.uid,
+        name: profileData.name ?? "",
+        email: profileData.email ?? "",
+        phone: profileData.mobileNumber,
+        pictureUrl: profileData.profilePicUrl));
     realTimeDatabaseRef
         .child('User/${auth.currentUser!.uid}')
         .set(profileData.toMap())

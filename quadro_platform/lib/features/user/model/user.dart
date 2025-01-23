@@ -36,14 +36,16 @@ class QuadroUser {
   }
 
   // Factory to create an instance from JSON
-  factory QuadroUser.fromJson(Map<String, dynamic> json) {
+  factory QuadroUser.fromJson(Map<String, dynamic> json, String id) {
     return QuadroUser(
-      id: json['user_id'] as String,
+      id: id, // Use email as ID if no user_id is provided
       name: json['name'] as String,
       email: json['email'] as String,
-      phone: json['phone'] as String?,
-      role: null, // Parse enum by name
-      pictureUrl: json['profile_picture'] as String?,
+      phone:
+          json['mobileNumber']?.toString(), // Convert to string if it's an int
+      role: null, // Map userType to role
+      pictureUrl:
+          json['profilePicUrl'] as String?, // Map profilePicUrl to pictureUrl
     );
   }
 

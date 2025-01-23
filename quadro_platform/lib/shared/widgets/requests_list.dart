@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import '../enum/maitenance_request_status.dart';
+import '../enum/request_status.dart';
+import 'gradient_circular_progress.dart';
+import 'request_templet.dart';
+import 'rounded_container.dart';
+
+class SharedRequestsList extends StatelessWidget {
+  final List<MaintenanceRequestDomainModel> requests;
+  final RequestStatus status;
+  final String noRequestsMessage;
+  final String errorMessage;
+  final String buttonTitle;
+  final Color buttonColor;
+  final Color backgroundColor;
+  final RequestType requestType;
+  final bool? isOffer;
+  final void Function(
+    MaintenanceRequestDomainModel request,
+    RequestType requestType,
+  ) onRequestDetails;
+
+  const SharedRequestsList({
+    super.key,
+    required this.requests,
+    required this.status,
+    this.noRequestsMessage = "لا يوجد طلبات حاليا",
+    this.errorMessage = "حدث خطاء في تحميل الطلبات",
+    this.buttonTitle = "تفاصيل الطلب",
+    this.buttonColor = Colors.blue,
+    required this.backgroundColor,
+    required this.onRequestDetails,
+    required this.requestType,
+    this.isOffer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 45.h,
+      child: Builder(
+        builder: (context) {
+          if (status == RequestStatus.failure) {
+            return Center(
+              child: Text(
+                errorMessage,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: Colors.red),
+              ),
+            );
+          }
+          if (status == RequestStatus.loading) {
+            return const GradientCircularProgress();
+          }
+
+          return requests.isEmpty
+              ? RoundedContainer(
+                  width: 80.w,
+                  height: 35.h,
+                  child: Center(
+                    child: Text(
+                      noRequestsMessage,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.apply(color: buttonColor),
+                    ),
+                  ),
+                )
+              : isOffer != null
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: requests.length,
+                      itemBuilder: (context, index) {
+                        final offer = requests[index];
+                        return RequestTemplet(
+                          requestType: RequestType.workshop_id,
+                          isOffer: true,
+                          buttonTitle: "تفاصيل",
+                          offerStatus: offer.offer!.status.name,
+                          servicePrice: offer.offer!.servicePrice.toString(),
+                          navigatorCall: () => onRequestDetails(
+                            offer,
+                            requestType,
+                          ),
+                          carBrand: offer.carCompany.name,
+                          carModel: offer.carModel.name,
+                          dateCreated: offer.offer!.dateCreated.toDate(),
+                          userName: offer.user.name,
+                        );
+                      },
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: requests.length,
+                      itemBuilder: (context, index) {
+                        final request = requests[index];
+                        return RequestTemplet(
+                          requestType: requestType,
+                          buttonColore: buttonColor,
+                          background: backgroundColor,
+                          buttonTitle: buttonTitle,
+                          navigatorCall: () => onRequestDetails(
+                            request,
+                            requestType,
+                          ),
+                          carBrand: request.carCompany.name,
+                          carModel: request.carModel.name,
+                          dateCreated: request.dateCreated,
+                          userName: request.user.name,
+                        );
+                      },
+                    );
+        },
+      ),
+    );
+  }
+}
+// RequestTemplet(
+//                           type: RequestType.workshop_id,
+//                           isOffer: true,
+//                           buttonTitle: "تفاصيل",
+//                           offerStatus: offer.offer!.status.name,
+//                           servicePrice: offer.offer!.servicePrice.toString(),
+//                           navigatorCall: () => NavigationService().routeTo(
+//                               RoutesConstants.requestDetails,
+//                               arguments: offer),
+//                           carBrand: offer.carCompany.name,
+//                           carModel: offer.carModel.name,
+//                           dateCreated: offer.offer!.dateCreated.toDate(),
+//                           userName: offer.user.name,
+//                         );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
 typedef CallbackNavigator = void Function();
@@ -8,8 +9,11 @@ class SectionHeader extends StatelessWidget {
   final bool? islarge;
   final bool? displayLarge;
   final bool? withButton;
-  final bool? withIcon;
+  final IconData? withIcon;
+  final Color? textColor;
+  final Color? buttonColor;
   final CallbackNavigator? callback;
+  final RequestType requestType;
 
   const SectionHeader({
     required this.text,
@@ -19,6 +23,9 @@ class SectionHeader extends StatelessWidget {
     this.withButton,
     this.callback,
     this.withIcon,
+    required this.requestType,
+    this.textColor,
+    this.buttonColor,
   });
 
   @override
@@ -42,28 +49,32 @@ class SectionHeader extends StatelessWidget {
                             .headlineMedium
                             ?.apply(
                                 decoration: TextDecoration.underline,
-                                color: Qcolors.primarycolor)))
+                                color: buttonColor ?? Qcolors.primarycolor)))
               ],
             )
           : withIcon != null
               ? Row(
                   textDirection: TextDirection.rtl,
                   children: [
-                    const Icon(
+                    Icon(
                       size: 40,
-                      Icons.directions_car,
-                      color: Qcolors.primarycolor,
+                      withIcon,
+                      color: Qcolors.getColorForRequestType(requestType),
                     ),
-                    Text(
-                      text,
-                      style: Theme.of(context).textTheme.displayLarge,
-                    )
+                    Text(text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge
+                            ?.copyWith(
+                                color: Qcolors.getColorForRequestType(
+                                    requestType)))
                   ],
                 )
               : Text(
                   text,
                   style: islarge != null
-                      ? Theme.of(context).textTheme.headlineLarge
+                      ? Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Qcolors.getColorForRequestType(requestType))
                       : displayLarge != null
                           ? Theme.of(context).textTheme.displayLarge
                           : Theme.of(context).textTheme.headlineMedium,

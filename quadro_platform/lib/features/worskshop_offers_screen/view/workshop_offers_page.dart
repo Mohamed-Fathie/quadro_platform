@@ -43,7 +43,9 @@ class WorkshopOffersPage extends StatelessWidget {
                 SizedBox(
                   height: 5.h,
                 ),
-                const SectionHeader(text: "العروض الخاصة بي"),
+                const SectionHeader(
+                    requestType: RequestType.workshop_id,
+                    text: "العروض الخاصة بي"),
                 const FilterList(),
                 BlocBuilder<WorkshopOffersCubit, WorkshopOffersState>(
                   builder: (context, state) {

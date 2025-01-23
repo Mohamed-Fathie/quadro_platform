@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/extension/date_formating.dart';
 import 'package:sizer/sizer.dart';
 
@@ -7,8 +8,10 @@ import '../../../../shared/widgets/section_row.dart';
 import '../../../workshop_main_screen/repository/models/offers.dart';
 
 class OfferDetails extends StatelessWidget {
+  final RequestType requestType;
   final Offer offer;
-  const OfferDetails({super.key, required this.offer});
+  const OfferDetails(
+      {super.key, required this.offer, required this.requestType});
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +19,30 @@ class OfferDetails extends StatelessWidget {
       spacing: 3.h,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader(
+        SectionHeader(
+          withIcon: Icons.attach_money,
+          requestType: requestType,
           text: "تفاصيل العرض :",
           displayLarge: true,
         ),
         SectionRow(
+            requestType: requestType,
             label: "مبلغ الصيانة :",
             value: "${offer.servicePrice.toString()}   LYD"),
         SectionRow(
+            requestType: requestType,
             label: "مدة الضمان :",
             value: "${offer.guaranteePeriod.toString()}   يوم  "),
         SectionRow(
+            requestType: requestType,
             label: "حالة القطع التي ستستخدم للصيانة :",
             value: offer.sparePartsStatus.name),
-        SectionRow(label: "حالة العرض :", value: offer.status.name),
         SectionRow(
+            requestType: requestType,
+            label: "حالة العرض :",
+            value: offer.status.name),
+        SectionRow(
+            requestType: requestType,
             label: "تاريخ انشاء العرض :",
             value: offer.dateCreated.toDate().formatInArabic()),
         SizedBox(

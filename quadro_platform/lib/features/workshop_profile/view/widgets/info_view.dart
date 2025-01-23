@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/widgets/section_row.dart';
 
 import '../../../../shared/utils/constans/colors.dart';
@@ -29,10 +30,12 @@ class InfoView extends StatelessWidget {
           thickness: 2,
         ),
         SectionRow(
+          requestType: RequestType.workshop_id,
           label: "رقم الهاتف:",
           value: workshop!.phone,
         ),
         const SectionRow(
+          requestType: RequestType.workshop_id,
           label: "موقع الورشة:",
           value: "Tripoli",
         ),

@@ -1,33 +1,30 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/user.dart';
-
 class UserRepository {
   final FirebaseAuth _auth;
-  final FirebaseFirestore _firebaseFirestore;
-  late final CollectionReference<QuadroUser> userRef;
+  final FirebaseDatabase _database;
+  late final DatabaseReference userRef;
 
-  UserRepository({FirebaseAuth? auth, FirebaseFirestore? firestore})
+  UserRepository({FirebaseAuth? auth, FirebaseDatabase? database})
       : _auth = auth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firestore ?? FirebaseFirestore.instance {
-    userRef = _firebaseFirestore.collection("Users").withConverter<QuadroUser>(
-          fromFirestore: (snapshot, _) => QuadroUser.fromJson(snapshot.data()!),
-          toFirestore: (user, _) => user.toJson(),
-        );
+        _database = database ?? FirebaseDatabase.instance {
+    userRef = _database.ref();
   }
 
   /// Adds or updates a user in the database.
   Future<void> addUser(QuadroUser user) async {
     try {
-      await userRef.doc(user.id).set(user);
+      userRef.child('User/${user.id}').set(user.toJson());
       await cacheUser(user);
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure.fromCode(
@@ -66,11 +63,19 @@ class UserRepository {
   }
 
   /// Retrieves a user by ID from Firestore.
-  Future<QuadroUser> getUserById(String id) async {
+  Future<QuadroUser?> getUserById(String id) async {
     try {
-      final docSnapshot = await userRef.doc(id).get();
-      return docSnapshot.data()!;
-      // Returns null if the document doesn't exist: means deleted account
+      final docSnapshot = await userRef.child('User/$id').get();
+      // Check if the snapshot contains data
+      log(docSnapshot.value.toString());
+      if (docSnapshot.exists) {
+        // Convert the snapshot value to a Map and then to a QuadroUser object
+        return QuadroUser.fromJson(
+            Map<String, dynamic>.from(docSnapshot.value as Map), id);
+      } else {
+        // Return null if the user doesn't exist
+        return null;
+      }
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure.fromCode(e.code);
     }
@@ -89,7 +94,7 @@ class UserRepository {
     final userString = prefs.getString('cached_user');
     if (userString != null) {
       final userJson = jsonDecode(userString) as Map<String, dynamic>;
-      return QuadroUser.fromJson(userJson);
+      return QuadroUser.fromJson(userJson, userJson['user_id']);
     }
     return null;
   }
@@ -102,19 +107,18 @@ class UserRepository {
 
   /// map of user by their ids : helper function  to get all users related to specific  requests
   Future<Map<String, QuadroUser>> fetchUsers(Set<String> userIds) async {
-    final List<List<String?>> chunks = splitIntoChunks(userIds.toList(), 10);
+    final Map<String, QuadroUser> users = {};
 
-    final List<Future<Map<String, QuadroUser>>> futures = chunks.map(
-      (chunk) async {
-        final snapshot =
-            await userRef.where(FieldPath.documentId, whereIn: chunk).get();
-        return {for (var doc in snapshot.docs) doc.id: doc.data()};
-      },
-    ).toList();
-    final result = await Future.wait(futures);
-    return result.fold<Map<String, QuadroUser>>(
-      {},
-      (previousValue, element) => {...previousValue, ...element},
-    );
+    // Fetch each user individually
+    for (final userId in userIds) {
+      log(userId);
+      final user = await getUserById(userId);
+      log(user?.name ?? "user is null");
+      if (user != null) {
+        users[userId] = user;
+      }
+    }
+
+    return users;
   }
 }

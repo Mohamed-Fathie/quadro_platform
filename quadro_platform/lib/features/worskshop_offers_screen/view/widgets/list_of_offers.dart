@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/widgets/request_templet.dart';
 import 'package:sizer/sizer.dart';
 
@@ -36,6 +37,7 @@ class ListOfOffers extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                requestType: RequestType.workshop_id,
                 buttonTitle: "تقديم عرض",
                 navigatorCall: () => NavigationService().routeTo(
                     RoutesConstants.requestDetails,
@@ -50,6 +52,7 @@ class ListOfOffers extends StatelessWidget {
           return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                requestType: RequestType.workshop_id,
                 isOffer: true,
                 buttonTitle: "تفاصيل",
                 offerStatus: request.offer!.status.name,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/utils/extension/date_formating.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
@@ -19,6 +20,9 @@ class RequestTemplet<T> extends StatelessWidget {
   final String? offerStatus;
   final bool? isOffer;
   final double? width;
+  final RequestType requestType;
+  final Color? buttonColore;
+  final Color? background;
 //
   const RequestTemplet(
       {super.key,
@@ -32,7 +36,10 @@ class RequestTemplet<T> extends StatelessWidget {
       required this.navigatorCall,
       this.offerStatus,
       this.isOffer,
-      this.width});
+      this.width,
+      required this.requestType,
+      this.buttonColore,
+      this.background});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +77,9 @@ class RequestTemplet<T> extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.apply(color: Qcolors.primarycolor)),
+                              ?.apply(
+                                  color: Qcolors.getColorForRequestType(
+                                      requestType))),
                     ),
                   ],
                 ),
@@ -87,7 +96,9 @@ class RequestTemplet<T> extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.apply(color: Qcolors.primarycolor)),
+                              ?.apply(
+                                  color: Qcolors.getColorForRequestType(
+                                      requestType))),
                     ],
                   ),
                 ),
@@ -104,7 +115,9 @@ class RequestTemplet<T> extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.apply(color: Qcolors.primarycolor)),
+                              ?.apply(
+                                  color: Qcolors.getColorForRequestType(
+                                      requestType))),
                     ],
                   ),
                 ),
@@ -123,7 +136,9 @@ class RequestTemplet<T> extends StatelessWidget {
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium
-                                    ?.apply(color: Qcolors.primarycolor)),
+                                    ?.apply(
+                                        color: Qcolors.getColorForRequestType(
+                                            requestType))),
                           ],
                         ),
                       )
@@ -145,7 +160,8 @@ class RequestTemplet<T> extends StatelessWidget {
                             ),
                             Expanded(
                               child: CustomElevatedButton(
-                                buttonColor: Qcolors.primarycolor,
+                                buttonColor:
+                                    Qcolors.getColorForRequestType(requestType),
                                 buttonTitle: buttonTitle,
                                 onPressed: navigatorCall,
                               ),
@@ -155,7 +171,8 @@ class RequestTemplet<T> extends StatelessWidget {
                     : Expanded(
                         flex: 2,
                         child: CustomElevatedButton(
-                          buttonColor: Qcolors.primarycolor,
+                          buttonColor:
+                              Qcolors.getColorForRequestType(requestType),
                           buttonTitle: buttonTitle,
                           onPressed: navigatorCall,
                         ),
@@ -164,13 +181,15 @@ class RequestTemplet<T> extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          " تم ارسال ${isOffer != null ? "العرض" : "الطلب"} ${dateCreated.formatInArabic()}",
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium
-              ?.apply(color: Qcolors.primarycolor),
-        )
+        requestType == RequestType.vehicle_owner_id
+            ? const SizedBox.shrink()
+            : Text(
+                " تم ارسال ${isOffer != null ? "العرض" : "الطلب"} ${dateCreated.formatInArabic()}",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.apply(color: Qcolors.primarycolor),
+              )
       ],
     );
   }

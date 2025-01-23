@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../enum/maitenance_request_status.dart';
 import 'helper_functions.dart';
 
 class Qcolors {
@@ -10,5 +11,24 @@ class Qcolors {
   static Color getCurrentColor(BuildContext context) {
     final isDark = QhelperFucntions().isDarkMode(context);
     return isDark ? const Color(0xFF1A2A38) : const Color(0xFFE4F4F7);
+  }
+
+  static Color getPrimeryColor(BuildContext context) {
+    final isDark = QhelperFucntions().isDarkMode(context);
+    return isDark ? const Color(0xFF1A2A38) : const Color(0xFFE4F4F7);
+  }
+
+  static List<Color> gradient = [
+    const Color(0xFF0078A3),
+    const Color(0xFF03AABF),
+    const Color(0xFF0EDED2),
+  ];
+  static Color getColorForRequestType(RequestType requestType) {
+    switch (requestType) {
+      case RequestType.vehicle_owner_id:
+        return Qcolors.secondary;
+      case RequestType.workshop_id:
+        return Qcolors.primarycolor;
+    }
   }
 }

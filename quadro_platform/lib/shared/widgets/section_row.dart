@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
-import 'package:quadro_platform/shared/widgets/rounded_container.dart';
 import 'package:sizer/sizer.dart';
 
 class SectionRow extends StatelessWidget {
   final String label;
   final String value;
   final String? imageUrl;
+  final RequestType requestType;
 
   const SectionRow({
     super.key,
     required this.label,
     required this.value,
     this.imageUrl,
+    required this.requestType,
   });
 
   @override
@@ -33,7 +35,7 @@ class SectionRow extends StatelessWidget {
                 TextSpan(
                   text: " $value",
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Qcolors.primarycolor,
+                        color: Qcolors.getColorForRequestType(requestType),
                       ),
                 ),
               ],
@@ -47,7 +49,8 @@ class SectionRow extends StatelessWidget {
             margin: EdgeInsets.only(left: 8.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Qcolors.primarycolor, width: 2),
+              border: Border.all(
+                  color: Qcolors.getColorForRequestType(requestType), width: 2),
               image: DecorationImage(
                 image: NetworkImage(imageUrl!),
                 fit: BoxFit.cover,

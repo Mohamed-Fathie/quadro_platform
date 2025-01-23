@@ -15,6 +15,8 @@ import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../shared/enum/maitenance_request_status.dart';
+
 class WorkshopDetainsPage extends StatelessWidget {
   final WorkshopAuthbloc detailscubit;
 
@@ -81,21 +83,27 @@ class WorkshopRegisterationView extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             const VerticalSpacing(height: 40),
-            const SectionHeader(text: "اضف وصف للورشة"),
+            const SectionHeader(
+                requestType: RequestType.workshop_id, text: "اضف وصف للورشة"),
             const VerticalSpacing(height: 25),
             const TextArea(),
             const VerticalSpacing(height: 25),
-            const SectionHeader(text: "انواع شركات السيارات التي تعمل بها"),
+            const SectionHeader(
+                requestType: RequestType.workshop_id,
+                text: "انواع شركات السيارات التي تعمل بها"),
             const VerticalSpacing(height: 25),
             const DropdownMinu(),
             const VerticalSpacing(height: 25),
             const BrandList(),
             const VerticalSpacing(height: 25),
-            const SectionHeader(text: "حالة القطع التي تعمل بها"),
+            const SectionHeader(
+                requestType: RequestType.workshop_id,
+                text: "حالة القطع التي تعمل بها"),
             const VerticalSpacing(height: 20),
             const SpareParts(),
             const VerticalSpacing(height: 25),
-            const SectionHeader(text: "موقع الورشة"),
+            const SectionHeader(
+                requestType: RequestType.workshop_id, text: "موقع الورشة"),
             const VerticalSpacing(height: 20),
             CustomElevatedButton(
               buttonColor: Qcolors.buttonbackground,

@@ -15,10 +15,8 @@ import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
-import 'package:quadro_platform/user/view/bottomNavBars/main_bottom_navbar.dart';
-
-import '../../../features/workshop_authentication/views/workshop_authenitication_page.dart';
 import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
+import '../../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
 
 class AuthServices {
   // ******************* loginUser function *****************//
@@ -175,7 +173,7 @@ class AuthServices {
           Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                  child: MainBottomNavBar(),
+                  child: const MainBottomNavbar(),
                   type: PageTransitionType.bottomToTop),
               (route) => false);
         }

@@ -52,12 +52,15 @@ class RouteGenerator {
         );
 
       case RoutesConstants.requestDetails:
-        final request = settings.arguments;
-        if (request is! MaintenanceRequestDomainModel) {
+        final argument = settings.arguments;
+        if (argument is! Map<String, dynamic>) {
           return _errorRoute("Invalid arguments for ${settings.name}");
         }
+
         return _pageTransition(
-          DetailsScreenPage(request: request),
+          DetailsScreenPage(
+            argument: argument,
+          ),
           PageTransitionType.bottomToTop,
         );
 

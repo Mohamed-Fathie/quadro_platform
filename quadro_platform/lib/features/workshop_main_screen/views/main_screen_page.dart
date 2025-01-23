@@ -10,6 +10,7 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/offers_
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/offers_list.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/requests_list.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/widgets/request_templet.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/workshop_name_widget.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
@@ -17,6 +18,7 @@ import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../shared/widgets/quadro_appbar.dart';
 import '../../workshop_bottom_nav_bar/workshop_screens.dart';
 
 class MainScreenPage extends StatelessWidget {
@@ -25,18 +27,8 @@ class MainScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "QUADRO",
-          style: TextStyle(
-              color: Qcolors.primarycolor,
-              fontSize: 31,
-              fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
-        ],
+      appBar: GradientAppBar(
+        notificationCallBack: () {},
       ),
       body: SafeArea(
         child: Padding(
@@ -81,16 +73,19 @@ class MainScreenView extends StatelessWidget {
             const VerticalSpacing(height: 50),
             const WorkshopName(),
             const SectionHeader(
+              requestType: RequestType.workshop_id,
               text: "مرحبا بعودتك ",
               displayLarge: true,
             ),
             const VerticalSpacing(height: 25),
             const SectionHeader(
+              requestType: RequestType.workshop_id,
               text: "الطلبات الجديدة",
               islarge: true,
             ),
             const RequestsList(),
             SectionHeader(
+              requestType: RequestType.workshop_id,
               text: "  العروض الخاصة بي",
               callback: () {
                 WorkshopScreens().controller.jumpToTab(2);

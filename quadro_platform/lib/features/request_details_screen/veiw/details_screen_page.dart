@@ -3,6 +3,7 @@ import 'package:quadro_platform/features/request_details_screen/veiw/widgets/off
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/car_models.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/utils/constans/helper_functions.dart';
@@ -13,42 +14,58 @@ import 'package:quadro_platform/shared/widgets/section_row.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../shared/routes/navigation_service.dart';
-import '../../../shared/widgets/vertical_spacing.dart';
 
 class DetailsScreenPage extends StatelessWidget {
-  final MaintenanceRequestDomainModel request;
-  const DetailsScreenPage({super.key, required this.request});
+  final Map<String, dynamic> argument;
+  const DetailsScreenPage({super.key, required this.argument});
 
   @override
   Widget build(BuildContext context) {
+    final request = argument['request'] as MaintenanceRequestDomainModel;
+    final requestType = argument['requestType'] as RequestType;
     return Scaffold(
-      backgroundColor: Qcolors.getCurrentColor(context),
+      backgroundColor: requestType == RequestType.vehicle_owner_id
+          ? Qcolors.getPrimeryColor(context)
+          : Qcolors.getCurrentColor(context),
       appBar: AppBar(
-        backgroundColor: Qcolors.getCurrentColor(context),
+        backgroundColor: requestType == RequestType.vehicle_owner_id
+            ? Qcolors.getPrimeryColor(context)
+            : Qcolors.getCurrentColor(context),
         centerTitle: true,
-        title: Text(
-          request.offer == null ? "تقديم عرض" : "تفاصيل العرض",
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge
-              ?.apply(color: Qcolors.primarycolor),
-        ),
+        title: requestType == RequestType.vehicle_owner_id
+            ? Text(
+                'تفاصيل الطلب',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.apply(color: Qcolors.secondary),
+              )
+            : Text(
+                request.offer == null ? "تقديم عرض" : "تفاصيل العرض",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.apply(color: Qcolors.primarycolor),
+              ),
       ),
       body: SafeArea(
           child: Padding(
-        padding: EdgeInsets.all(8.w),
+        padding: EdgeInsets.all(6.w),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             spacing: 3.h,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const VerticalSpacing(height: 40),
-              const SectionHeader(
+              const SizedBox.shrink(),
+              SectionHeader(
+                withIcon: Icons.description,
+                requestType: requestType,
                 text: " تفاصيل الطلب :",
                 displayLarge: true,
               ),
               SectionRow(
+                requestType: requestType,
                 imageUrl:
                     // request.user.pictureUrl ??
                     "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
@@ -56,22 +73,29 @@ class DetailsScreenPage extends StatelessWidget {
                 value: request.user.name,
               ),
               SectionRow(
-                  label: "حالة الطلب:", value: request.requestStatus.name),
+                  requestType: requestType,
+                  label: "حالة الطلب:",
+                  value: request.requestStatus.name),
               SectionRow(
+                  requestType: requestType,
                   label: "تاريخ انشاء الطلب :",
                   value: request.dateCreated.formatInArabic()),
-              const SectionHeader(
-                withIcon: true,
+              SectionHeader(
+                requestType: requestType,
+                withIcon: Icons.directions_car,
                 text: "مواصفات المركبة :",
                 displayLarge: true,
               ),
               SectionRow(
+                  requestType: requestType,
                   label: "تحديد شركة المركبة :",
                   value: request.carCompany.toArabic()),
               SectionRow(
+                  requestType: requestType,
                   label: "تحديد نوع المركبة :",
                   value: request.carModel.toArabic()),
-              const SectionHeader(
+              SectionHeader(
+                requestType: requestType,
                 text: "وصف حالة المركبة :",
               ),
               Align(
@@ -80,13 +104,12 @@ class DetailsScreenPage extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   request.description,
                   softWrap: true,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.apply(color: Qcolors.primarycolor),
+                  style: Theme.of(context).textTheme.headlineMedium?.apply(
+                      color: Qcolors.getColorForRequestType(requestType)),
                 ),
               ),
-              const SectionHeader(
+              SectionHeader(
+                requestType: requestType,
                 text: "صورة للمركبة :",
               ),
               request.carImageUrl != null
@@ -100,15 +123,32 @@ class DetailsScreenPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
               request.offer == null
-                  ? CustomElevatedButton(
-                      buttonColor: Qcolors.primarycolor,
-                      buttonTitle: "تقديم عرض",
-                      onPressed: () {
-                        NavigationService().routeTo(RoutesConstants.sendOffer,
-                            arguments: request);
-                      },
-                    )
-                  : OfferDetails(offer: request.offer!)
+                  ? requestType == RequestType.vehicle_owner_id
+                      ? Column(
+                          spacing: 3.h,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SectionHeader(
+                                withIcon: Icons.attach_money,
+                                text: "تفاصيل العرض :",
+                                requestType: requestType),
+                            Text(
+                              "لا يوجد عرض الى الان",
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            )
+                          ],
+                        )
+                      : CustomElevatedButton(
+                          buttonColor: Qcolors.primarycolor,
+                          buttonTitle: "تقديم عرض",
+                          onPressed: () {
+                            NavigationService().routeTo(
+                                RoutesConstants.sendOffer,
+                                arguments: request);
+                          },
+                        )
+                  : OfferDetails(
+                      requestType: requestType, offer: request.offer!)
             ],
           ),
         ),

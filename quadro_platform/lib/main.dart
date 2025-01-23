@@ -9,11 +9,6 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_maps_provider.dart';
-import 'package:quadro_platform/features/request_details_screen/veiw/details_screen_page.dart';
-import 'package:quadro_platform/features/onboarding/view/on_boarding_page.dart';
-import 'package:quadro_platform/features/onboarding/view/widgets/on_boarding_screen.dart';
-import 'package:quadro_platform/features/sending_offers/view/sending_offer_page.dart';
-
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
@@ -30,12 +25,7 @@ import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
-import 'package:quadro_platform/shared/routes/routes_constants.dart';
-import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
-import 'package:quadro_platform/user/view/account/user_account_screen.dart';
 import 'package:sizer/sizer.dart';
-
-import 'features/worskshop_offers_screen/view/workshop_offers_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,9 +45,9 @@ class Quadro extends StatelessWidget {
       builder: (context, _, __) {
         return MultiProvider(
           providers: [
-            ChangeNotifierProvider<BottomNavBarProvider>(
-              create: (_) => BottomNavBarProvider(),
-            ),
+            // ChangeNotifierProvider<BottomNavBarProvider>(
+            //   create: (_) => BottomNavBarProvider(),
+            // ),
             ChangeNotifierProvider<LocationProvider>(
               create: (_) => LocationProvider(),
             ),
@@ -73,6 +63,12 @@ class Quadro extends StatelessWidget {
             ChangeNotifierProvider<DriverLocationProvider>(
               create: (_) => DriverLocationProvider(),
             ),
+            // ChangeNotifierProvider<RideRequestProvider>(
+            //   create: (_) => RideRequestProvider(),
+            // ),
+            // ChangeNotifierProvider<DriverRideRequestProvider>(
+            //   create: (_) => DriverRideRequestProvider(),
+            // ),
           ],
           child: MaterialApp(
             locale: const Locale('ar'),

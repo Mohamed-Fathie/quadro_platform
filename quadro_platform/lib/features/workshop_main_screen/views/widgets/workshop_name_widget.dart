@@ -6,6 +6,8 @@ import 'package:quadro_platform/features/workshop_main_screen/bloc/main_screenbl
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
 
+import '../../../../shared/enum/maitenance_request_status.dart';
+
 class WorkshopName extends StatelessWidget {
   const WorkshopName({super.key});
 
@@ -17,7 +19,9 @@ class WorkshopName extends StatelessWidget {
       },
     );
     return workshop != null
-        ? SectionHeader(text: "${workshop.name} ${workshop.phone}")
+        ? SectionHeader(
+            requestType: RequestType.workshop_id,
+            text: "${workshop.name} ${workshop.phone}")
         : const Center(
             child: CircularProgressIndicator(
               color: Qcolors.primarycolor,
