@@ -68,7 +68,9 @@ class MainScreenView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const VerticalSpacing(height: 50),
+            SizedBox(
+              height: 5.h,
+            ),
             const WorkshopName(),
             const SectionHeader(
               requestType: RequestType.workshop_id,
@@ -81,6 +83,9 @@ class MainScreenView extends StatelessWidget {
               text: "الطلبات الجديدة",
               islarge: true,
             ),
+            SizedBox(
+              height: 2.h,
+            ),
             const RequestsList(),
             SectionHeader(
               requestType: RequestType.workshop_id,
@@ -91,7 +96,13 @@ class MainScreenView extends StatelessWidget {
               islarge: true,
               withButton: true,
             ),
-            const OffersList()
+            SizedBox(
+              height: 2.h,
+            ),
+            const OffersList(),
+            SizedBox(
+              height: 8.h,
+            ),
           ],
         ),
       ),

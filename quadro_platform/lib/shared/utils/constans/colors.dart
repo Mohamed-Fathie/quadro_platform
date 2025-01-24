@@ -31,4 +31,14 @@ class Qcolors {
         return Qcolors.primarycolor;
     }
   }
+
+  static Color getLightColorForRequestType(
+      RequestType requestType, BuildContext context) {
+    switch (requestType) {
+      case RequestType.vehicle_owner_id:
+        return getPrimeryColor(context);
+      case RequestType.workshop_id:
+        return getCurrentColor(context);
+    }
+  }
 }

@@ -39,9 +39,7 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
     Emitter<MainUserScreenState> emit,
   ) async {
     try {
-      log("here i'm");
       final user = await getuser();
-      log("error is this function");
 
       if (user == null) {
         emit(state.copyWith(
@@ -49,8 +47,6 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
             errorMessage: "مستخدم غير مصرح"));
         return;
       }
-      log(user.name);
-      log("hhhhhhhhhhhh");
       emit(state.copyWith(
           status: MainUserScreenStatus.success, userName: user.name));
     } on Exception catch (e) {

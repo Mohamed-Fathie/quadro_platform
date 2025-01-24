@@ -1,22 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/enum/offers_filter.dart';
 
-part 'workshop_offers_state.dart';
+part 'offers_state.dart';
 
 // use     id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2"  for testing purposes
 
-class WorkshopOffersCubit extends Cubit<WorkshopOffersState> {
+class OffersCubit extends Cubit<OffersState> {
   Map<OffersFilter, List<MaintenanceRequestDomainModel>>? statusMap;
   final RepositoryManager _manager;
-  final WorkshopRepository _workshopRepository;
-  WorkshopOffersCubit(this._manager, this._workshopRepository)
-      : super(const WorkshopOfferFetchloading(index: 0));
+  OffersCubit(
+    this._manager,
+  ) : super(const OfferFetchloading(index: 0));
 
   Future<Map<OffersFilter, List<MaintenanceRequestDomainModel>>?> fetchOffers({
     required String id,
@@ -26,36 +25,49 @@ class WorkshopOffersCubit extends Cubit<WorkshopOffersState> {
     return statusMap = await _manager.getoffers(id: id, type: type);
   }
 
+  Future<String> getIdBasedOnRequestType(
+      {required RequestType requestType}) async {
+    final String id;
+    if (requestType == RequestType.vehicle_owner_id) {
+      final user = await _manager.getCashedQuadroUser();
+      id = user.id;
+    } else {
+      final workshop = await _manager.getCashedWorkshop();
+      id = workshop.ownerId;
+    }
+    return id;
+  }
+
   Future<void> handleOfferFilterChange(int index, RequestType type) async {
     final status = OffersFilter.values[index];
-    emit(WorkshopOfferFetchloading(index: index));
+    emit(OfferFetchloading(index: index));
 
     try {
-      final id = await _workshopRepository.getCachedUser();
+      final id = await getIdBasedOnRequestType(requestType: type);
 
-      final map = await fetchOffers(id: id.ownerId, type: type);
+      final map = await fetchOffers(id: "3a1BWhzZZCQv7hfHlhHa", type: type);
       switch (status) {
         case OffersFilter.all:
-          emit(WorkshopOfferFetchAllSuccess(
+          emit(OfferFetchAllSuccess(
               allOffers: map![OffersFilter.all]!, index: index));
           break;
         case OffersFilter.inprogress:
-          emit(WorkshopOfferFetchInprogressSuccess(
+          emit(OfferFetchInprogressSuccess(
               inprogressOffers: map![OffersFilter.inprogress]!, index: index));
           break;
         case OffersFilter.pending:
-          emit(WorkshopOfferFetchPendingSuccess(
+          emit(OfferFetchPendingSuccess(
               pendingOffers: map![OffersFilter.pending]!, index: index));
           break;
         case OffersFilter.requests:
-          final requests =
-              await _manager.getRequestslist(id: id.ownerId, type: type);
-          emit(WorkshopRequestSuccess(requests: requests, index: index));
+          final requests = await _manager.getRequestslist(
+              id: "3a1BWhzZZCQv7hfHlhHa", type: type);
+          emit(RequestSuccess(requests: requests, index: index));
           statusMap = null;
           break;
       }
     } catch (e) {
-      emit(WorkshopOfferFetchFailure(error: e.toString(), index: index));
+      emit(OfferFetchFailure(error: e.toString(), index: index));
     }
   }
 }

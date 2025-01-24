@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../features/workshop_bottom_nav_bar/workshop_screens.dart';
 import '../../routes/navigation_service.dart';
 import '../../routes/routes_constants.dart';
 import '../../utils/constans/helper_functions.dart';
@@ -74,6 +76,7 @@ class OverlaySendingOffer {
                             overlay.remove();
                             NavigationService().goBack();
                             NavigationService().goBack();
+                            WorkshopScreens().controller.jumpToTab(0);
                           },
                           icon: Icons.arrow_back,
                           iconColor: Qcolors.primarycolor,

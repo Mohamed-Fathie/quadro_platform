@@ -73,8 +73,10 @@ class SectionHeader extends StatelessWidget {
               : Text(
                   text,
                   style: islarge != null
-                      ? Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Qcolors.getColorForRequestType(requestType))
+                      ? Theme.of(context)
+                          .textTheme
+                          .headlineLarge
+                          ?.copyWith(color: textColor)
                       : displayLarge != null
                           ? Theme.of(context).textTheme.displayLarge
                           : Theme.of(context).textTheme.headlineMedium,

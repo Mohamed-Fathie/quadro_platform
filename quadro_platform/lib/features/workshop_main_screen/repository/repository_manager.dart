@@ -47,6 +47,16 @@ class RepositoryManager {
     }
   }
 
+  Future<QuadroUser> getCashedQuadroUser() async {
+    final user = await _userRepository.getCachedUser();
+    return user!;
+  }
+
+  Future<Workshop> getCashedWorkshop() async {
+    final workshop = await _workshopRepository.getCachedUser();
+    return workshop;
+  }
+
   // fetch all maitenance requests or limit the number of requests
   Stream<List<MaintenanceRequestDomainModel>> fetchRequests({
     required String id,

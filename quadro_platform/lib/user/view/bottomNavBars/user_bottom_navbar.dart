@@ -4,7 +4,7 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
 import 'package:quadro_platform/user/view/riderActivityScreen/rider_activity_screen.dart';
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';

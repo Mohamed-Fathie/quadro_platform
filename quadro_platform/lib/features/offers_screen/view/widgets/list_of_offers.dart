@@ -10,7 +10,9 @@ import '../../../../shared/utils/constans/colors.dart';
 
 class ListOfOffers extends StatelessWidget {
   final List<MaintenanceRequestDomainModel> offers;
-  const ListOfOffers({super.key, required this.offers});
+  final RequestType requestType;
+  const ListOfOffers(
+      {super.key, required this.offers, required this.requestType});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class ListOfOffers extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .headlineMedium
-                ?.apply(color: Qcolors.primarycolor),
+                ?.apply(color: Qcolors.getColorForRequestType(requestType)),
           ),
         ),
       );
@@ -37,11 +39,19 @@ class ListOfOffers extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
-                requestType: RequestType.workshop_id,
-                buttonTitle: "تقديم عرض",
-                navigatorCall: () => NavigationService().routeTo(
+                requestType: requestType,
+                buttonTitle: requestType == RequestType.vehicle_owner_id
+                    ? "تفاصيل الطلب"
+                    : "تقديم عرض",
+                navigatorCall: () {
+                  NavigationService().routeTo(
                     RoutesConstants.requestDetails,
-                    arguments: request),
+                    arguments: {
+                      'request': request,
+                      'requestType': requestType,
+                    },
+                  );
+                },
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,
                 dateCreated: request.dateCreated,
@@ -52,14 +62,20 @@ class ListOfOffers extends StatelessWidget {
           return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
-                requestType: RequestType.workshop_id,
+                requestType: requestType,
                 isOffer: true,
                 buttonTitle: "تفاصيل",
                 offerStatus: request.offer!.status.name,
                 servicePrice: request.offer!.servicePrice.toString(),
-                navigatorCall: () => NavigationService().routeTo(
+                navigatorCall: () {
+                  NavigationService().routeTo(
                     RoutesConstants.requestDetails,
-                    arguments: request),
+                    arguments: {
+                      'request': request,
+                      'requestType': requestType,
+                    },
+                  );
+                },
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,
                 dateCreated: request.offer!.dateCreated.toDate(),

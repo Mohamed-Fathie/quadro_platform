@@ -3,8 +3,8 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/main_screen_page.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 
+import '../offers_screen/view/workshop_offer_page.dart';
 import '../workshop_profile/view/workshop_profile_page.dart';
-import '../worskshop_offers_screen/view/workshop_offers_page.dart';
 
 class WorkshopScreens {
   static final WorkshopScreens _instance = WorkshopScreens._internal();
@@ -39,7 +39,7 @@ class WorkshopScreens {
         ),
       ),
       PersistentTabConfig(
-        screen: const WorkshopOffersPage(),
+        screen: const WorkshopOfferPage(),
         item: ItemConfig(
           activeForegroundColor: Qcolors.primarycolor,
           icon: const Icon(Icons.local_offer_rounded),

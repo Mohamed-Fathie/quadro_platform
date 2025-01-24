@@ -58,7 +58,9 @@ class RequestTemplet<T> extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "العميل :",
+                      requestType == RequestType.workshop_id
+                          ? "العميل :"
+                          : "ورشة :",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     RoundedContainer(
@@ -66,8 +68,8 @@ class RequestTemplet<T> extends StatelessWidget {
                       width: 50,
                       child: Image.network(
                         fit: BoxFit.cover,
-                        // imageUrl ??
-                        "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
+                        imageUrl ??
+                            "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
                       ),
                     ),
                     Expanded(

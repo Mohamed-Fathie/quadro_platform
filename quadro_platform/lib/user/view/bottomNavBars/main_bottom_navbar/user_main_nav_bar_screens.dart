@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
+import '../../../../features/offers_screen/view/user_offer_page.dart';
 import '../../../../shared/utils/constans/colors.dart';
 import '../../account/user_account_screen.dart';
 import '../../mainUserScreen/view/main_user_screen_page.dart';
@@ -39,12 +40,10 @@ class UserMainNavBarScreens {
         ),
       ),
       PersistentTabConfig(
-        screen: const Center(
-          child: Text("اشعارات"),
-        ),
+        screen: const UserOfferPage(),
         item: ItemConfig(
           activeForegroundColor: Qcolors.secondary,
-          icon: const Icon(Icons.local_offer_rounded),
+          icon: const Icon(Icons.build_circle),
           title: "عروض",
         ),
       ),

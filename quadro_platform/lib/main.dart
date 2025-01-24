@@ -9,6 +9,7 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_maps_provider.dart';
+import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 import 'package:quadro_platform/features/theme/globalthemdata.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
@@ -25,6 +26,8 @@ import 'package:quadro_platform/firebase_options.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
+import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -63,12 +66,12 @@ class Quadro extends StatelessWidget {
             ChangeNotifierProvider<DriverLocationProvider>(
               create: (_) => DriverLocationProvider(),
             ),
-            // ChangeNotifierProvider<RideRequestProvider>(
-            //   create: (_) => RideRequestProvider(),
-            // ),
-            // ChangeNotifierProvider<DriverRideRequestProvider>(
-            //   create: (_) => DriverRideRequestProvider(),
-            // ),
+            ChangeNotifierProvider<RideRequestProvider>(
+              create: (_) => RideRequestProvider(),
+            ),
+            ChangeNotifierProvider<DriverRideRequestProvider>(
+              create: (_) => DriverRideRequestProvider(),
+            ),
           ],
           child: MaterialApp(
             locale: const Locale('ar'),

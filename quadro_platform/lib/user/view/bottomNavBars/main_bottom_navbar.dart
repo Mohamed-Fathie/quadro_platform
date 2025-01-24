@@ -2,16 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_services.dart';
+import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
-import 'package:quadro_platform/user/controller/BottomNavBarProvider/bottom_nav_bar_provider.dart';
+import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
 import 'package:quadro_platform/user/view/mainUserScreen/main_user_screen.dart';
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
-class MainBottomNavBar extends StatelessWidget {
+class MainBottomNavBar extends StatefulWidget {
   MainBottomNavBar({super.key});
 
+  @override
+  State<MainBottomNavBar> createState() => _MainBottomNavBarState();
+}
+
+class _MainBottomNavBarState extends State<MainBottomNavBar> {
   List<PersistentTabConfig> _navBarItems(int currentTab) {
     return [
       PersistentTabConfig(
@@ -31,7 +40,7 @@ class MainBottomNavBar extends StatelessWidget {
       //   title: 'Maintanence',
       //   activeForegroundColor: green200,
       // ),
-      
+
       PersistentTabConfig(
         screen: UserAccountScreen(),
         item: ItemConfig(
@@ -46,6 +55,19 @@ class MainBottomNavBar extends StatelessWidget {
   }
 
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ProfileDataModel profileData =
+          await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
+              auth.currentUser!.uid);
+      PushNotivicationServices.initializeFirebaseMessagingForUsers(
+          profileData, context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BottomNavBarProvider>(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
@@ -27,10 +29,21 @@ class MainUserScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              'مرحبا مؤمن',
-              style: AppTextStyles.Mheading20Bold.copyWith(color: grey),
-            ),
+            Consumer<ProfileDataProvider>(
+                builder: (context, profileProvider, child) {
+              if (profileProvider.profileData == null) {
+                return Text(
+                  'مرحبا مستخدم كوادرو',
+                  style: AppTextStyles.Mheading20Bold.copyWith(color: grey),
+                );
+              } else {
+                return Text(
+                  'مرحبا ${profileProvider.profileData!.name!.split(' ').first}' ??
+                      'مستخدم كوادرو',
+                  style: AppTextStyles.Mheading20Bold.copyWith(color: grey),
+                );
+              }
+            }),
             SizedBox(
               height: 0.5.h,
             ),
