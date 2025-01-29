@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/features/google_map/model/selected_location.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/brand_list.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/dropdown_minu.dart';
@@ -7,6 +8,7 @@ import 'package:quadro_platform/features/workshop_authentication/views/widgets/p
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/save_button.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/spare_parts.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/text_area.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
@@ -16,6 +18,7 @@ import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../shared/enum/maitenance_request_status.dart';
+import 'widgets/location_button.dart';
 
 class WorkshopDetainsPage extends StatelessWidget {
   final WorkshopAuthbloc detailscubit;
@@ -68,7 +71,7 @@ class WorkshopRegisterationView extends StatelessWidget {
         }
         if (state.status == WorkshopAuthStatus.workshopAuthenticated) {
           NavigationService()
-              .replaceRoute(RoutesConstants.workshopBottomNavBar);
+              .clearAndNavigateTo(RoutesConstants.workshopBottomNavBar);
         }
       },
       child: SingleChildScrollView(
@@ -105,13 +108,7 @@ class WorkshopRegisterationView extends StatelessWidget {
             const SectionHeader(
                 requestType: RequestType.workshop_id, text: "موقع الورشة"),
             const VerticalSpacing(height: 20),
-            CustomElevatedButton(
-              buttonColor: Qcolors.buttonbackground,
-              buttonTitle: "حدد الموقع",
-              onPressed: () {},
-              icon: Icons.location_on,
-              iconColor: Qcolors.primarycolor,
-            ),
+            const LocationButton(),
             const VerticalSpacing(height: 20),
             const SaveButton()
           ],

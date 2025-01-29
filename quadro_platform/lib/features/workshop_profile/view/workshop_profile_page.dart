@@ -4,7 +4,7 @@ import 'package:quadro_platform/features/workshop_authentication/models/workshop
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_profile/cubit/workshop_profile_cubit.dart';
-import 'package:quadro_platform/shared/enum/workshop_profile_menu.dart';
+import 'package:quadro_platform/features/workshop_profile/view/widgets/workshop_image_appbar.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -73,21 +73,14 @@ class WorkshopProfileView extends StatelessWidget {
             );
           }
           if (state == WorkshopProfileStatus.failure) {
-            return const Center(child: Text("somehtin went wrong"));
+            return const Center(child: Text("somehting went wrong"));
           }
           return NestedScrollView(
               physics: const BouncingScrollPhysics(),
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
-                  SliverAppBar(
-                    leading: const WorkshopPopupMenuButton(),
-                    expandedHeight: 35.h,
-                    flexibleSpace: FlexibleSpaceBar(
-                        background: Image.network(
-                            fit: BoxFit.cover,
-                            "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b")),
-                  ),
+                  const WorkshopImageAppbar(),
                   SliverAppBar(
                     collapsedHeight:
                         8.h, // Adjust this to control the pinned height

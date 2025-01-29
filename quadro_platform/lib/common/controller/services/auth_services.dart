@@ -185,7 +185,6 @@ class AuthServices {
                 (route) => false);
           } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
             context.read<ProfileDataProvider>().getProfileData();
-
             return Navigator.pushAndRemoveUntil(
                 context,
                 PageTransition(

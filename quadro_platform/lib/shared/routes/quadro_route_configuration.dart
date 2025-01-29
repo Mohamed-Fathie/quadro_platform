@@ -15,6 +15,7 @@ import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart'
 import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 
 import '../../common/view/reset_password_screen.dart';
+import '../../features/google_map/views/workshop_location_map.dart';
 import '../../features/request_details_screen/veiw/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
@@ -26,9 +27,13 @@ class RouteGenerator {
         return _materialRoute(const LogInScreen());
       case RoutesConstants.workshopBottomNavBar:
         return _materialRoute(const WorkshopNavBar());
+      case RoutesConstants.workshopLocationMap:
+        return _materialRoute(const WorkshopLocationMapPage());
 
       case RoutesConstants.signUp:
         return _materialRoute(const RegistrationScreen());
+      case RoutesConstants.workshopRegistration:
+        return _materialRoute(const WorkshopRegisterationPage());
 
       case RoutesConstants.licens:
         final contextCubit = settings.arguments;

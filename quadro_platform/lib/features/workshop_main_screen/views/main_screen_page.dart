@@ -74,7 +74,7 @@ class MainScreenView extends StatelessWidget {
             const WorkshopName(),
             const SectionHeader(
               requestType: RequestType.workshop_id,
-              text: "مرحبا بعودتك ",
+              text: "أهلاً بعودتك إلى كوادروا،",
               displayLarge: true,
             ),
             const VerticalSpacing(height: 25),

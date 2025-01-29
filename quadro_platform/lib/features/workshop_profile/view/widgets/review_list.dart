@@ -15,7 +15,13 @@ class ReviewList extends StatelessWidget {
       selector: (state) => state.reviewslist,
       builder: (context, reviewslist) {
         if (reviewslist == null || reviewslist.isEmpty) {
-          return const Center(child: Text("لا يوجد تقييم"));
+          return SizedBox(
+              height: 30.h,
+              child: Center(
+                  child: Text(
+                "لا يوجد تقييمات لهده الورشة",
+                style: Theme.of(context).textTheme.headlineMedium,
+              )));
         }
 
         return ListView.separated(

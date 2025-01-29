@@ -17,7 +17,7 @@ class WorkshopNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = QhelperFucntions().isDarkMode(context);
+    final isDark = QhelperFucntions.isDarkMode(context);
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WorkshopRepository>(

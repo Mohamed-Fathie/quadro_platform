@@ -18,7 +18,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Workshop? _workshop;
   Future<Workshop?> getWorkshop() async {
     if (_workshop == null) {
+      log("we are here in the workshop main screeen");
       _workshop = await _workshopRepository.getCachedUser();
+      log(_workshop?.toJson().toString() ?? "workshop is null");
       return _workshop;
     }
     return _workshop;
@@ -53,12 +55,14 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     Emitter<MainScreenState> emit,
   ) async {
     emit(state.copyWith(status: MainScreenStatus.reqestloading));
-
+// "1SByKZ4gSPNpwaO9g2AgQ9HKrvj2" for testing
     // Listen to requests stream
+    final workshop = _workshop ?? await getWorkshop();
+
     try {
       await emit.forEach(
         _manager.fetchRequests(
-            id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
+            id: workshop!.ownerId,
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: true),
@@ -78,10 +82,12 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   ) async {
     emit(state.copyWith(status: MainScreenStatus.offerloading));
     // Listen to offers stream
+    final workshop = _workshop ?? await getWorkshop();
+
     try {
       await emit.forEach(
         _manager.fetchRequests(
-            id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
+            id: workshop!.ownerId,
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: false),

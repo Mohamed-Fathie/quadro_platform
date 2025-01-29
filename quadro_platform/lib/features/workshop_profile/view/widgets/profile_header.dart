@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_profile/cubit/workshop_profile_cubit.dart';
+import 'package:quadro_platform/shared/widgets/rating_stars.dart';
 
 import '../../../../shared/utils/constans/colors.dart';
 
@@ -54,9 +55,9 @@ class ProfileHeader extends StatelessWidget {
                 // Rating
                 Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.yellow, size: 24),
+                    RatingWidget(rating: workshopReview!["averageRating"]),
                     Text(
-                      " ${workshopReview!["averageRating"]}",
+                      " ${workshopReview["averageRating"]}",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],

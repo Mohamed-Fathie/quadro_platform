@@ -15,7 +15,7 @@ class RoundedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = QhelperFucntions().isDarkMode(context);
+    final isDark = QhelperFucntions.isDarkMode(context);
     return FittedBox(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),

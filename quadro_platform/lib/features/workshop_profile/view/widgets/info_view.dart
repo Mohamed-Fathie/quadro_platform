@@ -34,10 +34,11 @@ class InfoView extends StatelessWidget {
           label: "رقم الهاتف:",
           value: workshop!.phone,
         ),
-        const SectionRow(
+        SectionRow(
           requestType: RequestType.workshop_id,
-          label: "موقع الورشة:",
-          value: "Tripoli",
+          label: "موقع الورشة  :",
+          value:
+              " ${workshop.city} , ${(workshop.street == "Unknown street" ? "" : workshop.street)} ",
         ),
       ],
     );

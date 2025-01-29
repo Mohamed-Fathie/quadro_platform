@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';

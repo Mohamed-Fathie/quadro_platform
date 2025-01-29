@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/features/workshop_profile/model/Review_Domain.dart';
 import 'package:quadro_platform/shared/utils/extension/date_formating.dart';
+import 'package:quadro_platform/shared/widgets/rating_stars.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,10 +22,11 @@ class ReviewItem extends StatelessWidget {
           // User Information Row
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 25,
                 backgroundImage: NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
+                  review.user.pictureUrl ??
+                      "https://firebasestorage.googleapis.com/v0/b/quadro-204be.firebasestorage.app/o/Profile_Images%2Fdhdhdgg%40gmail.com42435c00-c43b-11ef-b85b-879b0d7d6b91?alt=media&token=ee320211-7794-4481-b66a-6d5f048f035b",
                 ),
               ),
               SizedBox(width: 4.w),
@@ -46,15 +48,18 @@ class ReviewItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(),
-              Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.yellow, size: 20),
-                  Text(
-                    review.rating.toString(),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
+              // const Spacer(),
+              Expanded(
+                child: Row(
+                  spacing: 3.w,
+                  children: [
+                    RatingWidget(rating: review.rating),
+                    Text(
+                      review.rating.toString(),
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

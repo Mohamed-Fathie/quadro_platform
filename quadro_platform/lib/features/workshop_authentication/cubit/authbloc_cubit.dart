@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quadro_platform/features/google_map/model/selected_location.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
@@ -126,29 +126,39 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
     ));
   }
 
+  void onSelectedLocation(SelectedLocation location) {
+    emit(state.copyWith(location: location));
+  }
+
   // Save data to repository
   Future<void> saveData() async {
-    final currentUser = await _user.getCachedUser();
+    final currentUser =
+        await _user.getUserById((await _user.getCachedUser())!.id);
 
     if (currentUser == null) {
       emit(state.copyWith(
           exception: "المستخدم ليس موثق", status: WorkshopAuthStatus.failure));
       return;
     }
+    if (state.location == null) {
+      return;
+    }
     try {
       emit(state.copyWith(status: WorkshopAuthStatus.loading));
       final workshop = Workshop(
+        imagePath: currentUser.pictureUrl ?? "",
+        city: state.location?.city,
+        coordination: state.location?.coordinates,
+        street: state.location?.street,
         name: currentUser.name,
         ownerId: currentUser.id,
         description: state.description,
-        phone: "091100019",
+        phone: currentUser.phone ?? "",
         status: state.truePartsStatus,
         carBrands: state.brands,
       );
-      await _workshopRepository.addWorkshop(workshop
-          // location: location,
-
-          );
+      await _workshopRepository.addWorkshop(workshop);
+      log(workshop.toJsonMap().toString());
       await _workshopRepository.cacheUser(workshop);
       emit(state.copyWith(status: WorkshopAuthStatus.workshopAuthenticated));
     } on FirestoreReadWriteFailure catch (e) {

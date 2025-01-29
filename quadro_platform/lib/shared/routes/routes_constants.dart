@@ -10,4 +10,6 @@ class RoutesConstants {
   static const String requestDetails = 'requestDetails';
   static const String sendOffer = 'sendOffer';
   static const String resetPassWordScreen = 'ResetPassWordScreen';
+  static const String workshopLocationMap = 'workshopLocationMap';
+  static const String workshopRegistration = 'workshopRegistration';
 }

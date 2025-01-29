@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
-import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
-import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
@@ -102,7 +99,8 @@ class UserRepository {
   // Clear Cached User Data when log out or delete account
   Future<void> clearCachedUser() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('cached_user');
+    // await prefs.remove('cached_user');
+    await prefs.clear();
   }
 
   /// map of user by their ids : helper function  to get all users related to specific  requests

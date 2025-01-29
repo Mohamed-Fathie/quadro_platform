@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
@@ -63,17 +64,29 @@ class WorkshopRepository {
   //Cache User Data
   Future<void> cacheUser(Workshop workshop) async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = workshop.toJson();
+    final userJson = workshop.toJsonMap();
     await prefs.setString('cached_workshop', jsonEncode(userJson));
   }
 
 //Retrieve Cached User Data
-  Future<Workshop> getCachedUser() async {
+  Future<Workshop?> getCachedUser() async {
     final prefs = await SharedPreferences.getInstance();
     final workshopString = prefs.getString('cached_workshop');
 
-    final userJson = jsonDecode(workshopString!) as Map<String, dynamic>;
-    return Workshop.fromJson(userJson);
+    if (workshopString == null) {
+      log("The cached workshop is null");
+      return null;
+    }
+
+    try {
+      final Map<String, dynamic> userJson = jsonDecode(workshopString);
+
+      return Workshop.fromJson(userJson);
+    } catch (e, stacktrace) {
+      log("Error decoding workshop JSON: $e");
+      log("Stacktrace: $stacktrace");
+      return null;
+    }
   }
 
   // Clear Cached User Data when log out or delete account

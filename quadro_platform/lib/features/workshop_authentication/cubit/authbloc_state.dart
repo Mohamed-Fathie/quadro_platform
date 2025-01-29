@@ -23,6 +23,7 @@ class WorkshopAuthblocState extends Equatable {
   final List<CarBrand> brands;
   final Map<SparePartsStatus, bool> partsStatus;
   final WorkshopAuthStatus status;
+  final SelectedLocation? location;
 
   const WorkshopAuthblocState({
     this.progress = null,
@@ -31,6 +32,7 @@ class WorkshopAuthblocState extends Equatable {
     this.profilImageUrl = null,
     this.idcardUrl = null,
     this.licensUrl = null,
+    this.location = null,
     this.status = WorkshopAuthStatus.initial,
     this.description = "",
     this.brands = const <CarBrand>[],
@@ -53,6 +55,7 @@ class WorkshopAuthblocState extends Equatable {
     List<CarBrand>? brands,
     Map<SparePartsStatus, bool>? partsStatus,
     WorkshopAuthStatus? status,
+    SelectedLocation? location,
   }) {
     return WorkshopAuthblocState(
         progress: progress ?? this.progress,
@@ -64,6 +67,7 @@ class WorkshopAuthblocState extends Equatable {
         description: description ?? this.description,
         brands: brands ?? this.brands,
         partsStatus: partsStatus ?? this.partsStatus,
+        location: location ?? this.location,
         status: status ?? this.status);
   }
 
@@ -79,6 +83,7 @@ class WorkshopAuthblocState extends Equatable {
         brands,
         partsStatus,
         status,
+        location
       ];
 
   /// Filters and returns only the `true` keys from `partsStatus`

@@ -54,7 +54,7 @@ class RepositoryManager {
 
   Future<Workshop> getCashedWorkshop() async {
     final workshop = await _workshopRepository.getCachedUser();
-    return workshop;
+    return workshop!;
   }
 
   // fetch all maitenance requests or limit the number of requests
@@ -193,6 +193,7 @@ class RepositoryManager {
   ) {
     return query.snapshots().asyncMap((snapshot) async {
       final docs = snapshot.docs;
+      log(docs.length.toString());
       final relatedData = await _fetchRelatedData(docs, withOffer);
       return docs.map((doc) {
         final maintenanceRequest = doc.data() as MaintenanceRequest;

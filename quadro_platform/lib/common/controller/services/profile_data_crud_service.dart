@@ -12,6 +12,8 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
 
 class ProfileDataCRUDServices {
   static getProfileDataFromRealTimeDatabase(String userID) async {
@@ -53,7 +55,9 @@ class ProfileDataCRUDServices {
     //           child: const LogInScreen(), type: PageTransitionType.bottomToTop),
     //       (route) => false);
     // }
-    await UserRepository().addUser(QuadroUser(
+    log("registerUserToDatabase");
+    await UserRepository().clearCachedUser();
+    await UserRepository().cacheUser(QuadroUser(
         id: auth.currentUser!.uid,
         name: profileData.name ?? "",
         email: profileData.email ?? "",
@@ -68,11 +72,19 @@ class ProfileDataCRUDServices {
         toastStatus: 'SUCCESS',
         context: context,
       );
-      Navigator.pushAndRemoveUntil(
-          context,
-          PageTransition(
-              child: const LogInLogic(), type: PageTransitionType.bottomToTop),
-          (route) => false);
+      log("message");
+      if (profileData.userType != null &&
+          profileData.userType!.contains("التسجيل كصاحب ورشة")) {
+        NavigationService()
+            .clearAndNavigateTo(RoutesConstants.workshopRegistration);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            PageTransition(
+                child: const LogInLogic(),
+                type: PageTransitionType.bottomToTop),
+            (route) => false);
+      }
     }).onError((error, stackTrace) {
       ToastService.sendScaffoldAlert(
         msg: 'Opps! Error getting Registered',

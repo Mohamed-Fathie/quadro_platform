@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/shared/utils/serivces/image_picker_service.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
@@ -32,7 +31,7 @@ class DocumentUploadView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = QhelperFucntions().isDarkMode(context);
+    final bool isDark = QhelperFucntions.isDarkMode(context);
     final cubitt = context.read<WorkshopAuthbloc>();
 
     return Column(

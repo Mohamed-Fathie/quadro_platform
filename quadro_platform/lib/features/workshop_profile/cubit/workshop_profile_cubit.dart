@@ -41,8 +41,8 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
       // Resolve the workshop either from the provided data or cached data
       workshop ??= await workshopRepo.getCachedUser();
       //workshop!.ownerId
-      reviewsRepo =
-          ReviewsRepository(workshopId: "1LQiEMpL1MMSvTwizkuhCMuO8iW2");
+      // "1LQiEMpL1MMSvTwizkuhCMuO8iW2"
+      reviewsRepo = ReviewsRepository(workshopId: workshop!.ownerId);
       final average = await reviewsRepo?.getAverageRatingAndReviewCount();
       emit(state.copyWith(
           reviewInfo: average,
@@ -56,8 +56,8 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
 
   Future<void> workshopProfileReviewFetched() async {
     try {
-      final reviewlist = await repoManager.getReviews(
-          workshopId: "1LQiEMpL1MMSvTwizkuhCMuO8iW2");
+      final reviewlist =
+          await repoManager.getReviews(workshopId: workshop!.ownerId);
       emit(state.copyWith(
           reviewslist: reviewlist,
           status: WorkshopProfileStatus.fetchreviewsuccess));

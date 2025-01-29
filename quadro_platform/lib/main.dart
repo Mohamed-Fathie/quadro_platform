@@ -30,6 +30,8 @@ import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bo
 import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
 import 'package:sizer/sizer.dart';
 
+import 'features/google_map/views/workshop_location_map.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
