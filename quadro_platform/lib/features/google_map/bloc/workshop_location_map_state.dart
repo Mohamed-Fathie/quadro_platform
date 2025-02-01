@@ -39,19 +39,15 @@ final class WorkshopLocationinitial extends WorkshopLocationState {
       ];
 }
 
-enum WorkshopLocationErrorType { gpsDisabled, permissionDenied, unknown }
-
 final class WorkshopLocationFailure extends WorkshopLocationState {
-  final WorkshopLocationErrorType errorType;
-  final String errorMessage;
+  final WorkshopLocationException exception;
 
   WorkshopLocationFailure({
-    required this.errorType,
-    required this.errorMessage,
+    required this.exception,
   });
 
   @override
-  List<Object?> get props => [errorType, errorMessage];
+  List<Object?> get props => [exception];
 }
 
 final class WorkshopLocationConfirmSuccess extends WorkshopLocationState {

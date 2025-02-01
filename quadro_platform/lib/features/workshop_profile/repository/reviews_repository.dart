@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../workshop_authentication/models/firestore_exceptions.dart';
@@ -23,7 +21,6 @@ class ReviewsRepository {
   }
 
   CollectionReference<Review>? get _reviewRef {
-    log(_currentWorkshopId ?? " id is null ");
     if (_currentWorkshopId == null) {
       return null; // Prevent invalid queries if workshopId is not set
     }
@@ -51,7 +48,8 @@ class ReviewsRepository {
 
       // Extract results
       final reviewCount = aggregation.count; // Total number of reviews
-      final averageRating = aggregation.getAverage('rating'); // Average rating
+      final averageRating = aggregation.getAverage('rating');
+      // Average rating
       return {
         'averageRating': averageRating ?? 0.0,
         'reviewCount': reviewCount ?? 0,

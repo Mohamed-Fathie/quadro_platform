@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,8 +46,9 @@ class OffersCubit extends Cubit<OffersState> {
 
     try {
       final id = await getIdBasedOnRequestType(requestType: type);
-
+// "3a1BWhzZZCQv7hfHlhHa"
       final map = await fetchOffers(id: "3a1BWhzZZCQv7hfHlhHa", type: type);
+
       switch (status) {
         case OffersFilter.all:
           emit(OfferFetchAllSuccess(
@@ -60,8 +63,8 @@ class OffersCubit extends Cubit<OffersState> {
               pendingOffers: map![OffersFilter.pending]!, index: index));
           break;
         case OffersFilter.requests:
-          final requests = await _manager.getRequestslist(
-              id: "3a1BWhzZZCQv7hfHlhHa", type: type);
+          // "3a1BWhzZZCQv7hfHlhHa"
+          final requests = await _manager.getRequestslist(id: id, type: type);
           emit(RequestSuccess(requests: requests, index: index));
           statusMap = null;
           break;

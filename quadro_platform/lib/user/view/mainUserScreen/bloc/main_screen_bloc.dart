@@ -20,6 +20,8 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
   QuadroUser? _user;
   Future<QuadroUser?> getuser() async {
     _user ??= await _userRepository.getCachedUser();
+    _user ??=
+        await _userRepository.getUserById(_userRepository.getuserId ?? "");
     return _user;
   }
 
@@ -47,6 +49,8 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
             errorMessage: "مستخدم غير مصرح"));
         return;
       }
+      log(user.name);
+      log(user.phone ?? "phone is null");
       emit(state.copyWith(
           status: MainUserScreenStatus.success, userName: user.name));
     } on Exception catch (e) {
@@ -59,13 +63,19 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
     Emitter<MainUserScreenState> emit,
   ) async {
     emit(state.copyWith(status: MainUserScreenStatus.reqestloading));
-    log("fetching ");
-    // Listen to requests stream
+    final user = await getuser();
+
+    if (user == null) {
+      emit(state.copyWith(
+          status: MainUserScreenStatus.failure,
+          errorMessage: "مستخدم غير مصرح"));
+      return;
+    }
     try {
       await emit.forEach(
         _manager.fetchRequests(
-            id: "RQcyfgqN9ld9GeaOhlgKC2LK5ih2",
-            type: RequestType.workshop_id,
+            id: user.id,
+            type: RequestType.vehicle_owner_id,
             limit: 10,
             withOffer: true),
         onData: (list) => state.copyWith(

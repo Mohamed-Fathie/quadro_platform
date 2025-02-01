@@ -14,16 +14,15 @@ import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
 import 'package:quadro_platform/common/model/searched_address_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
+import '../../../features/google_map/model/location_service_exception.dart';
+
 class LocationServices {
-  static getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        getCurrentLocation;
-        // ToastService.sendScaffoldAlert(msg: 'عليك قبول اذونات الموقع لكي تتمكن من استخدام التطبيق', toastStatus: 'WARNING', context: context)
-      }
+  static Future<LatLng> getCurrentLocation() async {
+    try {
+      await WorkshopLocationException.checkLocationServices();
+      await WorkshopLocationException.checkAndRequestPermission();
+    } catch (e) {
+      rethrow;
     }
     Position currentPosition = await Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
@@ -41,7 +40,6 @@ class LocationServices {
     try {
       var response = await dio.get(api).timeout(const Duration(seconds: 60),
           onTimeout: () {
-      
         throw TimeoutException('انتهت صلاحية الجلسة');
       });
       if (response.statusCode == 200) {
@@ -117,7 +115,6 @@ class LocationServices {
     try {
       var response = await dio.get(api).timeout(const Duration(seconds: 120),
           onTimeout: () {
-        
         throw TimeoutException('انتهت صلاحية الجلسة');
       });
 

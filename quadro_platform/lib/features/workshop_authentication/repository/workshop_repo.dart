@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../shared/utils/hleper_function/list_splitter.dart';
 
 class WorkshopRepository {
@@ -15,7 +14,13 @@ class WorkshopRepository {
   WorkshopRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance {
     workshopRef = _firestore.collection("workshop").withConverter<Workshop>(
-          fromFirestore: (snapshot, _) => Workshop.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            final data = snapshot.data();
+            if (data == null) {
+              throw Exception("Workshop document is missing or null!");
+            }
+            return Workshop.fromfirestor(data);
+          },
           toFirestore: (workshop, _) => workshop.toJson(),
         );
   }

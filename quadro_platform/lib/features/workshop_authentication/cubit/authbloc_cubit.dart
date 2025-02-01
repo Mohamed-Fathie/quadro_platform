@@ -14,6 +14,8 @@ import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
+import '../../../shared/utils/extension/coordination_togeopoint.dart';
+
 part 'authbloc_state.dart';
 
 class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
@@ -132,8 +134,7 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
 
   // Save data to repository
   Future<void> saveData() async {
-    final currentUser =
-        await _user.getUserById((await _user.getCachedUser())!.id);
+    final currentUser = await _user.getUserById((_user.getuserId!));
 
     if (currentUser == null) {
       emit(state.copyWith(
@@ -143,12 +144,13 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
     if (state.location == null) {
       return;
     }
+
     try {
       emit(state.copyWith(status: WorkshopAuthStatus.loading));
       final workshop = Workshop(
         imagePath: currentUser.pictureUrl ?? "",
         city: state.location?.city,
-        coordination: state.location?.coordinates,
+        coordination: state.location!.coordinates.toGeoFirePoint(),
         street: state.location?.street,
         name: currentUser.name,
         ownerId: currentUser.id,

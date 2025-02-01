@@ -1,30 +1,33 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
-import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_profile/cubit/workshop_profile_cubit.dart';
 import 'package:quadro_platform/features/workshop_profile/view/widgets/workshop_image_appbar.dart';
+import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
-import 'widgets/popup_menu_button.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/tab_bar.dart';
 import 'widgets/tabs_views.dart';
 
 class WorkshopProfilePage extends StatelessWidget {
   final Workshop? workshop;
+  final RequestType? requestType;
 
-  const WorkshopProfilePage({super.key, this.workshop});
+  const WorkshopProfilePage({super.key, this.workshop, this.requestType});
 
   @override
   Widget build(BuildContext context) {
+    log(workshop?.toJson().toString() ?? "workshop is null ");
     return BlocProvider(
       create: (context) => WorkshopProfileCubit(
         workshop: workshop,
         repoManager: context.read<RepositoryManager>(),
-        workshopRepo: context.read<WorkshopRepository>(),
+        workshopRepo: context.read<RepositoryManager>().workshopRepository,
       )..initialize(),
       child: DefaultTabController(
         length: 3,
@@ -46,7 +49,9 @@ class WorkshopProfilePage extends StatelessWidget {
             }
           }
 
-          return const WorkshopProfileView();
+          return WorkshopProfileView(
+            requestType: requestType,
+          );
         }),
       ),
     );
@@ -54,7 +59,8 @@ class WorkshopProfilePage extends StatelessWidget {
 }
 
 class WorkshopProfileView extends StatelessWidget {
-  const WorkshopProfileView({super.key});
+  final RequestType? requestType;
+  const WorkshopProfileView({super.key, this.requestType});
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +86,11 @@ class WorkshopProfileView extends StatelessWidget {
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
-                  const WorkshopImageAppbar(),
+                  WorkshopImageAppbar(
+                    requestType: requestType,
+                  ),
                   SliverAppBar(
+                    automaticallyImplyLeading: false,
                     collapsedHeight:
                         8.h, // Adjust this to control the pinned height
                     flexibleSpace: const ProfileHeader(),

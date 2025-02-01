@@ -53,7 +53,7 @@ class MainUserScreenView extends StatelessWidget {
               text: 'طلب خدمة صيانة سيارة',
               imagePath: 'assets/images/icons/icons8-car-50.png',
               onTap: () {
-                // NavigationService().routeTo(RoutesConstants.bottomNavBar);
+                NavigationService().routeTo(RoutesConstants.workshopSearch);
               },
             ),
             VerticalSpacing(height: 5.w),

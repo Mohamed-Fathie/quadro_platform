@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
@@ -12,17 +11,20 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/offers_
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
+import 'package:quadro_platform/shared/utils/extension/coordination_togeopoint.dart';
 
+import '../../../common/controller/services/location_services.dart';
 import '../../../shared/enum/offers_filter.dart';
+import '../../../user/view/workshop_search/model/workshop_model.dart';
 import '../../user/model/user.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_profile/model/Review_Domain.dart';
 
 class RepositoryManager {
   final OffersRepository _offersRepository;
-  final UserRepository _userRepository;
-  final WorkshopRepository _workshopRepository;
-  final MaintenanceRequestsRepository _maintenanceRequestsRepository;
+  final UserRepository userRepository;
+  final WorkshopRepository workshopRepository;
+  final MaintenanceRequestsRepository maintenanceRequestsRepository;
   final ReviewsRepository reviewsRepository;
 
   RepositoryManager(
@@ -32,15 +34,15 @@ class RepositoryManager {
       required WorkshopRepository workshopRepository,
       required MaintenanceRequestsRepository maintenanceRequestsRepository})
       : _offersRepository = offersRepository,
-        _userRepository = userRepository,
+        userRepository = userRepository,
         // ignore: prefer_initializing_formals
         reviewsRepository = reviewsRepository,
-        _workshopRepository = workshopRepository,
-        _maintenanceRequestsRepository = maintenanceRequestsRepository;
+        workshopRepository = workshopRepository,
+        maintenanceRequestsRepository = maintenanceRequestsRepository;
   Future<void> addOffer(Offer offer) async {
     try {
       final offerId = await _offersRepository.addOfferToFirebase(offer);
-      await _maintenanceRequestsRepository
+      await maintenanceRequestsRepository
           .updateRequest(id: offer.requestId, map: {"offer_id": offerId});
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure(e.code);
@@ -48,12 +50,12 @@ class RepositoryManager {
   }
 
   Future<QuadroUser> getCashedQuadroUser() async {
-    final user = await _userRepository.getCachedUser();
+    final user = await userRepository.getCachedUser();
     return user!;
   }
 
   Future<Workshop> getCashedWorkshop() async {
-    final workshop = await _workshopRepository.getCachedUser();
+    final workshop = await workshopRepository.getCachedUser();
     return workshop!;
   }
 
@@ -65,7 +67,7 @@ class RepositoryManager {
     required bool withOffer,
   }) {
     try {
-      Query query = _maintenanceRequestsRepository.maintenanceRequestRef
+      Query query = maintenanceRequestsRepository.maintenanceRequestRef
           .where(type.name, isEqualTo: id)
           .where("offer_id", isNull: withOffer);
 
@@ -83,7 +85,7 @@ class RepositoryManager {
     required String id,
     required RequestType type,
   }) async {
-    final query = await _maintenanceRequestsRepository.maintenanceRequestRef
+    final query = await maintenanceRequestsRepository.maintenanceRequestRef
         .where(type.name, isEqualTo: id)
         .where("offer_id", isNull: true)
         .get();
@@ -101,7 +103,7 @@ class RepositoryManager {
     required String id,
     required RequestType type,
   }) async {
-    final query = await _maintenanceRequestsRepository.maintenanceRequestRef
+    final query = await maintenanceRequestsRepository.maintenanceRequestRef
         .where(type.name, isEqualTo: id)
         .where("offer_id", isNull: false)
         .get();
@@ -167,7 +169,7 @@ class RepositoryManager {
     try {
       reviewsRepository.setWorkshopId(workshopId);
       final reviews = await reviewsRepository.getReviews();
-      final user = await _userRepository.fetchUsers(reviews
+      final user = await userRepository.fetchUsers(reviews
           .map(
             (e) => e.userId,
           )
@@ -193,7 +195,6 @@ class RepositoryManager {
   ) {
     return query.snapshots().asyncMap((snapshot) async {
       final docs = snapshot.docs;
-      log(docs.length.toString());
       final relatedData = await _fetchRelatedData(docs, withOffer);
       return docs.map((doc) {
         final maintenanceRequest = doc.data() as MaintenanceRequest;
@@ -225,6 +226,34 @@ class RepositoryManager {
     );
   }
 
+// fetch nearby workshop
+  Stream<List<WorkshopModel>> getNearbyWorkshops(double radiusInKm) async* {
+    final currentLocation = await LocationServices.getCurrentLocation();
+    yield* GeoCollectionReference(workshopRepository.workshopRef)
+        .subscribeWithin(
+      center: currentLocation.toGeoFirePoint(),
+      radiusInKm: radiusInKm,
+      field: 'coordination',
+      geopointFrom: (data) {
+        return (data as Workshop).coordination?.data["geopoint"] as GeoPoint;
+      },
+      strictMode: true, // Ensures accurate radius filtering
+    )
+        .asyncMap((snapshotList) async {
+      return Future.wait(snapshotList.map((firestoreWorkshop) async {
+        final workshop = firestoreWorkshop.data()! as Workshop;
+        reviewsRepository.setWorkshopId(workshop.ownerId);
+        final reviewData =
+            await reviewsRepository.getAverageRatingAndReviewCount();
+        final dynamic ratingValue = reviewData["averageRating"];
+        final double avg =
+            ratingValue != null ? (ratingValue as num).toDouble() : 0.0;
+
+        return WorkshopModel(workshop: workshop, average: avg);
+      }));
+    });
+  }
+
   /// Fetch related data for maintenance requests
   Future<_RelatedData> _fetchRelatedData(
       List<QueryDocumentSnapshot> docs, bool withOffers) async {
@@ -253,8 +282,8 @@ class RepositoryManager {
     }
 
     // Fetch related data
-    final users = await _userRepository.fetchUsers(userIds);
-    final workshops = await _workshopRepository.fetchWorkshops(workshopIds);
+    final users = await userRepository.fetchUsers(userIds);
+    final workshops = await workshopRepository.fetchWorkshops(workshopIds);
 
     // Return consolidated data
     return _RelatedData(groupedOffers, users, workshops, offers);

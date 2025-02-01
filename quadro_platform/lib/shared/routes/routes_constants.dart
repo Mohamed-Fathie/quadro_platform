@@ -12,4 +12,6 @@ class RoutesConstants {
   static const String resetPassWordScreen = 'ResetPassWordScreen';
   static const String workshopLocationMap = 'workshopLocationMap';
   static const String workshopRegistration = 'workshopRegistration';
+  static const String workshopSearch = 'workshopSearch';
+  static const String workshoProfile = 'workshopProfile';
 }

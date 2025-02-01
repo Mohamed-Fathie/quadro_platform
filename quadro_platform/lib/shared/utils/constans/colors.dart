@@ -10,12 +10,16 @@ class Qcolors {
   static const Color buttonbackground = Color(0xFFE4F4F7);
   static Color getCurrentColor(BuildContext context) {
     final isDark = QhelperFucntions.isDarkMode(context);
-    return isDark ? const Color(0xFF1A2A38) : const Color(0xFFE4F4F7);
+    return isDark
+        ? const Color(0xFF1A2A38)
+        : const Color.fromARGB(255, 210, 237, 242);
   }
 
   static Color getPrimeryColor(BuildContext context) {
     final isDark = QhelperFucntions.isDarkMode(context);
-    return isDark ? const Color(0xFF1A2A38) : const Color(0xFFE4F4F7);
+    return isDark
+        ? const Color(0xFF1A2A38)
+        : const Color.fromARGB(255, 220, 246, 244);
   }
 
   static List<Color> gradient = [

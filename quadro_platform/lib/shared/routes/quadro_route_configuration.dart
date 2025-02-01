@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
@@ -6,6 +8,7 @@ import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
+import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/trade_license.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/workshop_registeration_page.dart';
@@ -19,6 +22,8 @@ import '../../features/google_map/views/workshop_location_map.dart';
 import '../../features/request_details_screen/veiw/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import '../../features/workshop_profile/view/workshop_profile_page.dart';
+import '../../user/view/workshop_search/views/workshop_search_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
@@ -29,7 +34,20 @@ class RouteGenerator {
         return _materialRoute(const WorkshopNavBar());
       case RoutesConstants.workshopLocationMap:
         return _materialRoute(const WorkshopLocationMapPage());
-
+      case RoutesConstants.workshopSearch:
+        return _materialRoute(const WorkshopSearchPage());
+      case RoutesConstants.workshoProfile:
+        final workshop = settings.arguments;
+        if (workshop is! Map<String, dynamic>) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+        return _pageTransition(
+          WorkshopProfilePage(
+            workshop: workshop["workshop"],
+            requestType: workshop["requestType"],
+          ),
+          PageTransitionType.bottomToTop,
+        );
       case RoutesConstants.signUp:
         return _materialRoute(const RegistrationScreen());
       case RoutesConstants.workshopRegistration:

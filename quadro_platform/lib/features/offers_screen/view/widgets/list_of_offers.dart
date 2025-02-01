@@ -39,6 +39,8 @@ class ListOfOffers extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                city: request.workshop.city,
+                street: request.workshop.street,
                 requestType: requestType,
                 buttonTitle: requestType == RequestType.vehicle_owner_id
                     ? "تفاصيل الطلب"
@@ -62,6 +64,8 @@ class ListOfOffers extends StatelessWidget {
           return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                city: request.workshop.city,
+                street: request.workshop.street,
                 requestType: requestType,
                 isOffer: true,
                 buttonTitle: "تفاصيل",

@@ -185,6 +185,8 @@ class AuthServices {
                 (route) => false);
           } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
             context.read<ProfileDataProvider>().getProfileData();
+            // logOutUser();
+
             return Navigator.pushAndRemoveUntil(
                 context,
                 PageTransition(
@@ -223,8 +225,8 @@ class AuthServices {
   }
 
 // ******************* logOutUser function *****************//
-  static logOutUser() {
-    auth.signOut();
+  static logOutUser() async {
+    await auth.signOut();
     NavigationService().clearAndNavigateTo(RoutesConstants.loginLogic);
   }
 

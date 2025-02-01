@@ -16,7 +16,7 @@ class MapView extends StatelessWidget {
       listener: (context, state) {
         if (state is WorkshopLocationFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(_getErrorMessage(state.errorType))),
+            SnackBar(content: Text(state.exception.message)),
           );
         }
       },
@@ -69,16 +69,5 @@ class MapView extends StatelessWidget {
     context
         .read<WorkshopLocationMapBloc>()
         .add(WorkshopLocationSelected(location: location));
-  }
-
-  String _getErrorMessage(WorkshopLocationErrorType errorType) {
-    switch (errorType) {
-      case WorkshopLocationErrorType.gpsDisabled:
-        return "يرجى تفعيل خدمات الموقع من إعدادات الجهاز.";
-      case WorkshopLocationErrorType.permissionDenied:
-        return "تم رفض إذن الموقع. يرجى السماح بالوصول للموقع.";
-      case WorkshopLocationErrorType.unknown:
-        return "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.";
-    }
   }
 }

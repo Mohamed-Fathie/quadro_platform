@@ -10,6 +10,8 @@ typedef CallbackNavigator = void Function();
 
 class RequestTemplet<T> extends StatelessWidget {
   final String? imageUrl;
+  final String? street;
+  final String? city;
   final String userName;
   final String carBrand;
   final String carModel;
@@ -27,6 +29,8 @@ class RequestTemplet<T> extends StatelessWidget {
   const RequestTemplet(
       {super.key,
       this.imageUrl,
+      this.city,
+      this.street,
       required this.userName,
       required this.carBrand,
       required this.carModel,
@@ -85,44 +89,67 @@ class RequestTemplet<T> extends StatelessWidget {
                     ),
                   ],
                 ),
-                Expanded(
-                  child: Row(
-                    spacing: 8,
-                    children: [
-                      Text(
-                        "نوع المركبة :",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      Text(carBrand,
-                          softWrap: true,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.apply(
-                                  color: Qcolors.getColorForRequestType(
-                                      requestType))),
-                    ],
+                if (requestType == RequestType.vehicle_owner_id)
+                  Expanded(
+                    child: Row(
+                      spacing: 8,
+                      children: [
+                        Text(
+                          "الموقع :",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        Text(
+                            "$city , ${(street == "Unknown street" ? "" : street)} ",
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.apply(
+                                    color: Qcolors.getColorForRequestType(
+                                        requestType))),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Row(
-                    spacing: 8,
-                    children: [
-                      Text(
-                        "موديل السيارة :",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      Text(carModel,
-                          softWrap: true,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.apply(
-                                  color: Qcolors.getColorForRequestType(
-                                      requestType))),
-                    ],
+                if (requestType != RequestType.vehicle_owner_id)
+                  Expanded(
+                    child: Row(
+                      spacing: 8,
+                      children: [
+                        Text(
+                          "نوع المركبة :",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        Text(carBrand,
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.apply(
+                                    color: Qcolors.getColorForRequestType(
+                                        requestType))),
+                      ],
+                    ),
                   ),
-                ),
+                if (requestType != RequestType.vehicle_owner_id)
+                  Expanded(
+                    child: Row(
+                      spacing: 8,
+                      children: [
+                        Text(
+                          "موديل السيارة :",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        Text(carModel,
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.apply(
+                                    color: Qcolors.getColorForRequestType(
+                                        requestType))),
+                      ],
+                    ),
+                  ),
                 servicePrice != null
                     ? Expanded(
                         child: Row(

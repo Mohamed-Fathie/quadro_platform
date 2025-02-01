@@ -5,6 +5,7 @@ import 'package:quadro_platform/common/controller/provider/profile_data_provider
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
+import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:sizer/sizer.dart';
 
 class UserAccountScreen extends StatefulWidget {
@@ -120,9 +121,10 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                 itemCount: accountButtons.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (index == (accountButtons.length) - 1) {
                         AuthServices.logOutUser();
+                        await UserRepository.clearCachedUser();
                       }
                     },
                     child: Container(

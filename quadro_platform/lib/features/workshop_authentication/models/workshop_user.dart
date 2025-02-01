@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show GeoPoint;
-import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart' show GeoFirePoint;
 import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
-import 'package:quadro_platform/shared/utils/extension/coordination_togeopoint.dart';
 
 class Workshop {
   final String name;
@@ -14,7 +13,7 @@ class Workshop {
   final String? city;
   final List<SparePartsStatus> status;
   final List<CarBrand> carBrands;
-  final LatLng? coordination;
+  final GeoFirePoint? coordination;
 
   Workshop({
     required this.street,
@@ -28,11 +27,8 @@ class Workshop {
     required this.carBrands,
     required this.coordination,
   });
-
   // Convert a JSON map into a Workshop instance
-  factory Workshop.fromJson(Map<String, dynamic> json) {
-    final dynamic coordinationData = json['coordination'];
-
+  factory Workshop.fromfirestor(Map<String, dynamic> json) {
     return Workshop(
       name: json['name'] as String,
       imagePath: json['imagePath'] as String,
@@ -49,12 +45,40 @@ class Workshop {
                   CarBrandExtension.fromString(e.toString().split('.').last))
               .toList() ??
           [],
-      coordination: (coordinationData is GeoPoint)
-          ? coordinationData.toLatLng() // Use the extension method
-          : LatLng(
-              (coordinationData['latitude'] as num).toDouble(),
-              (coordinationData['longitude'] as num).toDouble(),
-            ),
+      coordination: json['coordination'] != null
+          ? GeoFirePoint(json['coordination']["geopoint"])
+          : null,
+      street: json['street'] as String?,
+      city: json['city'] as String?,
+    );
+  }
+
+  // Convert a JSON map into a Workshop instance
+  factory Workshop.fromJson(Map<String, dynamic> json) {
+    return Workshop(
+      name: json['name'] as String,
+      imagePath: json['imagePath'] as String,
+      ownerId: json['owner_id'] as String,
+      description: json['description'] as String,
+      phone: json['phone'] as String,
+      status: (json['status'] as List<dynamic>?)
+              ?.map((e) => SparePartsStatusExtension.fromString(
+                  e.toString().split('.').last))
+              .toList() ??
+          [],
+      carBrands: (json['carBrands'] as List<dynamic>?)
+              ?.map((e) =>
+                  CarBrandExtension.fromString(e.toString().split('.').last))
+              .toList() ??
+          [],
+      coordination: json['coordination'] != null
+          ? GeoFirePoint(
+              GeoPoint(
+                json['coordination']['latitude'],
+                json['coordination']['longitude'],
+              ),
+            )
+          : null,
       street: json['street'] as String?,
       city: json['city'] as String?,
     );
@@ -70,7 +94,7 @@ class Workshop {
       'phone': phone,
       'status': status.map((e) => e.toJson()).toList(),
       'carBrands': carBrands.map((e) => e.toString()).toList(),
-      'coordination': coordination?.toGeoPoint(),
+      'coordination': coordination!.data,
       'street': street,
       'city': city,
     };

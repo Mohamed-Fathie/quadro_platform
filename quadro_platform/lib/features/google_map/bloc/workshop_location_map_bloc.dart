@@ -2,10 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quadro_platform/features/google_map/model/marker_model.dart';
 import 'package:quadro_platform/features/google_map/repository/geo_conding_repository.dart';
+
+import '../../../common/controller/services/location_services.dart';
+import '../model/location_service_exception.dart';
 part 'workshop_location_map_event.dart';
 part 'workshop_location_map_state.dart';
 
@@ -112,49 +114,7 @@ class WorkshopLocationMapBloc
   ) async {
     emit(WorkshopLocationLoading());
     try {
-      // Check if location services are enabled
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        await Geolocator.openLocationSettings();
-        emit(WorkshopLocationFailure(
-          errorType: WorkshopLocationErrorType.gpsDisabled,
-          errorMessage: "خدمات الموقع معطلة. يرجى تفعيلها من إعدادات الجهاز.",
-        ));
-        return;
-      }
-
-      // Request permission if needed
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          emit(WorkshopLocationFailure(
-            errorType: WorkshopLocationErrorType.permissionDenied,
-            errorMessage: "تم رفض إذن الوصول للموقع. يرجى منح الإذن للوصول.",
-          ));
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        emit(WorkshopLocationFailure(
-          errorType: WorkshopLocationErrorType.permissionDenied,
-          errorMessage:
-              "تم رفض إذن الموقع بشكل دائم. قم بتفعيله من إعدادات التطبيق.",
-        ));
-        return;
-      }
-
-      // Fetch current position using new settings parameter
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high, // High accuracy location
-          distanceFilter: 10, // Minimum distance to trigger updates
-        ),
-      );
-
-      // Prepare current location and marker
-      LatLng currentLocation = LatLng(position.latitude, position.longitude);
+      LatLng currentLocation = await LocationServices.getCurrentLocation();
       List<MarkerModel> customMarkers = [
         MarkerModel(
           id: currentLocation.toString(),
@@ -169,11 +129,8 @@ class WorkshopLocationMapBloc
         selectedLocation: currentLocation,
         markers: customMarkers,
       ));
-    } catch (e) {
-      emit(WorkshopLocationFailure(
-        errorType: WorkshopLocationErrorType.unknown,
-        errorMessage: "حدث خطأ غير متوقع: $e",
-      ));
+    } on WorkshopLocationException catch (e) {
+      emit(WorkshopLocationFailure(exception: e));
     }
   }
 }

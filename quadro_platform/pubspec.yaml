@@ -70,6 +70,7 @@ dependencies:
   pin_code_fields: ^8.0.1
   google_geocoding_api: ^1.5.2
   flutter_rating_bar: ^4.0.1
+  geoflutterfire_plus: ^0.0.32
   
   
 dev_dependencies:

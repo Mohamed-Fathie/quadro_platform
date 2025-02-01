@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,10 +30,11 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
           reviewslist: [],
           status: WorkshopProfileStatus.loading,
         ));
-  void onSelectedMenu(WorkshopProfileMenu clecked) {
+  void onSelectedMenu(WorkshopProfileMenu clecked) async {
     switch (clecked) {
       case WorkshopProfileMenu.logout:
         AuthServices.logOutUser();
+        await workshopRepo.clearCachedUser();
       case WorkshopProfileMenu.edit:
     }
   }
@@ -40,6 +43,7 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
     try {
       // Resolve the workshop either from the provided data or cached data
       workshop ??= await workshopRepo.getCachedUser();
+      log(workshop?.ownerId ?? " workshop in null");
       //workshop!.ownerId
       // "1LQiEMpL1MMSvTwizkuhCMuO8iW2"
       reviewsRepo = ReviewsRepository(workshopId: workshop!.ownerId);

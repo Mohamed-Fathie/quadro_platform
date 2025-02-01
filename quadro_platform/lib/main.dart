@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ import 'package:quadro_platform/user/controller/provider/trip_provider/ride_requ
 import 'package:sizer/sizer.dart';
 
 import 'features/google_map/views/workshop_location_map.dart';
+import 'features/workshop_profile/repository/reviews_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,21 +77,29 @@ class Quadro extends StatelessWidget {
               create: (_) => DriverRideRequestProvider(),
             ),
           ],
-          child: MaterialApp(
-            locale: const Locale('ar'),
-            supportedLocales: const [Locale('ar')],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate, // For Cupertino widgets
-            ],
-            navigatorKey: NavigationService().navigatorKey,
-            onGenerateRoute: RouteGenerator.generateRoutes,
-            debugShowCheckedModeBanner: false,
-            theme: GlobalThemData.lightThemeData,
-            darkTheme: GlobalThemData.darkThemeData,
-            themeMode: ThemeMode.system,
-            home: const LogInLogic(),
+          child: RepositoryProvider(
+            create: (context) => RepositoryManager(
+                reviewsRepository: ReviewsRepository(),
+                maintenanceRequestsRepository: MaintenanceRequestsRepository(),
+                offersRepository: OffersRepository(),
+                userRepository: UserRepository(),
+                workshopRepository: WorkshopRepository()),
+            child: MaterialApp(
+              locale: const Locale('ar'),
+              supportedLocales: const [Locale('ar')],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate, // For Cupertino widgets
+              ],
+              navigatorKey: NavigationService().navigatorKey,
+              onGenerateRoute: RouteGenerator.generateRoutes,
+              debugShowCheckedModeBanner: false,
+              theme: GlobalThemData.lightThemeData,
+              darkTheme: GlobalThemData.darkThemeData,
+              themeMode: ThemeMode.system,
+              home: const LogInLogic(),
+            ),
           ),
         );
       },

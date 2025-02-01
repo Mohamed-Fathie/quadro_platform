@@ -42,6 +42,9 @@ class UserRepository {
         phone: phone));
   }
 
+// getter for user id from firebase auth
+  String? get getuserId => _auth.currentUser?.uid;
+
   /// Gets the current user, if authenticated.
   Future<QuadroUser?> getCurrentUser() async {
     final firebaseAuthUser = _auth.currentUser;
@@ -79,7 +82,7 @@ class UserRepository {
   }
 
 //Cache User Data
-  Future<void> cacheUser(QuadroUser user) async {
+  static Future<void> cacheUser(QuadroUser user) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = user.toJson();
     await prefs.setString('cached_user', jsonEncode(userJson));
@@ -97,10 +100,10 @@ class UserRepository {
   }
 
   // Clear Cached User Data when log out or delete account
-  Future<void> clearCachedUser() async {
+  static Future<void> clearCachedUser() async {
     final prefs = await SharedPreferences.getInstance();
-    // await prefs.remove('cached_user');
-    await prefs.clear();
+    await prefs.remove('cached_user');
+    // await prefs.clear();
   }
 
   /// map of user by their ids : helper function  to get all users related to specific  requests

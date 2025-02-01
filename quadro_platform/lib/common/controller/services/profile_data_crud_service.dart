@@ -56,13 +56,15 @@ class ProfileDataCRUDServices {
     //       (route) => false);
     // }
     log("registerUserToDatabase");
-    await UserRepository().clearCachedUser();
-    await UserRepository().cacheUser(QuadroUser(
-        id: auth.currentUser!.uid,
-        name: profileData.name ?? "",
-        email: profileData.email ?? "",
-        phone: profileData.mobileNumber,
-        pictureUrl: profileData.profilePicUrl));
+
+    if (profileData.userType != "التسجيل كصاحب ورشة") {
+      await UserRepository.cacheUser(QuadroUser(
+          id: auth.currentUser!.uid,
+          name: profileData.name ?? "",
+          email: profileData.email ?? "",
+          phone: profileData.mobileNumber,
+          pictureUrl: profileData.profilePicUrl));
+    }
     realTimeDatabaseRef
         .child('User/${auth.currentUser!.uid}')
         .set(profileData.toMap())

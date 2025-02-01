@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -13,6 +15,8 @@ class SharedRequestsList extends StatelessWidget {
   final List<MaintenanceRequestDomainModel>? requests;
   final RequestStatus status;
   final String noRequestsMessage;
+  // final String? city;
+  // final String? street;
   final String errorMessage;
   final String buttonTitle;
   final Color buttonColor;
@@ -36,6 +40,8 @@ class SharedRequestsList extends StatelessWidget {
     required this.onRequestDetails,
     required this.requestType,
     this.isOffer,
+    // this.city,
+    // this.street,
   });
 
   @override
@@ -83,7 +89,11 @@ class SharedRequestsList extends StatelessWidget {
                           itemCount: requests!.length,
                           itemBuilder: (context, index) {
                             final offer = requests![index];
+                            log("here is the offer ");
+                            log(offer.workshop.toJson().toString());
                             return RequestTemplet(
+                              city: offer.workshop.city,
+                              street: offer.workshop.street,
                               requestType: RequestType.workshop_id,
                               isOffer: true,
                               buttonTitle: "تفاصيل",
