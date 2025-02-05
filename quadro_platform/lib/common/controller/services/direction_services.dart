@@ -46,7 +46,7 @@ class DirectionServices {
           polylinePoints: decodedResponse['routes'][0]['overview_polyline']
               ['points'],
         );
-        log(directionModel.toMap().toString());
+        log('direction model${directionModel.toMap().toString()}');
         context.read<RideRequestProvider>().updateDirection(directionModel);
       }
     } catch (e) {
@@ -68,14 +68,14 @@ class DirectionServices {
         throw TimeoutException('انتهت صلاحية الجلسة');
       }).onError(
         (error, stackTrace) {
-          log(error.toString());
+          log('error : ${error.toString()}');
           throw Exception(error);
         },
       );
       log('log(response.statusCode): ${response.statusCode.toString()}');
       if (response.statusCode == 200) {
         var decodedResponse = response.data;
-        log(decodedResponse.toString());
+        log('decodedResponse: ${decodedResponse.toString()}');
           if (decodedResponse['routes'].isEmpty) {
     log('No routes found between the given locations.');
     ToastService.sendScaffoldAlert(
@@ -102,7 +102,7 @@ class DirectionServices {
             .updateDirection(directionModel);
       }
     } catch (e) {
-      log(e.toString());
+      log('error :${e.toString()}');
       throw Exception(e);
     }
   }

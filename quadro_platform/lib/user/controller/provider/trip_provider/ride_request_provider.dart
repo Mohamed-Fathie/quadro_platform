@@ -4,8 +4,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_services.dart';
+import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
 import 'package:quadro_platform/common/model/direction_model.dart';
 import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
+import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/user/model/nearby_drivers_model.dart';
@@ -29,10 +32,14 @@ class RideRequestProvider extends ChangeNotifier {
   int quadroHookFare = 0;
   int quadroWheelLeftFare = 0;
   int quadroIntegratedTowFare = 0;
-
-//nearby drivers list
   bool fechNearbyDrivers = false;
   List<NearbyDriversModel> nearbyDrivers = [];
+  bool placeRideRequest = false;
+
+  updatePlaceRideRequestStatus(bool newStatus) {
+    placeRideRequest = newStatus;
+    notifyListeners();
+  }
 
   makeFareZero() {
     quadroHookFare = 0;
@@ -191,8 +198,7 @@ class RideRequestProvider extends ChangeNotifier {
         Marker truckMarker = Marker(
           markerId: MarkerId(driver.driverID),
           rotation: rotation,
-          position:
-              LatLng(pickupLocation!.latitude!, pickupLocation!.longitude!),
+          position: LatLng(driver.latitude, driver.longitude),
           icon: truckIconForMap!,
         );
         riderMarker.add(truckMarker);
@@ -217,6 +223,17 @@ class RideRequestProvider extends ChangeNotifier {
   }
 
 // nearby drivers functions
+
+  sendPushNotificationToNearbyDrivers() async {
+    for (var driver in nearbyDrivers) {
+      ProfileDataModel driverProfileData =
+          await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
+              driver.driverID);
+      log(driverProfileData.cloudMessagingToken!);
+      await PushNotivicationServices.sendRideRequestToNearbyDrivers(
+          driverProfileData.cloudMessagingToken!);
+    }
+  }
 
   addDriver(NearbyDriversModel driver) {
     nearbyDrivers.add(driver);

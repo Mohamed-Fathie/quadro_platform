@@ -64,8 +64,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   firebase_messaging: ^15.1.6
   pin_code_fields: ^8.0.1
-  
-  
+  googleapis_auth: ^1.5.1
+  http: ^1.2.1
+  googleapis: ^13.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

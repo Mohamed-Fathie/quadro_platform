@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,6 +11,7 @@ import 'package:quadro_platform/common/controller/provider/profile_data_provider
 import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
 import 'package:quadro_platform/common/model/rider_request_model.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
+import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
@@ -82,18 +86,9 @@ class _BookRideScreenState extends State<BookRideScreen> {
       'من 5 الى 10 طن'
     ],
   ];
-  // getBorderColorForSelectedVehicleType(int index) {
-  //   if (selectedVehicleType == 'QuadroHOOK') {
-  //     return teal;
-  //   }
-  //   if (selectedVehicleType == 'QuadroWheelLeft') {
-  //     return teal;
-  //   }
-  //   if (selectedVehicleType == 'QuadroIntegrationTow') {
-  //     return teal;
-  //   }
-  //   return transparent;
-  // }
+  DatabaseReference userRideRequestRef = FirebaseDatabase.instance
+      .ref()
+      .child('RideRequest/${auth.currentUser!.uid}');
 
   final panelController = PanelController();
   @override
@@ -109,223 +104,265 @@ class _BookRideScreenState extends State<BookRideScreen> {
           ),
         ),
         panelBuilder: (controller) {
-          return Builder(
-            builder: (context) {
-              if (bookRideButtonPressed == true) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CircularProgressIndicator(
-                      color: teal,
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Container(
-                      height: 10.h,
-                      width: 10.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: teal, width: 2),
-                        color: white,
-                      ),
-                      child: Icon(
-                        CupertinoIcons.xmark,
-                        color: teal,
-                        size: 6.h,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      'الغاء الرحلة',
-                      style: AppTextStyles.Mbody18Bold,
-                    ),
-                  ],
-                );
-              } else {
-                return Consumer<RideRequestProvider>(
-                  builder: (context, rideRequestProvider, child) {
-                    if ((rideRequestProvider.quadroHookFare == 0) &&
-                        (rideRequestProvider.quadroWheelLeftFare == 0) &&
-                        (rideRequestProvider.quadroIntegratedTowFare == 0)) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: teal,
-                        ),
-                      );
-                    } else {
-                      return ListView(
-                        controller: controller,
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.w, vertical: 2.h),
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 1.h,
-                                  width: 20.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(10.sp),
-                                      color: grey),
-                                ),
-                              ]),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          ListView.builder(
-                              itemCount: ridesList.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedVehicleType = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: 0.4.h),
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 1.h,
-                                      horizontal: 1.w,
+          return Consumer<RideRequestProvider>(
+              builder: (context, rideRequestProvider, child) {
+            if (rideRequestProvider.placeRideRequest == false) {
+              return Builder(
+                builder: (context) {
+                  if (bookRideButtonPressed == true) {
+                    return CancelRideRequest(
+                      controller: controller,
+                    );
+                  } else {
+                    return Consumer<RideRequestProvider>(
+                      builder: (context, rideRequestProvider, child) {
+                        if ((rideRequestProvider.quadroHookFare == 0) &&
+                            (rideRequestProvider.quadroWheelLeftFare == 0) &&
+                            (rideRequestProvider.quadroIntegratedTowFare ==
+                                0)) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: teal,
+                            ),
+                          );
+                        } else {
+                          return ListView(
+                            controller: controller,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 3.w, vertical: 2.h),
+                            children: [
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 1.h,
+                                      width: 20.w,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.sp),
+                                          color: grey),
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(16.sp),
-                                      border: Border.all(
-                                          color: index == selectedVehicleType
-                                              ? teal
-                                              : transparent,
-                                          width: 2),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          height: 7.h,
-                                          width: 7.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16.sp),
-                                            border: Border.all(color: teal),
-                                            color: white,
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                ridesList[index][0],
-                                              ),
-                                            ),
-                                          ),
+                                  ]),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              ListView.builder(
+                                  itemCount: ridesList.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedVehicleType = index;
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 0.4.h),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 1.h,
+                                          horizontal: 1.w,
                                         ),
-                                        SizedBox(
-                                          width: 3.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.sp),
+                                          border: Border.all(
+                                              color:
+                                                  index == selectedVehicleType
+                                                      ? teal
+                                                      : transparent,
+                                              width: 2),
                                         ),
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                getVehicleType(index),
-                                                style:
-                                                    AppTextStyles.Mbody18Bold,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              SizedBox(
-                                                width: 2.5.w,
-                                              ),
-                                              Icon(
-                                                Icons.scale_rounded,
-                                                color: teal,
-                                              ),
-                                              Text(
-                                                ' ${ridesList[index][2]}',
-                                                style: AppTextStyles.Mbody14Bold
-                                                    .copyWith(color: teal),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Column(
+                                        child: Row(
                                           children: [
-                                            Text(
-                                              getFare(index).toString(),
-                                              style: AppTextStyles.Mbody18Bold,
-                                            ),
-                                            Text(
-                                              'د.ل ${(getFare(index) * 1.15).round().toString()}',
-                                              style: AppTextStyles.Mbody16Bold
-                                                  .copyWith(
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: grey,
+                                            Container(
+                                              height: 7.h,
+                                              width: 7.h,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        16.sp),
+                                                border: Border.all(color: teal),
+                                                color: white,
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                    ridesList[index][0],
+                                                  ),
+                                                ),
                                               ),
+                                            ),
+                                            SizedBox(
+                                              width: 3.w,
+                                            ),
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    getVehicleType(index),
+                                                    style: AppTextStyles
+                                                        .Mbody18Bold,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 2.5.w,
+                                                  ),
+                                                  Icon(
+                                                    Icons.scale_rounded,
+                                                    color: teal,
+                                                  ),
+                                                  Text(
+                                                    ' ${ridesList[index][2]}',
+                                                    style: AppTextStyles
+                                                            .Mbody14Bold
+                                                        .copyWith(color: teal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  getFare(index).toString(),
+                                                  style:
+                                                      AppTextStyles.Mbody18Bold,
+                                                ),
+                                                Text(
+                                                  'د.ل ${(getFare(index) * 1.15).round().toString()}',
+                                                  style: AppTextStyles
+                                                      .Mbody16Bold.copyWith(
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: grey,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                          SizedBox(
-                            height: 1.h,
+                                      ),
+                                    );
+                                  }),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              CustomElevatedButton(
+                                buttonTitle: 'استمرار',
+                                fontSize: 20,
+                                fontColor: white,
+                                onPressed: () {
+                                  context
+                                      .read<RideRequestProvider>()
+                                      .updatePlaceRideRequestStatus(true);
+                                  setState(() {
+                                    bookRideButtonPressed = true;
+                                  });
+                                  RiderRequistModel model = RiderRequistModel(
+                                    rideCreateTime: DateTime.now(),
+                                    userProfile: context
+                                        .read<ProfileDataProvider>()
+                                        .profileData!,
+                                    pickupLocation: context
+                                        .read<RideRequestProvider>()
+                                        .pickupLocation!,
+                                    dropLocation: context
+                                        .read<RideRequestProvider>()
+                                        .dropLocation!,
+                                    fare:
+                                        getFare(selectedVehicleType).toString(),
+                                    vehicleType:
+                                        getVehicleType(selectedVehicleType),
+                                    rideStatus:
+                                        RideRequestService.getRideStatus(0),
+                                    otp: math.Random().nextInt(9999).toString(),
+                                  );
+                                  RideRequestService.createNewRideRequest(
+                                      model, context);
+                                  context
+                                      .read<RideRequestProvider>()
+                                      .sendPushNotificationToNearbyDrivers();
+                                },
+                                child: Builder(builder: (context) {
+                                  if (bookRideButtonPressed == true) {
+                                    return CircularProgressIndicator(
+                                      color: white,
+                                    );
+                                  } else {
+                                    return Text(
+                                      'استمرار',
+                                      style: AppTextStyles.Mbody18Bold.copyWith(
+                                          color: white),
+                                    );
+                                  }
+                                }),
+                              )
+                            ],
+                          );
+                        }
+                      },
+                    );
+                  }
+                },
+              );
+            } else {
+              return StreamBuilder(
+                stream: userRideRequestRef.onValue,
+                builder: (context, event) {
+                  if ((event.connectionState == ConnectionState.waiting) ||
+                      (event.data == null)) {
+                    return ListView(
+                      shrinkWrap: true,
+                      controller: controller,
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: teal,
                           ),
-                          CustomElevatedButton(
-                            buttonTitle: 'استمرار',
-                            fontSize: 20,
-                            fontColor: white,
-                            onPressed: () {
-                              setState(() {
-                                bookRideButtonPressed = true;
-                              });
-                              RiderRequistModel model = RiderRequistModel(
-                                riderCreateTime: DateTime.now(),
-                                userProfile: context
-                                    .read<ProfileDataProvider>()
-                                    .profileData!,
-                                pickupLocation: context
-                                    .read<RideRequestProvider>()
-                                    .pickupLocation!,
-                                dropLocation: context
-                                    .read<RideRequestProvider>()
-                                    .dropLocation!,
-                                fare: getFare(selectedVehicleType).toString(),
-                                rideStatus: RideRequestService.getRideStatus(0),
-                                vehicleType:
-                                    getVehicleType(selectedVehicleType),
-                                otp: math.Random().nextInt(9999).toString(),
-                              );
-                              RideRequestService.createNewRideRequest(
-                                  model, context);
-                            },
-                            child: Builder(builder: (context) {
-                              if (bookRideButtonPressed == true) {
-                                return CircularProgressIndicator(
-                                  color: white,
-                                );
-                              } else {
-                                return Text(
-                                  'استمرار',
-                                  style: AppTextStyles.Mbody18Bold.copyWith(
-                                      color: white),
-                                );
-                              }
-                            }),
-                          )
-                        ],
+                        ),
+                      ],
+                    );
+                  }
+                  if (event.data != null) {
+                    log('not null');
+                    if (event.data!.snapshot.value != null) {
+                      RiderRequistModel rideData = RiderRequistModel.fromMap(
+                        jsonDecode(
+                          jsonEncode(event.data!.snapshot.value),
+                        ) as Map<String, dynamic>,
                       );
+                     
+                      if (rideData.driverProfile == null) {
+                        return CancelRideRequest(
+                          controller: controller,
+                        );
+                      }
+                      if (rideData.rideStatus ==
+                          RideRequestService.getRideStatus(0)) {
+                        return RideData(
+                          rideData: rideData,
+                          controller: controller,
+                        );
+                      } else if (rideData.rideStatus ==
+                          RideRequestService.getRideStatus(1)) {
+                        return RideData(
+                          rideData: rideData,
+                          controller: controller,
+                        );
+                      } else {
+                        RideData(
+                          rideData: rideData,
+                          controller: controller,
+                        );
+                      }
                     }
-                  },
-                );
-              }
-            },
-          );
+                  }
+                  return CancelRideRequest(controller: controller);
+                },
+              );
+            }
+          });
         },
         body: Consumer<RideRequestProvider>(
           builder: (context, rideRequestProvider, child) {
@@ -387,6 +424,186 @@ class _BookRideScreenState extends State<BookRideScreen> {
           },
         ),
       ),
+    );
+  }
+}
+
+class RideData extends StatelessWidget {
+  const RideData({super.key, required this.rideData, required this.controller});
+
+  final RiderRequistModel rideData;
+  final ScrollController controller;
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      controller: controller,
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 1.h,
+              width: 20.w,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.sp), color: grey),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            SizedBox(
+              width: 70.w,
+              child: Text(
+                rideData.driverProfile!.name!,
+                style: AppTextStyles.Mheading26Bold,
+              ),
+            ),
+            Container(
+              height: 18.w,
+              width: 18.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: black87),
+                image: DecorationImage(
+                  image: NetworkImage(rideData.driverProfile!.profilePicUrl!),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'نقطة البداية',
+              style: AppTextStyles.Mbody16Bold,
+            ),
+            Text(
+              rideData.pickupLocation.name!,
+              style: AppTextStyles.Mbody16Bold,
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            Text(
+              'نقطة النهاية',
+              style: AppTextStyles.Mbody16Bold,
+            ),
+            Text(
+              rideData.dropLocation.name!,
+              style: AppTextStyles.Mbody16Bold,
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'نوع المركبة',
+              style: AppTextStyles.Mbody16Bold,
+            ),
+            SizedBox(
+              width: 3.w,
+            ),
+            Text(
+              rideData.vehicleType,
+              style: AppTextStyles.Mbody16Bold,
+            ),
+            Builder(builder: (context) {
+              if (rideData.vehicleType == 'سيارة جر') {
+                return Image(
+                  image: const AssetImage(
+                    'assets/images/vehicle/hookTruck.png',
+                  ),
+                  height: 5.h,
+                );
+              } else if (rideData.vehicleType == 'سيارة سحب') {
+                return Image(
+                  image:
+                      const AssetImage('assets/images/vehicle/towingTruck.png'),
+                  height: 5.h,
+                );
+              } else {
+                return Image(
+                  image: const AssetImage(
+                      'assets/images/vehicle/integrationTruck.png'),
+                  height: 5.h,
+                );
+              }
+            }),
+          ],
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        Text(
+          '${rideData.driverProfile!.vehicleBrandName!} ${rideData.driverProfile!.vehicleModel!}',
+          style: AppTextStyles.Mbody16Bold,
+        ),
+        Text(
+          rideData.driverProfile!.vehicleRegistrationNumber!,
+          style: AppTextStyles.Mbody16Bold,
+        ),
+      ],
+    );
+  }
+}
+
+class CancelRideRequest extends StatelessWidget {
+  const CancelRideRequest({super.key, required this.controller});
+  final ScrollController controller;
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      controller: controller,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(
+          height: 5.h,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: teal,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 5.h,
+        ),
+        InkWell(
+          onTap: () async {
+            await RideRequestService.cancelRideRequest(context);
+          },
+          child: Container(
+            height: 8.h,
+            width: 8.h,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: teal,
+                  width: 2,
+                ),
+                color: white),
+            child: Icon(
+              CupertinoIcons.xmark,
+              color: teal,
+              size: 6.h,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        Text(
+          'الغاء الرحلة',
+          textAlign: TextAlign.center,
+          style: AppTextStyles.body16Bold,
+        ),
+      ],
     );
   }
 }

@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
 import 'package:quadro_platform/common/controller/services/auth_services.dart';
+import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:quadro_platform/common/model/profile_data_model.dart';
 import 'package:quadro_platform/common/model/rider_request_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
+import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class RideRequestServicesForDriver {
-  
   static checkRideAvailability(BuildContext context, String rideID) async {
     DatabaseReference? tripRef =
         FirebaseDatabase.instance.ref().child('RideRequest/$rideID');
@@ -102,19 +104,75 @@ class RideRequestServicesForDriver {
     ProfileDataModel profileData =
         context.read<ProfileDataProvider>().profileData!;
     ref.set(profileData.toMap()).then((value) {
-    if(context.mounted)  {ToastService.sendScaffoldAlert(
-          msg: 'تم تسجيل الطلب بنجاح',
-          toastStatus: 'SUCCESS',
-          context: context);}
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+            msg: 'تم تسجيل الطلب بنجاح',
+            toastStatus: 'SUCCESS',
+            context: context);
+      }
     }).onError(
       (error, stackTrace) {
-        if(context.mounted){ToastService.sendScaffoldAlert(
-            msg: 'المعذرة ، خطأ في الطلب',
-            toastStatus: 'ERROR',
-            context: context);}
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+              msg: 'المعذرة ، خطأ في الطلب',
+              toastStatus: 'ERROR',
+              context: context);
+        }
         log('error');
         throw Exception(error);
       },
     );
+  }
+
+  static endRide(String rideID, BuildContext context) async {
+    try {
+      Uuid uuid = const Uuid();
+      String uniqueID = uuid.v1().toString();
+
+      DatabaseReference rideRef = FirebaseDatabase.instance
+          .ref()
+          .child('RideRequest/$rideID/rideEndTime');
+      DatabaseReference rideRefFechData =
+          FirebaseDatabase.instance.ref().child('RideRequest/$rideID');
+
+      DatabaseReference riderRef = FirebaseDatabase.instance
+          .ref()
+          .child('RiderRideHistory/$rideID/$uniqueID');
+
+      DatabaseReference driverProfileRef = FirebaseDatabase.instance
+          .ref()
+          .child('User/${auth.currentUser!.uid}/activeRideRequestID');
+
+      DatabaseReference driverRef = FirebaseDatabase.instance
+          .ref()
+          .child('DriverRideHistory/$rideID/$uniqueID');
+      context.read<DriverRideRequestProvider>().updateUpdateMarkerStatus(false);
+      await rideRef.set(DateTime.now().microsecondsSinceEpoch);
+
+      final snapshot = await rideRefFechData.get();
+      log(snapshot.value.toString());
+      if (snapshot.value != null) {
+        RiderRequistModel rideData = RiderRequistModel.fromMap(
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>);
+        log('fare isss: ${(rideData.fare)}');
+          ToastService.sendScaffoldAlert(
+            msg: ' :تم انهاء الرحلة بنجاح ، حسابك هو ${(rideData.fare)}',
+            toastStatus: 'SUCCESS',
+            context: context);
+        await RideRequestServicesForDriver.updateRideRequestStatus(
+            RideRequestServicesForDriver.getRideStatus(3), rideID);
+        await riderRef.set(rideData.toMap());
+        await driverRef.set(rideData.toMap());
+        await rideRefFechData.remove();
+        await driverProfileRef.remove();
+        
+      
+      } else {
+        log('null fare');
+      }
+    } catch (e) {
+      log(e.toString());
+      throw Exception(e);
+    }
   }
 }

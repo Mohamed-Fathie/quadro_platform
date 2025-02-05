@@ -10,6 +10,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/controller/services/direction_services.dart';
 import 'package:quadro_platform/common/controller/services/location_services.dart';
+import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:quadro_platform/common/model/rider_request_model.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
@@ -103,13 +104,19 @@ class _BookRideScreenState extends State<TripScreen> {
                                     .otp) {
                               LatLng pickupLocation =
                                   await LocationServices.getCurrentLocation();
-                                  LatLng dropLocation = LatLng(context.read<DriverRideRequestProvider>().dropLocation!.latitude!,context.read<DriverRideRequestProvider>().dropLocation!.longitude!);
-                                
+                              LatLng dropLocation = LatLng(
+                                  context
+                                      .read<DriverRideRequestProvider>()
+                                      .dropLocation!
+                                      .latitude!,
+                                  context
+                                      .read<DriverRideRequestProvider>()
+                                      .dropLocation!
+                                      .longitude!);
+
                               await DirectionServices
                                   .getDirectionDetailsForDriver(
-                                      pickupLocation,
-                                      dropLocation,
-                                      context);
+                                      pickupLocation, dropLocation, context);
                               context
                                   .read<DriverRideRequestProvider>()
                                   .decodePolylineAndUpdatePolylineField();
@@ -123,7 +130,7 @@ class _BookRideScreenState extends State<TripScreen> {
                               context
                                   .read<DriverRideRequestProvider>()
                                   .updateMarker();
-                              
+
                               RideRequestServicesForDriver
                                   .updateRideRequestStatus(
                                       RideRequestServicesForDriver
@@ -150,7 +157,14 @@ class _BookRideScreenState extends State<TripScreen> {
                         activeTrackColor: grey,
                         elevationThumb: 2,
                         elevationTrack: 2,
-                        onSwipe: () {},
+                        onSwipe: () async {
+                          await RideRequestServicesForDriver.endRide(
+                              rideID!, context);
+
+                          // DatabaseReference rideRefFechData =
+                          //     FirebaseDatabase.instance.ref().child('RideRequest/$rideID');
+                          //     final snapshot = await rideRefFechData.get();
+                        },
                         child: Builder(
                           builder: (context) {
                             return Text(

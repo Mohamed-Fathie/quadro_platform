@@ -52,7 +52,7 @@ class LocationServices {
           latitude: position.latitude,
           longitude: position.longitude,
         );
-        log(model.toMap().toString());
+        log('pickup and drop location: ${model.toMap().toString()}');
         context.read<LocationProvider>().updatePickupLocation(model);
         return model;
       } else {
@@ -106,7 +106,7 @@ class LocationServices {
     } catch (e) {
       ToastService.sendScaffoldAlert(
           msg: 'حدث خطأ غير متوقع: $e', toastStatus: 'ERROR', context: context);
-      throw Exception(e);
+      
     }
   }
 

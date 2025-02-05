@@ -6,11 +6,11 @@ import 'package:quadro_platform/constants/constants.dart';
 
 class RideRequestService {
   static createNewRideRequest(
-      RiderRequistModel rideRequestModel, BuildContext context) {
+      RiderRequistModel rideRequestModel, BuildContext context) async {
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
         .child('RideRequest/${auth.currentUser!.uid}');
-    ref.set(rideRequestModel.toMap()).then((onValue) {
+    await ref.set(rideRequestModel.toMap()).then((onValue) {
       if (context.mounted) {
         ToastService.sendScaffoldAlert(
             msg: 'تم تسجيل الرحلة بنجاح',
@@ -46,8 +46,8 @@ class RideRequestService {
         .child('RideRequest/${auth.currentUser!.uid}')
         .remove()
         .then((onValue) {});
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
+    // if (context.mounted) {
+    Navigator.pop(context);
+    //}
   }
 }

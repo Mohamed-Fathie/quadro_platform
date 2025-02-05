@@ -17,8 +17,8 @@ class NearbyDriverServices {
     )!
         .listen((event) {
       if (event != null) {
-        log('Event is Not Null');
-        var callback = event['callback'];
+        log('Event is Not nNull');
+        var callback = event['callBack'];
         switch (callback) {
           case Geofire.onKeyEntered:
             NearbyDriversModel model = NearbyDriversModel(
