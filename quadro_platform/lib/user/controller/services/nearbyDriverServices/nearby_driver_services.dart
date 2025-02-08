@@ -13,7 +13,7 @@ class NearbyDriverServices {
     Geofire.queryAtLocation(
       pickupLocation.latitude,
       pickupLocation.longitude,
-      20,
+      120,
     )!
         .listen((event) {
       if (event != null) {

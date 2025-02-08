@@ -33,7 +33,7 @@ class DirectionServices {
 
       if (response.statusCode == 200) {
         var decodedResponse = response.data;
-        log(decodedResponse.toString());
+
         DirectionModel directionModel = DirectionModel(
           distanceInKM: decodedResponse['routes'][0]['legs'][0]['distance']
               ['text'],
@@ -76,14 +76,14 @@ class DirectionServices {
       if (response.statusCode == 200) {
         var decodedResponse = response.data;
         log('decodedResponse: ${decodedResponse.toString()}');
-          if (decodedResponse['routes'].isEmpty) {
-    log('No routes found between the given locations.');
-    ToastService.sendScaffoldAlert(
-        msg: 'لا توجد مسارات متاحة بين المواقع المختارة',
-        toastStatus: 'INFO',
-        context: context);
-    return;
-  }
+        if (decodedResponse['routes'].isEmpty) {
+          log('No routes found between the given locations.');
+          ToastService.sendScaffoldAlert(
+              msg: 'لا توجد مسارات متاحة بين المواقع المختارة',
+              toastStatus: 'INFO',
+              context: context);
+          return;
+        }
         DirectionModel directionModel = DirectionModel(
           distanceInKM: decodedResponse['routes'][0]['legs'][0]['distance']
               ['text'],

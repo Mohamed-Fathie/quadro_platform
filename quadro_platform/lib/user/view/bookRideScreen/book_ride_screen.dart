@@ -332,7 +332,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
                           jsonEncode(event.data!.snapshot.value),
                         ) as Map<String, dynamic>,
                       );
-                     
+
                       if (rideData.driverProfile == null) {
                         return CancelRideRequest(
                           controller: controller,

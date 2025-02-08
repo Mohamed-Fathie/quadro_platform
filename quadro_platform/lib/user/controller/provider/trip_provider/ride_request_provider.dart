@@ -88,8 +88,8 @@ class RideRequestProvider extends ChangeNotifier {
     dropLocation = drop;
     notifyListeners();
     log('PICKUP AND DROP LOCATION IS');
-    log(pickupLocation!.toMap().toString());
-    log(dropLocation!.toMap().toString());
+    // log(pickupLocation!.toMap().toString());
+    // log(dropLocation!.toMap().toString());
   }
 
   updateDirection(DirectionModel newDirection) {

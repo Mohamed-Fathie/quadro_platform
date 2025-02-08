@@ -120,7 +120,7 @@ class PushNotivicationServices {
   }
 
   static Future<String> getAccessToken() async {
-    // JSON كـ Map مباشرة
+    
     final serviceAccountJson = {
       "type": "service_account",
       "project_id": "quadro-204be",
@@ -139,7 +139,7 @@ class PushNotivicationServices {
       "universe_domain": "googleapis.com"
     };
 
-    // إنشاء بيانات الحساب
+    
     List<String> scopes = [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/firebase.database",
@@ -157,7 +157,7 @@ class PushNotivicationServices {
               client);
 
       client.close();
-      log("Access Token: ${credentials.accessToken.data}"); // Print Access Token
+      // log("Access Token: ${credentials.accessToken.data}"); // Print Access Token
       return credentials.accessToken.data;
     } catch (e) {
       log("Error getting access token: $e");
@@ -169,7 +169,7 @@ class PushNotivicationServices {
     try {
       final String accessToken = await getAccessToken();
       log('access token: $accessToken');
-      // ضبط التحقق من الشهادة
+      
       (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
         HttpClient client = HttpClient();
         client.badCertificateCallback =

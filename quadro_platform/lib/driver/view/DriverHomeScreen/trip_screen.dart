@@ -102,6 +102,11 @@ class _BookRideScreenState extends State<TripScreen> {
                                     .read<DriverRideRequestProvider>()
                                     .rideRequestData!
                                     .otp) {
+                              ToastService.sendScaffoldAlert(
+                                msg: 'تم تسجيل الرحلة بنجاح ، طريق السلامة',
+                                toastStatus: 'SUCCESS',
+                                context: context,
+                              );
                               LatLng pickupLocation =
                                   await LocationServices.getCurrentLocation();
                               LatLng dropLocation = LatLng(
@@ -136,6 +141,12 @@ class _BookRideScreenState extends State<TripScreen> {
                                       RideRequestServicesForDriver
                                           .getRideStatus(2),
                                       rideID!);
+                            } else {
+                              ToastService.sendScaffoldAlert(
+                                msg: 'رقم Otp خاطئ',
+                                toastStatus: 'WARNING',
+                                context: context,
+                              );
                             }
                           },
                           onChanged: (value) {},
