@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -39,20 +41,19 @@ class LocationServices {
     try {
       var response = await dio.get(api).timeout(const Duration(seconds: 60),
           onTimeout: () {
-        ToastService.sendScaffoldAlert(
-            msg: 'انتهت صلاحية الجلسة , حاول بعد قليل',
-            toastStatus: 'ERROR',
-            context: context);
+      
         throw TimeoutException('انتهت صلاحية الجلسة');
       });
       if (response.statusCode == 200) {
         var decodedResponse = response.data;
         PickupAndDropLocationModel model = PickupAndDropLocationModel(
-          latitude: position.latitude.toString(),
-          longitude: position.longitude.toString(),
           name: decodedResponse['results'][0]['formatted_address'],
           placeID: decodedResponse['results'][0]['place_id'],
+          latitude: position.latitude,
+          longitude: position.longitude,
         );
+        log('pickup and drop location: ${model.toMap().toString()}');
+        context.read<LocationProvider>().updatePickupLocation(model);
         return model;
       } else {
         throw Exception('خطأ في الاستجابة: ${response.statusCode}');
@@ -105,6 +106,44 @@ class LocationServices {
     } catch (e) {
       ToastService.sendScaffoldAlert(
           msg: 'حدث خطأ غير متوقع: $e', toastStatus: 'ERROR', context: context);
+      
+    }
+  }
+
+  static getLatLngFromPlaceID(SearchedAddressModel address,
+      BuildContext context, String locationType) async {
+    final api = Apis.getLatLngFromPlaceIDAPI(address.placeID);
+
+    try {
+      var response = await dio.get(api).timeout(const Duration(seconds: 120),
+          onTimeout: () {
+        
+        throw TimeoutException('انتهت صلاحية الجلسة');
+      });
+
+      if (response.statusCode == 200) {
+        log('Responssssssssssssssssssssssssssssssse: ${response.data.toString()}');
+        var decodedResponse = response.data;
+
+        var locationLatLng = decodedResponse['result']['geometry']['location'];
+        PickupAndDropLocationModel model = PickupAndDropLocationModel(
+          name: address.mainName,
+          description: address.secondaryName,
+          placeID: address.placeID,
+          latitude: locationLatLng['lat'],
+          longitude: locationLatLng['lng'],
+        );
+
+        if (locationType == 'DROP') {
+          context.read<LocationProvider>().updateDropLocation(model);
+        } else {
+          context.read<LocationProvider>().updatePickupLocation(model);
+        }
+      } else {
+        throw Exception('خطأ في الاستجابة: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Error: $e');
       throw Exception(e);
     }
   }

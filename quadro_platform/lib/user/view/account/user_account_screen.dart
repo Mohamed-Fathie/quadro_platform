@@ -80,8 +80,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                           SizedBox(
                             width: 70.w,
                             child: Text(
-                              profileProvider.profileData!.name ??
-                                  'مستخدم كوادرو',
+                              profileProvider.profileData!.name! ,
                               style: AppTextStyles.Mheading26Bold,
                             ),
                           ),
@@ -93,9 +92,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                               border: Border.all(color: black87),
                               image: DecorationImage(
                                 image: NetworkImage(profileProvider
-                                        .profileData!.profilePicUrl!) ??
-                                    AssetImage(
-                                        'assets/images/uberLogo/quadroLogo.png'),
+                                        .profileData!.profilePicUrl!),
                               ),
                             ),
                           ),

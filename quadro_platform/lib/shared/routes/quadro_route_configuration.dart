@@ -12,7 +12,6 @@ import 'package:quadro_platform/features/workshop_authentication/views/workshop_
 import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
-import 'package:quadro_platform/user/view/riderHomeScreen/rider_home_screen.dart';
 
 import '../../common/view/reset_password_screen.dart';
 import '../../features/request_details_screen/veiw/details_screen_page.dart';

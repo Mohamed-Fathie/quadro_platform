@@ -5,8 +5,8 @@ class PickupAndDropLocationModel {
   final String? name;
   final String? description;
   final String? placeID;
-  final String? latitude;
-  final String? longitude;
+  final double? latitude;
+  final double? longitude;
 
   PickupAndDropLocationModel({
     required this.name,
@@ -29,11 +29,10 @@ class PickupAndDropLocationModel {
   factory PickupAndDropLocationModel.fromMap(Map<String, dynamic> map) {
     return PickupAndDropLocationModel(
       name: map['name'] != null ? map['name'] as String : null,
-      description:
-          map['description'] != null ? map['description'] as String : null,
+      description: map['description'] != null ? map['description'] as String : null,
       placeID: map['placeID'] != null ? map['placeID'] as String : null,
-      latitude: map['latitude'] != null ? map['latitude'] as String : null,
-      longitude: map['longitude'] != null ? map['longitude'] as String : null,
+      latitude: map['latitude'] != null ? map['latitude'] as double : null,
+      longitude: map['longitude'] != null ? map['longitude'] as double : null,
     );
   }
 

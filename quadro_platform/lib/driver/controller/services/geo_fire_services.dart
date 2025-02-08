@@ -9,7 +9,6 @@ import 'package:quadro_platform/common/controller/services/location_services.dar
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
-import 'package:quadro_platform/driver/view/DriverAccountScreen/driver_account_screen.dart';
 
 class GeoFireServices {
   static DatabaseReference databaseRef = FirebaseDatabase.instance
