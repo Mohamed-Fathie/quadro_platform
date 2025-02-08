@@ -8,7 +8,7 @@ import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/controller/services/location_services.dart';
-import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/modele/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';

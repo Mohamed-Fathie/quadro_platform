@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -8,14 +10,15 @@ import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/services/direction_services.dart';
 import 'package:quadro_platform/common/controller/services/location_services.dart';
-import 'package:quadro_platform/common/model/rider_request_model.dart';
+import 'package:quadro_platform/common/modele/rider_request_modele.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 import 'package:quadro_platform/driver/controller/services/rideRequestServicesForDriver/ride_request_services_for_driver.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../common/controller/services/firebasePushNotificationServices/direction_services.dart';
 
 class TripScreen extends StatefulWidget {
   TripScreen({super.key, required this.rideID});
@@ -103,13 +106,19 @@ class _BookRideScreenState extends State<TripScreen> {
                                     .otp) {
                               LatLng pickupLocation =
                                   await LocationServices.getCurrentLocation();
-                                  LatLng dropLocation = LatLng(context.read<DriverRideRequestProvider>().dropLocation!.latitude!,context.read<DriverRideRequestProvider>().dropLocation!.longitude!);
-                                
+                              LatLng dropLocation = LatLng(
+                                  context
+                                      .read<DriverRideRequestProvider>()
+                                      .dropLocation!
+                                      .latitude!,
+                                  context
+                                      .read<DriverRideRequestProvider>()
+                                      .dropLocation!
+                                      .longitude!);
+
                               await DirectionServices
                                   .getDirectionDetailsForDriver(
-                                      pickupLocation,
-                                      dropLocation,
-                                      context);
+                                      pickupLocation, dropLocation, context);
                               context
                                   .read<DriverRideRequestProvider>()
                                   .decodePolylineAndUpdatePolylineField();
@@ -123,7 +132,6 @@ class _BookRideScreenState extends State<TripScreen> {
                               context
                                   .read<DriverRideRequestProvider>()
                                   .updateMarker();
-                              
                               RideRequestServicesForDriver
                                   .updateRideRequestStatus(
                                       RideRequestServicesForDriver
@@ -150,7 +158,14 @@ class _BookRideScreenState extends State<TripScreen> {
                         activeTrackColor: grey,
                         elevationThumb: 2,
                         elevationTrack: 2,
-                        onSwipe: () {},
+                        onSwipe: () async {
+                          await RideRequestServicesForDriver.endRide(
+                              rideID!, context);
+
+                          // DatabaseReference rideRefFechData =
+                          //     FirebaseDatabase.instance.ref().child('RideRequest/$rideID');
+                          //     final snapshot = await rideRefFechData.get();
+                        },
                         child: Builder(
                           builder: (context) {
                             return Text(

@@ -7,7 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
-import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/modele/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/features/user/model/user.dart';

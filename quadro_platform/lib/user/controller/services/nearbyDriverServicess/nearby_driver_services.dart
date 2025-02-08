@@ -1,11 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
 import 'package:quadro_platform/user/model/nearby_drivers_model.dart';
+
+import '../../provider/trip_providerr/ride_request_provider.dart';
 
 class NearbyDriverServices {
   static getNearbyDrivers(LatLng pickupLocation, BuildContext context) {
@@ -17,8 +20,8 @@ class NearbyDriverServices {
     )!
         .listen((event) {
       if (event != null) {
-        log('Event is Not Null');
-        var callback = event['callback'];
+        log('Event is Not nNull');
+        var callback = event['callBack'];
         switch (callback) {
           case Geofire.onKeyEntered:
             NearbyDriversModel model = NearbyDriversModel(

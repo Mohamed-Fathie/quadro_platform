@@ -10,8 +10,8 @@ import 'package:quadro_platform/common/controller/provider/location_provider.dar
 import 'package:quadro_platform/common/controller/services/APIS&KEYS/apis.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
 import 'package:dio/dio.dart';
-import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/model/searched_address_model.dart';
+import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
+import 'package:quadro_platform/common/modele/searched_address_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 import '../../../features/google_map/model/location_service_exception.dart';
@@ -50,7 +50,7 @@ class LocationServices {
           latitude: position.latitude,
           longitude: position.longitude,
         );
-        log(model.toMap().toString());
+        log('pickup and drop location: ${model.toMap().toString()}');
         context.read<LocationProvider>().updatePickupLocation(model);
         return model;
       } else {
@@ -104,7 +104,6 @@ class LocationServices {
     } catch (e) {
       ToastService.sendScaffoldAlert(
           msg: 'حدث خطأ غير متوقع: $e', toastStatus: 'ERROR', context: context);
-      throw Exception(e);
     }
   }
 

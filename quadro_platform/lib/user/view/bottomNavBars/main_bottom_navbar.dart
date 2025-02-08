@@ -4,7 +4,7 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_services.dart';
 import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/modele/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';

@@ -10,14 +10,16 @@ import 'package:quadro_platform/common/controller/provider/profile_data_provider
 import 'package:quadro_platform/common/controller/services/image_services.dart';
 import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
 import 'package:quadro_platform/common/controller/services/toast_services.dart';
-import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/modele/profile_data_model.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import 'package:quadro_platform/driver/view/DriverHomeScreen/driver_home_screen_builder.dart';
+import 'package:quadro_platform/features/workshop_main_screen/views/main_screen_page.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
+
 import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import '../../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
 import 'firebasePushNotificationServices/push_notification_services.dart';
@@ -32,6 +34,16 @@ class AuthServices {
       if (emailController.text.isEmpty || passwordController.text.isEmpty) {
         showSnackBar(context, 'الرجاء إدخال البريد الإلكتروني وكلمة المرور.');
         return;
+      }
+      if (context.mounted) {
+        await auth.signInWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        showSnackBar(context, ' تم تسجيل الدخول بنجاح');
+        Navigator.push(
+          context,
+          PageTransition(
+              child: const LogInLogic(), type: PageTransitionType.bottomToTop),
+        );
       }
       if (context.mounted) {
         await auth.signInWithEmailAndPassword(
@@ -111,12 +123,27 @@ class AuthServices {
           context: context,
         );
       }
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg: ' تم التسجيل بنجاح',
+          toastStatus: 'SUCCESS',
+          context: context,
+        );
+      }
 
       // await Future.delayed(const Duration(seconds: 1));
       // NavigationService().goBack();
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'password_does_not_meet_requirements') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
         if (context.mounted) {
           ToastService.sendScaffoldAlert(
             msg:
@@ -134,7 +161,22 @@ class AuthServices {
             context: context,
           );
         }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
       } else if (e.code == 'email-already-in-use') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'هذا الحساب مسجل مسبقا',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
         if (context.mounted) {
           ToastService.sendScaffoldAlert(
             msg: 'هذا الحساب مسجل مسبقا',
@@ -150,9 +192,19 @@ class AuthServices {
             context: context,
           );
         }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'الرجاء ادخال البريد الالكتروني بشكل صحيح',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
       }
       return false;
     } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, 'There was an error, please try again.');
+      }
       if (context.mounted) {
         showSnackBar(context, 'There was an error, please try again.');
       }
@@ -171,8 +223,8 @@ class AuthServices {
           ProfileDataModel profileData =
               await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
                   auth.currentUser!.uid);
-          PushNotivicationServices.initializeFirebaseMessagingForUsers(
-              profileData, context);
+          // PushNotivicationServices.initializeFirebaseMessagingForUsers(
+          //     profileData, context);
           String userIsTowingDriver =
               await ProfileDataCRUDServices.userIsTowingDriver(context);
           if (userIsTowingDriver == 'التسجيل كصاحب ساحبة') {
@@ -185,7 +237,6 @@ class AuthServices {
                 (route) => false);
           } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
             context.read<ProfileDataProvider>().getProfileData();
-            // logOutUser();
 
             return Navigator.pushAndRemoveUntil(
                 context,
@@ -221,6 +272,12 @@ class AuthServices {
             toastStatus: 'WARNING',
             context: context);
       }
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+            msg: '!!حدث خطأ , حاول مجددا بعد قليل',
+            toastStatus: 'WARNING',
+            context: context);
+      }
     }
   }
 
@@ -244,6 +301,14 @@ class AuthServices {
       required String drivingLicenceNumberController,
       required context}) async {
     if (profilePic == null) {
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg:
+              'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
+          toastStatus: 'WARNING',
+          context: context,
+        );
+      }
       if (context.mounted) {
         ToastService.sendScaffoldAlert(
           msg:

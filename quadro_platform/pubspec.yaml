@@ -64,15 +64,19 @@ dependencies:
     sdk: flutter
   readmore: ^3.0.0
   cloud_firestore: ^5.6.2
-  flutter_polyline_points: ^2.1.0
-  sliding_up_panel: ^2.0.0+1
-  firebase_messaging: ^15.1.6
-  pin_code_fields: ^8.0.1
+  
   google_geocoding_api: ^1.5.2
   flutter_rating_bar: ^4.0.1
   geoflutterfire_plus: ^0.0.32
   
   
+  flutter_polyline_points: ^2.1.0
+  sliding_up_panel: ^2.0.0+1
+  firebase_messaging: ^15.1.6
+  pin_code_fields: ^8.0.1
+  googleapis_auth: ^1.5.1
+  http: ^1.2.1
+  googleapis: ^13.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -110,14 +114,6 @@ flutter:
     - assets/images/icons/icons8-car-50.png
     - assets/images/icons/icons8-tow-truck-50.png
     - assets/images/Towing-amico (1).png
-    - assets/images/icons/truckPng.png
-    - assets/images/icons/dropPng.png
-    - assets/images/icons/pickupPng.png
-    - assets/images/icons/dropPngSmall.png
-    - assets/images/icons/pickupPngSmall.png
-    - assets/images/vehicle/integrationTruck.png
-    - assets/images/vehicle/hookTruck.png
-    - assets/sounds/
     - assets/images/svg/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

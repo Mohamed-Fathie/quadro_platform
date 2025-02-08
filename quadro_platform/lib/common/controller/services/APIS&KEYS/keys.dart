@@ -1,1 +1,3 @@
 String mapsKey = 'AIzaSyBy4vQeOdM4OZlqi6Cyj6oil43a6pi-Iqg';
+String fcmServerKey =
+    'ya29.a0AXeO80Qae4R0yChHCO_lZ7U2ukA4oaGlG-I7y8k3RrP53LsaXZyZW2XpBbUUxnDPKRfzYQXW5qlyhrepnlnuviI56p_wQeLlxVtOgoG2maw2V3ahf1CMRgy4Ua3lyaLyIFq-McmaH6vMB9qirBgyX_fr7REGZnzpMZdD65EWrAaCgYKAaMSARESFQHGX2MiT5K9z7xFhJCHA13LG526iA0177';

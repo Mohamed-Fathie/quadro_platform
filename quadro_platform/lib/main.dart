@@ -52,9 +52,9 @@ class Quadro extends StatelessWidget {
       builder: (context, _, __) {
         return MultiProvider(
           providers: [
-            // ChangeNotifierProvider<BottomNavBarProvider>(
-            //   create: (_) => BottomNavBarProvider(),
-            // ),
+            ChangeNotifierProvider<BottomNavBarProvider>(
+              create: (_) => BottomNavBarProvider(),
+            ),
             ChangeNotifierProvider<LocationProvider>(
               create: (_) => LocationProvider(),
             ),

@@ -6,8 +6,8 @@ import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/user/view/pichupAndDropLocation/pickup_drop_location_screen.dart';
 import 'package:sizer/sizer.dart';
 
-class RiderHomeScreen extends StatelessWidget {
-  const RiderHomeScreen({super.key});
+class UserHomeScreen extends StatelessWidget {
+  const UserHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

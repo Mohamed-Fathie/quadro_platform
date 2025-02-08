@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/services/direction_services.dart';
 import 'package:quadro_platform/common/controller/services/location_services.dart';
-import 'package:quadro_platform/common/model/rider_request_model.dart';
+import 'package:quadro_platform/common/modele/rider_request_modele.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 import 'package:quadro_platform/driver/controller/services/rideRequestServicesForDriver/ride_request_services_for_driver.dart';
 import 'package:sizer/sizer.dart';
+
+import 'direction_services.dart';
 
 class PushNotificationDialouge {
   static RideRequestDilouge(
