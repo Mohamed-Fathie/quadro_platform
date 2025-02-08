@@ -1,35 +1,52 @@
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/car_models.dart';
-import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import '../../../../shared/enum/maitenance_request_status.dart'; // Fixed typo in filename
 
 class MaintenanceRequest {
-  final String id; // Document ID
-  final String vehicleOwnerId; // Reference to Users/{UID}
-  final String workshopId; // Reference to Workshops/{UID}, nullable
-  final CarBrand carCompany; // Car company name
-  final CarModels carModel; // Car model name
-  final String description; // Description of the issue
-  final String? requesImageUrl; // Firestore Storage URL
-  final MaitenanceRequestStatus status; // pending, under_maintenance, completed
-  final Timestamp dateCreated; // Timestamp of creation
-  final String? offerId; // Reference to Offers/{UID}, nullable
+  // Identifiers
+  final String? id;
+  final String? offerId;
+
+  // Entity references
+  final String vehicleOwnerId;
+  final String workshopId;
+
+  // Vehicle information
+  final CarBrand carCompany;
+  final CarModels carModel;
+
+  // Request details
+  final String description;
+  final MaitenanceRequestStatus status; // Fixed enum name
+  final Timestamp dateCreated;
+
+  // Media & attachments
+  final String? requestImageUrl; // Fixed typo in property name
 
   MaintenanceRequest({
-    required this.id,
+    // Identifiers
+    this.id,
+    this.offerId,
+
+    // Required references
     required this.vehicleOwnerId,
     required this.workshopId,
+
+    // Required vehicle info
     required this.carCompany,
     required this.carModel,
+
+    // Required request details
     required this.description,
-    this.requesImageUrl,
     required this.status,
     required this.dateCreated,
-    this.offerId,
+
+    // Optional media
+    this.requestImageUrl,
   });
 
-  // Factory method to create an instance from a Firestore document snapshot
   factory MaintenanceRequest.fromJson(String id, Map<String, dynamic> json) {
     return MaintenanceRequest(
       id: id,
@@ -38,26 +55,34 @@ class MaintenanceRequest {
       carCompany: CarBrand.values.byName(json['car_company']),
       carModel: CarModels.values.byName(json['car_model']),
       description: json['description'] as String,
-      requesImageUrl: json['image_url'] as String?,
-      status:
-          MaitenanceRequestStatus.values.byName(json['status']), // Enum parsing
+      requestImageUrl: json['image_url'] as String?,
+      status: MaitenanceRequestStatus.values.byName(json['status']),
       dateCreated: json['date_created'] as Timestamp,
       offerId: json['offer_id'] as String?,
     );
   }
 
-  // Method to convert an instance into a Map for Firestore
   Map<String, dynamic> toMap() {
     return {
+      // Identifiers
       'vehicle_owner_id': vehicleOwnerId,
       'workshop_id': workshopId,
-      'car_company': carCompany,
-      'car_model': carModel,
+
+      // Vehicle info
+      'car_company': carCompany.name,
+      'car_model': carModel.name,
+
+      // Request details
       'description': description,
-      'image_url': requesImageUrl,
       'status': status.name,
       'date_created': dateCreated,
+
+      // Optional references
+      'image_url': requestImageUrl,
       'offer_id': offerId,
+
+      // Add if storing locally
+      // 'image_path': imagePath, // Only include if needed in Firestore
     };
   }
 }

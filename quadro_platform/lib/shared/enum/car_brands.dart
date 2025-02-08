@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'car_models.dart';
+
 enum CarBrand {
   Toyota,
   Ford,
@@ -46,6 +48,89 @@ extension CarBrandExtension on CarBrand {
         return "نيسان";
       case CarBrand.Chevrolet:
         return "شيفروليه";
+    }
+  }
+
+  /// Returns the list of models for this car brand.
+  List<CarModels> get models {
+    switch (this) {
+      case CarBrand.Toyota:
+        return [
+          CarModels.toyotaCamry,
+          CarModels.toyotaCorolla,
+          CarModels.toyotaHilux,
+          CarModels.toyotaLandCruiser,
+          CarModels.toyotaPrado,
+        ];
+      case CarBrand.Ford:
+        return [
+          CarModels.fordRanger,
+          CarModels.fordExplorer,
+          CarModels.fordEdge,
+          CarModels.fordFocus,
+          CarModels.fordF150,
+        ];
+      case CarBrand.Honda:
+        return [
+          CarModels.hondaCivic,
+          CarModels.hondaAccord,
+          CarModels.hondaCRV,
+          CarModels.hondaCity,
+        ];
+      case CarBrand.BMW:
+        return [
+          CarModels.bmw3Series,
+          CarModels.bmw5Series,
+          CarModels.bmwX5,
+          CarModels.bmwX3,
+        ];
+      case CarBrand.Mercedes:
+        return [
+          CarModels.mercedesCClass,
+          CarModels.mercedesEClass,
+          CarModels.mercedesGClass,
+          CarModels.mercedesSClass,
+          CarModels.mercedesGLC,
+        ];
+      case CarBrand.Audi:
+        return [
+          CarModels.audiA4,
+          CarModels.audiA6,
+          CarModels.audiQ5,
+          CarModels.audiQ7,
+        ];
+      case CarBrand.Hyundai:
+        return [
+          CarModels.hyundaiElantra,
+          CarModels.hyundaiTucson,
+          CarModels.hyundaiAccent,
+          CarModels.hyundaiSonata,
+          CarModels.hyundaiSantaFe,
+        ];
+      case CarBrand.Kia:
+        return [
+          CarModels.kiaCerato,
+          CarModels.kiaSportage,
+          CarModels.kiaSorento,
+          CarModels.kiaOptima,
+          CarModels.kiaRio,
+        ];
+      case CarBrand.Nissan:
+        return [
+          CarModels.nissanAltima,
+          CarModels.nissanSunny,
+          CarModels.nissanPatrol,
+          CarModels.nissanXTrail,
+          CarModels.nissanSentra,
+        ];
+      case CarBrand.Chevrolet:
+        return [
+          CarModels.chevroletMalibu,
+          CarModels.chevroletTahoe,
+          CarModels.chevroletSilverado,
+          CarModels.chevroletCruze,
+          CarModels.chevroletAveo,
+        ];
     }
   }
 

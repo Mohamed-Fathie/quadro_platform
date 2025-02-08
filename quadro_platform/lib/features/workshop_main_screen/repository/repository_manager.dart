@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_initializing_formals
+
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
@@ -21,7 +25,7 @@ import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_profile/model/Review_Domain.dart';
 
 class RepositoryManager {
-  final OffersRepository _offersRepository;
+  final OffersRepository offersRepository;
   final UserRepository userRepository;
   final WorkshopRepository workshopRepository;
   final MaintenanceRequestsRepository maintenanceRequestsRepository;
@@ -33,15 +37,14 @@ class RepositoryManager {
       required ReviewsRepository reviewsRepository,
       required WorkshopRepository workshopRepository,
       required MaintenanceRequestsRepository maintenanceRequestsRepository})
-      : _offersRepository = offersRepository,
+      : offersRepository = offersRepository,
         userRepository = userRepository,
-        // ignore: prefer_initializing_formals
         reviewsRepository = reviewsRepository,
         workshopRepository = workshopRepository,
         maintenanceRequestsRepository = maintenanceRequestsRepository;
   Future<void> addOffer(Offer offer) async {
     try {
-      final offerId = await _offersRepository.addOfferToFirebase(offer);
+      final offerId = await offersRepository.addOfferToFirebase(offer);
       await maintenanceRequestsRepository
           .updateRequest(id: offer.requestId, map: {"offer_id": offerId});
     } on FirebaseException catch (e) {
@@ -49,14 +52,15 @@ class RepositoryManager {
     }
   }
 
-  Future<QuadroUser> getCashedQuadroUser() async {
+  String get authUserId => userRepository.getuserId ?? "";
+  Future<QuadroUser?> getCashedQuadroUser() async {
     final user = await userRepository.getCachedUser();
-    return user!;
+    return user;
   }
 
-  Future<Workshop> getCashedWorkshop() async {
+  Future<Workshop?> getCashedWorkshop() async {
     final workshop = await workshopRepository.getCachedUser();
-    return workshop!;
+    return workshop;
   }
 
   // fetch all maitenance requests or limit the number of requests
@@ -116,12 +120,15 @@ class RepositoryManager {
       OffersFilter.all: [],
       OffersFilter.pending: [],
       OffersFilter.inprogress: [],
+      OffersFilter.accepted: [],
+      OffersFilter.rejected: []
     };
 
     // Map document IDs to their snapshots
     final docMap = {
       for (var doc in docs) (doc.data()).offerId: doc,
     };
+    log(docMap.length.toString());
 
     // Helper to add grouped offers to the map
     void addGroupedOffers(
@@ -154,11 +161,17 @@ class RepositoryManager {
         OffersFilter.pending);
     addGroupedOffers(relatedData.groupedOffers?[OfferStatus.inprogress] ?? {},
         OffersFilter.inprogress);
+    addGroupedOffers(relatedData.groupedOffers?[OfferStatus.accepted] ?? {},
+        OffersFilter.accepted);
+    addGroupedOffers(relatedData.groupedOffers?[OfferStatus.rejected] ?? {},
+        OffersFilter.rejected);
 
     // Aggregate all offers into OfferStatus.all
     offersMap[OffersFilter.all] = [
       ...offersMap[OffersFilter.pending]!,
       ...offersMap[OffersFilter.inprogress]!,
+      ...offersMap[OffersFilter.accepted]!,
+      ...offersMap[OffersFilter.rejected]!,
     ];
 
     return offersMap;
@@ -177,7 +190,7 @@ class RepositoryManager {
       return reviews.map((review) {
         final reviewUser = user[review.userId]!;
         return ReviewDomainModel(
-            id: review.id,
+            id: review.id ?? "",
             user: reviewUser,
             rating: review.rating,
             reviewComment: review.reviewComment ?? "",
@@ -214,6 +227,7 @@ class RepositoryManager {
     _RelatedData relatedData,
   ) {
     return MaintenanceRequestDomainModel(
+      carImageUrl: request.requestImageUrl,
       user: relatedData.users[request.vehicleOwnerId]!,
       id: id,
       workshop: relatedData.workshops[request.workshopId]!,
@@ -276,7 +290,7 @@ class RepositoryManager {
         for (var doc in docs) (doc.data() as MaintenanceRequest).offerId
       };
 
-      final offersMap = await _offersRepository.fetchOffersBySet(offerIds);
+      final offersMap = await offersRepository.fetchOffersBySet(offerIds);
       offers = offersMap['allOffers'] as Map<String, Offer?>;
       groupedOffers = offersMap['groupedByStatus'];
     }

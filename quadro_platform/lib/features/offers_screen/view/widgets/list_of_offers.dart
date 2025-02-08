@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
+import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/widgets/request_templet.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../shared/routes/navigation_service.dart';
 import '../../../../shared/routes/routes_constants.dart';
 import '../../../../shared/utils/constans/colors.dart';
+import '../../cubit/offers_cubit.dart';
 
 class ListOfOffers extends StatelessWidget {
   final List<MaintenanceRequestDomainModel> offers;
@@ -39,6 +42,7 @@ class ListOfOffers extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                requestStatus: request.requestStatus.arabicName,
                 city: request.workshop.city,
                 street: request.workshop.street,
                 requestType: requestType,
@@ -64,21 +68,27 @@ class ListOfOffers extends StatelessWidget {
           return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                requestStatus: request.requestStatus.arabicName,
                 city: request.workshop.city,
                 street: request.workshop.street,
                 requestType: requestType,
                 isOffer: true,
                 buttonTitle: "تفاصيل",
-                offerStatus: request.offer!.status.name,
+                offerStatus: request.offer!.status.arabicName,
                 servicePrice: request.offer!.servicePrice.toString(),
                 navigatorCall: () {
-                  NavigationService().routeTo(
+                  final re = NavigationService().routeTo(
                     RoutesConstants.requestDetails,
                     arguments: {
                       'request': request,
                       'requestType': requestType,
                     },
                   );
+                  if (re != null) {
+                    context
+                        .read<OffersCubit>()
+                        .handleOfferFilterChange(0, requestType);
+                  }
                 },
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,

@@ -43,7 +43,9 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
     try {
       // Resolve the workshop either from the provided data or cached data
       workshop ??= await workshopRepo.getCachedUser();
-      log(workshop?.ownerId ?? " workshop in null");
+      workshop ??=
+          await workshopRepo.getWorkshopById(id: repoManager.authUserId);
+
       //workshop!.ownerId
       // "1LQiEMpL1MMSvTwizkuhCMuO8iW2"
       reviewsRepo = ReviewsRepository(workshopId: workshop!.ownerId);

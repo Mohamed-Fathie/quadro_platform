@@ -18,9 +18,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Workshop? _workshop;
   Future<Workshop?> getWorkshop() async {
     if (_workshop == null) {
-      log("we are here in the workshop main screeen");
       _workshop = await _workshopRepository.getCachedUser();
-      log(_workshop?.toJson().toString() ?? "workshop is null");
+      _workshop ??=
+          await _workshopRepository.getWorkshopById(id: _manager.authUserId);
       return _workshop;
     }
     return _workshop;
@@ -62,7 +62,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     try {
       await emit.forEach(
         _manager.fetchRequests(
-            id: workshop!.ownerId,
+            id: workshop?.ownerId ?? "",
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: true),
@@ -87,7 +87,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     try {
       await emit.forEach(
         _manager.fetchRequests(
-            id: workshop!.ownerId,
+            id: workshop?.ownerId ?? "",
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: false),

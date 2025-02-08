@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,10 +14,11 @@ import 'rounded_container.dart';
 
 class SharedRequestsList extends StatelessWidget {
   final List<MaintenanceRequestDomainModel>? requests;
+  final bool? withoutRejectedRequests;
   final RequestStatus status;
   final String noRequestsMessage;
-  // final String? city;
-  // final String? street;
+  final String? city;
+  final String? street;
   final String errorMessage;
   final String buttonTitle;
   final Color buttonColor;
@@ -40,12 +42,18 @@ class SharedRequestsList extends StatelessWidget {
     required this.onRequestDetails,
     required this.requestType,
     this.isOffer,
-    // this.city,
-    // this.street,
+    this.city,
+    this.street,
+    this.withoutRejectedRequests,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool hasNonRejectedRequest = requests?.any(
+          (element) =>
+              element.requestStatus != MaitenanceRequestStatus.rejected,
+        ) ??
+        false;
     return SizedBox(
       height: 45.h,
       child: Builder(
@@ -89,15 +97,13 @@ class SharedRequestsList extends StatelessWidget {
                           itemCount: requests!.length,
                           itemBuilder: (context, index) {
                             final offer = requests![index];
-                            log("here is the offer ");
-                            log(offer.workshop.toJson().toString());
                             return RequestTemplet(
                               city: offer.workshop.city,
                               street: offer.workshop.street,
                               requestType: RequestType.workshop_id,
                               isOffer: true,
                               buttonTitle: "تفاصيل",
-                              offerStatus: offer.offer!.status.name,
+                              offerStatus: offer.offer!.status.arabicName,
                               servicePrice:
                                   offer.offer!.servicePrice.toString(),
                               navigatorCall: () => onRequestDetails(
@@ -111,27 +117,81 @@ class SharedRequestsList extends StatelessWidget {
                             );
                           },
                         )
-                      : ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: requests!.length,
-                          itemBuilder: (context, index) {
-                            final request = requests![index];
-                            return RequestTemplet(
-                              requestType: requestType,
-                              buttonColore: buttonColor,
-                              background: backgroundColor,
-                              buttonTitle: buttonTitle,
-                              navigatorCall: () => onRequestDetails(
-                                request,
-                                requestType,
-                              ),
-                              carBrand: request.carCompany.name,
-                              carModel: request.carModel.name,
-                              dateCreated: request.dateCreated,
-                              userName: request.user.name,
-                            );
-                          },
-                        );
+                      : withoutRejectedRequests == null
+                          ? ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: requests!.length,
+                              itemBuilder: (context, index) {
+                                final request = requests![index];
+                                return RequestTemplet(
+                                  requestStatus:
+                                      request.requestStatus.arabicName,
+                                  street: request.workshop.street,
+                                  city: request.workshop.city,
+                                  requestType: requestType,
+                                  buttonColore: buttonColor,
+                                  background: backgroundColor,
+                                  buttonTitle: buttonTitle,
+                                  navigatorCall: () =>
+                                      onRequestDetails(request, requestType),
+                                  carBrand: request.carCompany.name,
+                                  carModel: request.carModel.name,
+                                  dateCreated: request.dateCreated,
+                                  userName: request.user.name,
+                                );
+                              },
+                            )
+                          : !hasNonRejectedRequest
+                              ? RoundedContainer(
+                                  width: 80.w,
+                                  height: 35.h,
+                                  child: Center(
+                                    child: Text(
+                                      noRequestsMessage,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.apply(
+                                            color:
+                                                Qcolors.getColorForRequestType(
+                                                    requestType),
+                                          ),
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: requests!.length,
+                                  itemBuilder: (context, index) {
+                                    final request = requests![index];
+
+                                    if (requestType ==
+                                            RequestType.workshop_id &&
+                                        withoutRejectedRequests != null &&
+                                        request.requestStatus ==
+                                            MaitenanceRequestStatus.rejected) {
+                                      return const SizedBox
+                                          .shrink(); // Skip rejected requests
+                                    }
+
+                                    return RequestTemplet(
+                                      requestStatus:
+                                          request.requestStatus.arabicName,
+                                      street: request.workshop.street,
+                                      city: request.workshop.city,
+                                      requestType: requestType,
+                                      buttonColore: buttonColor,
+                                      background: backgroundColor,
+                                      buttonTitle: buttonTitle,
+                                      navigatorCall: () => onRequestDetails(
+                                          request, requestType),
+                                      carBrand: request.carCompany.name,
+                                      carModel: request.carModel.name,
+                                      dateCreated: request.dateCreated,
+                                      userName: request.user.name,
+                                    );
+                                  },
+                                );
         },
       ),
     );

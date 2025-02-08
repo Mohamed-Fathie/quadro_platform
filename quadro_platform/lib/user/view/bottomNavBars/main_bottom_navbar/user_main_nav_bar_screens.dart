@@ -29,16 +29,16 @@ class UserMainNavBarScreens {
           activeForegroundColor: Qcolors.secondary,
         ),
       ),
-      PersistentTabConfig(
-        screen: const Center(
-          child: Text("اشعارات"),
-        ),
-        item: ItemConfig(
-          activeForegroundColor: Qcolors.secondary,
-          icon: const Icon(Icons.notifications_rounded),
-          title: "اشعارات",
-        ),
-      ),
+      // PersistentTabConfig(
+      //   screen: const Center(
+      //     child: Text("اشعارات"),
+      //   ),
+      //   item: ItemConfig(
+      //     activeForegroundColor: Qcolors.secondary,
+      //     icon: const Icon(Icons.notifications_rounded),
+      //     title: "اشعارات",
+      //   ),
+      // ),
       PersistentTabConfig(
         screen: const UserOfferPage(),
         item: ItemConfig(

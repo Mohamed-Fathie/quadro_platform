@@ -11,6 +11,7 @@ typedef CallbackNavigator = void Function();
 class RequestTemplet<T> extends StatelessWidget {
   final String? imageUrl;
   final String? street;
+  final String? requestStatus;
   final String? city;
   final String userName;
   final String carBrand;
@@ -41,6 +42,7 @@ class RequestTemplet<T> extends StatelessWidget {
       this.offerStatus,
       this.isOffer,
       this.width,
+      this.requestStatus,
       required this.requestType,
       this.buttonColore,
       this.background});
@@ -100,6 +102,46 @@ class RequestTemplet<T> extends StatelessWidget {
                         ),
                         Text(
                             "$city , ${(street == "Unknown street" ? "" : street)} ",
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.apply(
+                                    color: Qcolors.getColorForRequestType(
+                                        requestType))),
+                      ],
+                    ),
+                  ),
+                // if (requestType == RequestType.vehicle_owner_id)
+                //   Expanded(
+                //     child: Row(
+                //       spacing: 8,
+                //       children: [
+                //         Text(
+                //           "تاريخ الطلب :",
+                //           style: Theme.of(context).textTheme.headlineMedium,
+                //         ),
+                //         Text(dateCreated.formatInArabic(),
+                //             softWrap: true,
+                //             style: Theme.of(context)
+                //                 .textTheme
+                //                 .headlineMedium
+                //                 ?.apply(
+                //                     color: Qcolors.getColorForRequestType(
+                //                         requestType))),
+                //       ],
+                //     ),
+                //   ),
+                if (requestType == RequestType.vehicle_owner_id)
+                  Expanded(
+                    child: Row(
+                      spacing: 8,
+                      children: [
+                        Text(
+                          "حالة الطلب :",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        Text(requestStatus ?? "unKnown status",
                             softWrap: true,
                             style: Theme.of(context)
                                 .textTheme

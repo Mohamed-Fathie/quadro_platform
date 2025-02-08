@@ -10,13 +10,18 @@ class StorageRepository {
   Future<String> uploadImageWithProgress({
     required XFile xFile,
     required String path,
+    File? file,
     required Function(double) onProgressUpdate,
   }) async {
     // Reference to the specific file path in Firebase Storage
     final fileRef = storageRef.child(path);
-
+    final UploadTask uploadTask;
     // Start the upload task
-    final uploadTask = fileRef.putFile(File(xFile.path));
+    if (file != null) {
+      uploadTask = fileRef.putFile(file);
+    } else {
+      uploadTask = fileRef.putFile(File(xFile.path));
+    }
 
     // Listen to the upload progress
     uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {

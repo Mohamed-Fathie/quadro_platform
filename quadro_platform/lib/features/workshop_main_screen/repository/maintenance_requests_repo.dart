@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
@@ -19,6 +21,10 @@ class MaintenanceRequestsRepository {
           toFirestore: (request, options) => request.toMap(),
         );
   }
+  Future<void> addMaintenanceRequest(MaintenanceRequest request) async {
+    await maintenanceRequestRef.add(request);
+  }
+
   // Helper function to batch fetch Maintenance Requests
   Future<Map<String, MaintenanceRequest>> fetchMaintenanceRequests(
       Set<String> requestIds) async {

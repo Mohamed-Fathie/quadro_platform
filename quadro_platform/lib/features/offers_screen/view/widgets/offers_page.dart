@@ -52,7 +52,9 @@ class OffersPage extends StatelessWidget {
                     ? const SectionHeader(
                         requestType: RequestType.workshop_id,
                         text: "العروض الخاصة بي")
-                    : const SizedBox.shrink(),
+                    : const SectionHeader(
+                        requestType: RequestType.workshop_id,
+                        text: "عروض الطلبات : "),
                 FilterList(
                   requestType: requestType,
                 ),

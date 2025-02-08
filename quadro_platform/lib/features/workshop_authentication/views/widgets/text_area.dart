@@ -33,7 +33,7 @@ class TextArea extends StatelessWidget {
         onChanged: cubit.updateText,
         controller: cubit.textareaController
           ..selection = TextSelection.fromPosition(
-            TextPosition(offset: textdescription.length),
+            TextPosition(offset: textdescription!.length),
           ),
       ),
     );

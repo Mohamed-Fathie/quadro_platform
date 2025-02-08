@@ -23,6 +23,7 @@ import '../../features/request_details_screen/veiw/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import '../../features/workshop_profile/view/workshop_profile_page.dart';
+import '../../user/view/maintenance_request/views/maintenance_request_page.dart';
 import '../../user/view/workshop_search/views/workshop_search_page.dart';
 
 class RouteGenerator {
@@ -30,6 +31,12 @@ class RouteGenerator {
     switch (settings.name) {
       case RoutesConstants.login:
         return _materialRoute(const LogInScreen());
+      case RoutesConstants.maintenanceRequest:
+        final workshop = settings.arguments;
+        if (workshop is! Workshop) return _errorRoute("invalid arg");
+        return _materialRoute(MaintenanceRequestPage(
+          workshop: workshop,
+        ));
       case RoutesConstants.workshopBottomNavBar:
         return _materialRoute(const WorkshopNavBar());
       case RoutesConstants.workshopLocationMap:

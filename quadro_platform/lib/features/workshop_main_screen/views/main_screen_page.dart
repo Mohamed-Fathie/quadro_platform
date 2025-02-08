@@ -1,19 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/bloc/main_screenbloc_bloc.dart';
-import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
-import 'package:quadro_platform/features/workshop_main_screen/repository/offers_repository.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/repository_manager.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/offers_list.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/requests_list.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
-import 'package:quadro_platform/shared/widgets/request_templet.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/workshop_name_widget.dart';
-import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
@@ -91,7 +84,7 @@ class MainScreenView extends StatelessWidget {
               requestType: RequestType.workshop_id,
               text: "  العروض الخاصة بي",
               callback: () {
-                WorkshopScreens().controller.jumpToTab(2);
+                WorkshopScreens().controller.jumpToTab(1);
               },
               islarge: true,
               withButton: true,

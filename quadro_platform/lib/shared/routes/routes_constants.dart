@@ -14,4 +14,5 @@ class RoutesConstants {
   static const String workshopRegistration = 'workshopRegistration';
   static const String workshopSearch = 'workshopSearch';
   static const String workshoProfile = 'workshopProfile';
+  static const String maintenanceRequest = 'maintenanceRequest';
 }

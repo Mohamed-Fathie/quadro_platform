@@ -25,6 +25,7 @@ class RequestsList extends StatelessWidget {
         final list = state.requests;
         final status = state.requestStatus;
         return SharedRequestsList(
+          withoutRejectedRequests: true,
           requestType: RequestType.workshop_id,
           requests: list,
           status: status,

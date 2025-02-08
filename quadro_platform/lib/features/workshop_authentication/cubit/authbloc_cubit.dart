@@ -52,7 +52,7 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
       ));
 
       // Generate the dynamic path using userId
-      final path = imageType.pathWithId("currentUser.id");
+      final path = imageType.pathWithId(_user.getuserId ?? "");
 
       // Upload the image to the determined path
       final url = await _storageRepository.uploadImageWithProgress(
@@ -87,6 +87,7 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
             status: WorkshopAuthStatus.success,
           ));
           break;
+        case ImageType.maintenance:
       }
     } catch (e) {
       log(e.toString());
@@ -141,7 +142,21 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
           exception: "المستخدم ليس موثق", status: WorkshopAuthStatus.failure));
       return;
     }
+    // Check for location
     if (state.location == null) {
+      emit(state.copyWith(
+        exception: "يرجى اختيار الموقع", // "Please select a location"
+        status: WorkshopAuthStatus.failure,
+      ));
+      return;
+    }
+    // Check for at least one brand selected
+    if (state.brands.isEmpty) {
+      emit(state.copyWith(
+        exception:
+            "يرجى اختيار ماركة واحدة على الأقل", // "Please select at least one brand"
+        status: WorkshopAuthStatus.failure,
+      ));
       return;
     }
 

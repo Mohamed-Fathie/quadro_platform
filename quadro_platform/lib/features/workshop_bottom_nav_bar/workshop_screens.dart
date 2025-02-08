@@ -28,16 +28,16 @@ class WorkshopScreens {
           activeForegroundColor: Qcolors.primarycolor,
         ),
       ),
-      PersistentTabConfig(
-        screen: const Center(
-          child: Text("اشعارات"),
-        ),
-        item: ItemConfig(
-          activeForegroundColor: Qcolors.primarycolor,
-          icon: const Icon(Icons.notifications_rounded),
-          title: "اشعارات",
-        ),
-      ),
+      // PersistentTabConfig(
+      //   screen: const Center(
+      //     child: Text("اشعارات"),
+      //   ),
+      //   item: ItemConfig(
+      //     activeForegroundColor: Qcolors.primarycolor,
+      //     icon: const Icon(Icons.notifications_rounded),
+      //     title: "اشعارات",
+      //   ),
+      // ),
       PersistentTabConfig(
         screen: const WorkshopOfferPage(),
         item: ItemConfig(

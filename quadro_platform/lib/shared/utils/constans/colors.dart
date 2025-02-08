@@ -7,7 +7,10 @@ class Qcolors {
   static const Color primarycolor = Color(0xff0288a6);
   static const Color secondary = Color(0xFF05AB9F);
   static const Color blackFont = Color(0xff121212);
+  static const Color info = Color(0xFF03A9F4);
   static const Color buttonbackground = Color(0xFFE4F4F7);
+  static const Color warning = Color(0xFFFFC107);
+  static const Color success = Color(0xFF4CAF50); // Green
   static Color getCurrentColor(BuildContext context) {
     final isDark = QhelperFucntions.isDarkMode(context);
     return isDark

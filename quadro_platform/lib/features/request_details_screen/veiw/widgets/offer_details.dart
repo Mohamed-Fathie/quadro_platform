@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
+import 'package:quadro_platform/shared/enum/offer_status.dart';
+import 'package:quadro_platform/shared/enum/spare_parts.dart';
 import 'package:quadro_platform/shared/utils/extension/date_formating.dart';
 import 'package:sizer/sizer.dart';
 
@@ -36,11 +38,11 @@ class OfferDetails extends StatelessWidget {
         SectionRow(
             requestType: requestType,
             label: "حالة القطع التي ستستخدم للصيانة :",
-            value: offer.sparePartsStatus.name),
+            value: offer.sparePartsStatus.label),
         SectionRow(
             requestType: requestType,
             label: "حالة العرض :",
-            value: offer.status.name),
+            value: offer.status.arabicName),
         SectionRow(
             requestType: requestType,
             label: "تاريخ انشاء العرض :",

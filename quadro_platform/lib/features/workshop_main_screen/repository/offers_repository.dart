@@ -1,7 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
-import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
-import 'package:quadro_platform/features/workshop_main_screen/repository/maintenance_requests_repo.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/offers.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
@@ -19,6 +19,15 @@ class OffersRepository {
           toFirestore: (offer, options) => offer.toJson(),
         );
   }
+  Future<void> updateOffer(
+      {required String id, required Map<String, String> map}) async {
+    try {
+      await offersRef.doc(id).update(map);
+    } on FirebaseException catch (e) {
+      throw FirestoreReadWriteFailure.fromCode(e.code);
+    }
+  }
+
   Future<String> addOfferToFirebase(Offer offer) async {
     try {
       final offerId = await offersRef.add(offer);
@@ -76,11 +85,14 @@ class OffersRepository {
       {},
       (accumulator, currentChunk) => {...accumulator, ...currentChunk},
     );
+    // log(" all offers is: ${allOffers.length.toString()}");
 
     // Group offers by status
     final Map<OfferStatus, Map<String, Offer>> groupedByStatus = {
       OfferStatus.pending: {},
       OfferStatus.inprogress: {},
+      OfferStatus.accepted: {},
+      OfferStatus.completed: {}
     };
 
     for (final offer in allOffers.values) {
@@ -92,13 +104,22 @@ class OffersRepository {
           case OfferStatus.inprogress:
             groupedByStatus[OfferStatus.inprogress]![offer.id ?? ""] = offer;
             break;
+          case OfferStatus.accepted:
+            groupedByStatus[OfferStatus.accepted]![offer.id ?? ""] = offer;
+            break;
+          case OfferStatus.rejected:
+            groupedByStatus[OfferStatus.accepted]![offer.id ?? ""] = offer;
+            break;
+          // Optionally handle OfferStatus.completed or other statuses
           default:
-            // Optionally handle other statuses
             break;
         }
       }
     }
 
+    log(" pending offer is : ${groupedByStatus[OfferStatus.pending]?.length.toString()}");
+    log(" inprogress offer is : ${groupedByStatus[OfferStatus.inprogress]?.length.toString()}");
+    log(" accpted offer is : ${groupedByStatus[OfferStatus.accepted]?.length.toString()}");
     return {
       'allOffers': allOffers,
       'groupedByStatus': groupedByStatus,

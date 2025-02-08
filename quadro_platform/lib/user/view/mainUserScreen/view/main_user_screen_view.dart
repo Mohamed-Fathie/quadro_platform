@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/shared/enum/request_status.dart';
@@ -62,13 +64,14 @@ class MainUserScreenView extends StatelessWidget {
               buttonColor: Qcolors.secondary,
               text: "الطلبات الحالية",
               withButton: true,
-              callback: () => UserMainNavBarScreens().controller.jumpToTab(2),
+              callback: () => UserMainNavBarScreens().controller.jumpToTab(1),
             ),
             VerticalSpacing(height: 5.w),
             BlocBuilder<MainUserScreenBloc, MainUserScreenState>(
               builder: (context, state) {
                 final list = state.requests;
                 final status = state.requestStatus;
+
                 return SharedRequestsList(
                   requestType: RequestType.vehicle_owner_id,
                   requests: list,

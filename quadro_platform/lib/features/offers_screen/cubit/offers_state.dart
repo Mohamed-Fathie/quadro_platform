@@ -44,6 +44,26 @@ final class OfferFetchPendingSuccess extends OffersState {
   List<Object?> get props => [pendingOffers];
 }
 
+final class OfferFetchAcceptedSuccess extends OffersState {
+  final List<MaintenanceRequestDomainModel> acceptedOffers;
+
+  const OfferFetchAcceptedSuccess(
+      {required this.acceptedOffers, required super.index});
+
+  @override
+  List<Object?> get props => [acceptedOffers];
+}
+
+final class OfferFetchRejectedSuccess extends OffersState {
+  final List<MaintenanceRequestDomainModel> rejectedOffers;
+
+  const OfferFetchRejectedSuccess(
+      {required this.rejectedOffers, required super.index});
+
+  @override
+  List<Object?> get props => [rejectedOffers];
+}
+
 final class OfferFetchFailure extends OffersState {
   final String error;
 

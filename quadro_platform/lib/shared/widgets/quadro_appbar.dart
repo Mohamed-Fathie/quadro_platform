@@ -29,22 +29,22 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      actions: [
-        IconButton(
-          onPressed: notificationCallBack,
-          icon: ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: Qcolors.gradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-            child: const Icon(
-              Icons.notifications,
-              color: Colors.white, // This ensures the gradient is visible
-            ),
-          ),
-        ),
-      ],
+      // actions: [
+      //   IconButton(
+      //     onPressed: notificationCallBack,
+      //     icon: ShaderMask(
+      //       shaderCallback: (bounds) => LinearGradient(
+      //         colors: Qcolors.gradient,
+      //         begin: Alignment.topLeft,
+      //         end: Alignment.bottomRight,
+      //       ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+      //       child: const Icon(
+      //         Icons.notifications,
+      //         color: Colors.white, // This ensures the gradient is visible
+      //       ),
+      //     ),
+      //   ),
+      // ],
     );
   }
 

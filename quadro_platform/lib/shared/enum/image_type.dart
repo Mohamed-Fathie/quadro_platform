@@ -2,6 +2,7 @@ enum ImageType {
   profile,
   idCard,
   tradeLicense,
+  maintenance,
 }
 
 extension ImageTypePath on ImageType {
@@ -13,6 +14,9 @@ extension ImageTypePath on ImageType {
         return 'workshop/$userId/id_card.jpg';
       case ImageType.tradeLicense:
         return 'workshop/$userId/trade_license.jpg';
+
+      case ImageType.maintenance:
+        return "MaintenanceRequests/$userId/uploaded_image.jpg";
     }
   }
 }

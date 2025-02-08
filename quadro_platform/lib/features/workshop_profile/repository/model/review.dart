@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:equatable/equatable.dart';
 
 class Review extends Equatable {
-  final String id;
+  final String? id;
   final String userId;
   final double rating;
   final String? reviewComment;
@@ -10,7 +10,7 @@ class Review extends Equatable {
   final DateTime dateCreated;
 
   const Review({
-    required this.id,
+    this.id,
     required this.userId,
     required this.rating,
     required this.reviewComment,

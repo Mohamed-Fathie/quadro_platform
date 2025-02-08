@@ -95,11 +95,8 @@ class WorkshopList extends StatelessWidget {
                         buttonTitle: "ارسل طلب",
                         onPressed: () {
                           NavigationService().routeTo(
-                              RoutesConstants.workshoProfile,
-                              arguments: {
-                                "workshop": workshop,
-                                "requestType": RequestType.vehicle_owner_id
-                              });
+                              RoutesConstants.maintenanceRequest,
+                              arguments: workshop);
                         },
                       ),
                     ),
