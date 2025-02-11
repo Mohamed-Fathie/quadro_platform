@@ -7,19 +7,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
-import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/modele/rider_request_modele.dart';
+import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
-import 'package:quadro_platform/user/controller/services/nearbyDriverServices/nearby_driver_services.dart';
 import 'package:quadro_platform/user/controller/services/rideRequestServices/ride_request_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dart:math' as math;
+
+import '../../../commonn/controller/provider/profile_data_provider.dart';
+import '../../../commonn/model/pickup&drop_location_model.dart';
+import '../../controller/provider/trip_providerr/ride_request_provider.dart';
+import '../../controller/services/nearbyDriverServicess/nearby_driver_services.dart';
 
 class BookRideScreen extends StatefulWidget {
   BookRideScreen({super.key});
@@ -307,6 +308,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
                 },
               );
             } else {
+              log("in the stream");
               return StreamBuilder(
                 stream: userRideRequestRef.onValue,
                 builder: (context, event) {
@@ -351,7 +353,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
                           controller: controller,
                         );
                       } else {
-                        RideData(
+                        return RideData(
                           rideData: rideData,
                           controller: controller,
                         );
@@ -370,30 +372,43 @@ class _BookRideScreenState extends State<BookRideScreen> {
               padding: EdgeInsets.only(bottom: 10.h),
               child: Stack(
                 children: [
+                  // Text(" oidhfoig "),
                   GoogleMap(
-                    initialCameraPosition:
-                        rideRequestProvider.initialCameraPosition,
+                    initialCameraPosition: CameraPosition(
+                      zoom: 12.0,
+                      target: LatLng(32.8877, 13.1872),
+                    ),
                     mapType: MapType.normal,
                     myLocationButtonEnabled: false,
                     myLocationEnabled: true,
                     zoomControlsEnabled: true,
                     zoomGesturesEnabled: true,
                     polylines: rideRequestProvider.polylineSet,
-                    markers: rideRequestProvider.riderMarker,
+                    // markers: rideRequestProvider.riderMarker,
                     onMapCreated: (GoogleMapController controller) async {
-                      driverMapController.complete(controller);
+                      // Ensure we complete the completer only once.
+                      if (!driverMapController.isCompleted) {
+                        driverMapController.complete(controller);
+                      }
                       mapController = controller;
 
-                      LatLng pickupLocation = LatLng(
+                      // Check that pickupLocation is available before animating the camera.
+                      if (rideRequestProvider.pickupLocation != null) {
+                        LatLng pickupLocation = LatLng(
                           rideRequestProvider.pickupLocation!.latitude!,
-                          rideRequestProvider.pickupLocation!.longitude!);
-                      CameraPosition cameraPosition = CameraPosition(
-                        target: pickupLocation,
-                        zoom: 14,
-                      );
-                      mapController!.animateCamera(
-                        CameraUpdate.newCameraPosition(cameraPosition),
-                      );
+                          rideRequestProvider.pickupLocation!.longitude!,
+                        );
+                        CameraPosition cameraPosition = CameraPosition(
+                          target: pickupLocation,
+                          zoom: 14,
+                        );
+                        await mapController!.animateCamera(
+                          CameraUpdate.newCameraPosition(cameraPosition),
+                        );
+                      } else {
+                        // Optionally log or handle the case when pickupLocation is null.
+                        debugPrint('pickupLocation is null.');
+                      }
                     },
                   ),
                   Positioned(

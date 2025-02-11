@@ -32,28 +32,31 @@ class MainBottomNavbar extends StatelessWidget {
               workshopRepository: WorkshopRepository()),
         )
       ],
-      child: PersistentTabView(
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          duration: Duration(milliseconds: 700),
-          curve: Curves.ease,
-        ),
-        controller: UserMainNavBarScreens().controller,
-        tabs: UserMainNavBarScreens().buildScreens(),
-        navBarBuilder: (navBarConfig) => Style8BottomNavBar(
-          navBarConfig: navBarConfig,
-          navBarDecoration: NavBarDecoration(
-            color: isDark ? const Color(0xFF1F1929) : Colors.white,
-            borderRadius: BorderRadius.circular(
-              10,
+      child: FocusScope(
+        canRequestFocus: false,
+        child: PersistentTabView(
+          screenTransitionAnimation: const ScreenTransitionAnimation(
+            duration: Duration(milliseconds: 700),
+            curve: Curves.ease,
+          ),
+          controller: UserMainNavBarScreens().controller,
+          tabs: UserMainNavBarScreens().buildScreens(),
+          navBarBuilder: (navBarConfig) => Style8BottomNavBar(
+            navBarConfig: navBarConfig,
+            navBarDecoration: NavBarDecoration(
+              color: isDark ? const Color(0xFF1F1929) : Colors.white,
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
             ),
           ),
+          handleAndroidBackButtonPress: true, // Default is true.
+          resizeToAvoidBottomInset:
+              true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
+          stateManagement: true, // Default is true.
+          backgroundColor: Colors.grey.shade900,
+          navBarHeight: kBottomNavigationBarHeight,
         ),
-        handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset:
-            true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
-        stateManagement: true, // Default is true.
-        backgroundColor: Colors.grey.shade900,
-        navBarHeight: kBottomNavigationBarHeight,
       ),
     );
   }

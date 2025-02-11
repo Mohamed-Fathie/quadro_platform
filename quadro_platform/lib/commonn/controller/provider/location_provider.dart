@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/modele/searched_address_model.dart';
+import 'package:quadro_platform/commonn/model/pickup&drop_location_model.dart';
+import 'package:quadro_platform/commonn/model/searched_address_model.dart';
 
 class LocationProvider extends ChangeNotifier {
   List<SearchedAddressModel> searchedAddress = [];

@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_services.dart';
-import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/modele/profile_data_model.dart';
+import 'package:quadro_platform/commonn/controller/services/firebasePushNotificationServices/push_notification_services.dart';
+import 'package:quadro_platform/commonn/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/commonn/model/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/user/view/account/user_account_screen.dart';
-import 'package:quadro_platform/user/view/mainUserScreen/main_user_screen.dart';
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
@@ -23,17 +21,17 @@ class MainBottomNavBar extends StatefulWidget {
 class _MainBottomNavBarState extends State<MainBottomNavBar> {
   List<PersistentTabConfig> _navBarItems(int currentTab) {
     return [
-      PersistentTabConfig(
-        screen: const MainUserScreen(),
-        item: ItemConfig(
-          icon: Icon(currentTab == 0
-              ? CupertinoIcons.house_fill
-              : CupertinoIcons.house),
-          title: 'الرئيسية',
-          inactiveForegroundColor: grey,
-          activeForegroundColor: teal,
-        ),
-      ),
+      // PersistentTabConfig(
+      //   screen: const MainUserScreen(),
+      //   item: ItemConfig(
+      //     icon: Icon(currentTab == 0
+      //         ? CupertinoIcons.house_fill
+      //         : CupertinoIcons.house),
+      //     title: 'الرئيسية',
+      //     inactiveForegroundColor: grey,
+      //     activeForegroundColor: teal,
+      //   ),
+      // ),
       // PersistentTabConfig(
       //   icon: Icon(
       //       currentTab == 0 ? CupertinoIcons.car_fill : CupertinoIcons.car),

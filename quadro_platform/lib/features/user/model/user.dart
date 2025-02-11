@@ -43,7 +43,7 @@ class QuadroUser {
       email: json['email'] as String,
       phone:
           json['mobileNumber']?.toString(), // Convert to string if it's an int
-      role: null, // Map userType to role
+      role: (json["userType"] as String).toUserRole(), // Map userType to role
       pictureUrl:
           json['profilePicUrl'] as String?, // Map profilePicUrl to pictureUrl
     );

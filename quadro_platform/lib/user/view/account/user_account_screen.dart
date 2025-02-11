@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
-import 'package:quadro_platform/common/controller/services/auth_services.dart';
+import 'package:quadro_platform/commonn/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/commonn/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
@@ -81,7 +81,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                           SizedBox(
                             width: 70.w,
                             child: Text(
-                              profileProvider.profileData!.name! ,
+                              profileProvider.profileData!.name!,
                               style: AppTextStyles.Mheading26Bold,
                             ),
                           ),
@@ -93,7 +93,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                               border: Border.all(color: black87),
                               image: DecorationImage(
                                 image: NetworkImage(profileProvider
-                                        .profileData!.profilePicUrl!),
+                                    .profileData!.profilePicUrl!),
                               ),
                             ),
                           ),
@@ -120,7 +120,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
                   return InkWell(
                     onTap: () async {
                       if (index == (accountButtons.length) - 1) {
-                        AuthServices.logOutUser();
+                        AuthServices.logOutUser(context);
                         await UserRepository.clearCachedUser();
                       }
                     },

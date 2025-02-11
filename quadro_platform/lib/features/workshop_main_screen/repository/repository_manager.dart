@@ -17,7 +17,7 @@ import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/utils/extension/coordination_togeopoint.dart';
 
-import '../../../common/controller/services/location_services.dart';
+import '../../../commonn/controller/services/location_services.dart';
 import '../../../shared/enum/offers_filter.dart';
 import '../../../user/view/workshop_search/model/workshop_model.dart';
 import '../../user/model/user.dart';

@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/modele/profile_data_model.dart';
+import 'package:quadro_platform/commonn/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/commonn/model/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 class ProfileDataProvider extends ChangeNotifier {
   ProfileDataModel? profileData;
 
-  getProfileData() async {
+  Future<void> getProfileData() async {
     profileData =
         await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
             auth.currentUser!.uid);

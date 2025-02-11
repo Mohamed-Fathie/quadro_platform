@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/controller/services/auth_services.dart';
-import 'package:quadro_platform/common/controller/services/toast_services.dart';
+import 'package:quadro_platform/commonn/controller/services/auth_services.dart';
+import 'package:quadro_platform/commonn/controller/services/toast_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
@@ -11,8 +11,8 @@ import 'package:sizer/sizer.dart';
 
 class ResetPassWordScreen extends StatelessWidget {
   ResetPassWordScreen({super.key});
- final TextEditingController emailController = TextEditingController();
- final TextEditingController emailController2 = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController2 = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,7 +48,8 @@ class ResetPassWordScreen extends StatelessWidget {
               readOnly: false,
               title: 'البريد الالكتروني',
               hint: "",
-            ),SizedBox(height: 2.5.h),
+            ),
+            SizedBox(height: 2.5.h),
             RegistrationScreenTextField(
               controller: emailController2,
               keyBoardType: TextInputType.emailAddress,
@@ -85,7 +86,9 @@ class ResetPassWordScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
-                  onTap: () {  NavigationService().routeTo(RoutesConstants.signUp);},
+                  onTap: () {
+                    NavigationService().routeTo(RoutesConstants.signUp);
+                  },
                   child: Text(
                     "انشاء حساب ",
                     style: TextStyle(

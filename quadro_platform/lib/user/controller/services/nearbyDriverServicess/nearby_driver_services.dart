@@ -31,14 +31,14 @@ class NearbyDriverServices {
             );
             context.read<RideRequestProvider>().addDriver(model);
             if (context.read<RideRequestProvider>().fechNearbyDrivers == true) {
-              context.read<RideRequestProvider>().updateMarker();
+              // context.read<RideRequestProvider>().updateMarker();
             }
             break;
           case Geofire.onKeyExited:
             context
                 .read<RideRequestProvider>()
                 .removeDriver(event['key'].toString());
-            context.read<RideRequestProvider>().updateMarker();
+            // context.read<RideRequestProvider>().updateMarker();
             log('driver removed ${event['key']}');
             break;
 
@@ -50,7 +50,7 @@ class NearbyDriverServices {
             );
 
             context.read<RideRequestProvider>().updateNearbyLocation(model);
-            context.read<RideRequestProvider>().updateMarker();
+            // context.read<RideRequestProvider>().updateMarker();
 
             break;
           case Geofire.onGeoQueryReady:
@@ -59,7 +59,7 @@ class NearbyDriverServices {
                 .nearbyDrivers
                 .length
                 .toString());
-            context.read<RideRequestProvider>().updateMarker();
+            // context.read<RideRequestProvider>().updateMarker();
             break;
         }
       } else {

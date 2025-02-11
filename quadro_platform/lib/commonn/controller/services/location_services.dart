@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/location_provider.dart';
-import 'package:quadro_platform/common/controller/services/APIS&KEYS/apis.dart';
-import 'package:quadro_platform/common/controller/services/toast_services.dart';
+import 'package:quadro_platform/commonn/controller/provider/location_provider.dart';
+import 'package:quadro_platform/commonn/controller/services/APIS&KEYS/apis.dart';
+import 'package:quadro_platform/commonn/controller/services/toast_services.dart';
 import 'package:dio/dio.dart';
-import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/modele/searched_address_model.dart';
+import 'package:quadro_platform/commonn/model/pickup&drop_location_model.dart';
+import 'package:quadro_platform/commonn/model/searched_address_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 import '../../../features/google_map/model/location_service_exception.dart';
@@ -68,6 +68,7 @@ class LocationServices {
     List<SearchedAddressModel> address = [];
     final dio = Dio();
     final api = Apis.placesAPI(placeName);
+
     try {
       var response = await dio.get(api).timeout(const Duration(seconds: 60),
           onTimeout: () {

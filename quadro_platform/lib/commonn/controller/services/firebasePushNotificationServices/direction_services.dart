@@ -6,9 +6,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/services/APIS&KEYS/apis.dart';
-import 'package:quadro_platform/common/controller/services/toast_services.dart';
-import 'package:quadro_platform/common/modele/direction_model.dart';
+import 'package:quadro_platform/commonn/controller/services/APIS&KEYS/apis.dart';
+import 'package:quadro_platform/commonn/controller/services/toast_services.dart';
+import 'package:quadro_platform/commonn/model/direction_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 
@@ -18,7 +18,7 @@ class DirectionServices {
   static Future getDirectionDetailsForRider(
       LatLng pickupLocation, LatLng dropLocation, BuildContext context) async {
     final api = Apis.directionAPI(pickupLocation, dropLocation);
-
+    log("below the diarction");
     try {
       var response = await dio.get(api).timeout(const Duration(seconds: 60),
           onTimeout: () {
@@ -53,7 +53,11 @@ class DirectionServices {
         context.read<RideRequestProvider>().updateDirection(directionModel);
       }
     } catch (e) {
-      throw Exception(e);
+      log(e.toString());
+      ToastService.sendScaffoldAlert(
+          msg: 'انتهت صلاحية الجلسة , حاول بعد قليل',
+          toastStatus: e.toString(),
+          context: context);
     }
   }
 

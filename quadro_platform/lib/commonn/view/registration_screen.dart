@@ -3,8 +3,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/controller/services/auth_services.dart';
-import 'package:quadro_platform/common/controller/services/image_services.dart';
+import 'package:quadro_platform/commonn/controller/services/auth_services.dart';
+import 'package:quadro_platform/commonn/controller/services/image_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';

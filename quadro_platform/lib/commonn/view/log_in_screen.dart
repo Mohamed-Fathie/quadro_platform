@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/common/controller/services/auth_services.dart';
+import 'package:quadro_platform/commonn/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';

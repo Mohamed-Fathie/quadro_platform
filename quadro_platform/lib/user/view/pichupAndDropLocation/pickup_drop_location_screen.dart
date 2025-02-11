@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -5,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/location_provider.dart';
-import 'package:quadro_platform/common/controller/services/direction_services.dart';
-import 'package:quadro_platform/common/controller/services/location_services.dart';
-import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/modele/searched_address_model.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
 import 'package:quadro_platform/user/view/bookRideScreen/book_ride_screen.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../commonn/controller/provider/location_provider.dart';
+import '../../../commonn/controller/services/firebasePushNotificationServices/direction_services.dart';
+import '../../../commonn/controller/services/location_services.dart';
+import '../../../commonn/model/pickup&drop_location_model.dart';
+import '../../../commonn/model/searched_address_model.dart';
+import '../../controller/provider/trip_providerr/ride_request_provider.dart';
 
 class PickupAndDropLocationScreen extends StatefulWidget {
   const PickupAndDropLocationScreen({super.key});
@@ -53,7 +56,7 @@ class _PickupAndDropLocationScreenState
 
   navigateToBookRideScreen() async {
     if (context.mounted) {
-      if (context.read<LocationProvider>().pickupLocation != null &&
+      if (context.read<LocationProvider>().pickupLocation != null ||
           context.read<LocationProvider>().dropLocation != null) {
         PickupAndDropLocationModel pickup =
             context.read<LocationProvider>().pickupLocation!;
@@ -63,6 +66,7 @@ class _PickupAndDropLocationScreenState
               pickup,
               drop,
             );
+
         PickupAndDropLocationModel pickupModel =
             context.read<LocationProvider>().pickupLocation!;
         PickupAndDropLocationModel dropModel =
@@ -71,15 +75,17 @@ class _PickupAndDropLocationScreenState
             LatLng(pickupModel.latitude!, pickupModel.longitude!);
 
         LatLng dropLocation = LatLng(dropModel.latitude!, dropModel.longitude!);
+
         await DirectionServices.getDirectionDetailsForRider(
             pickupLocation, dropLocation, context);
         context.read<RideRequestProvider>().makeFareZero();
         context.read<RideRequestProvider>().createIcons(context);
-        context.read<RideRequestProvider>().updateMarker();
+        // context.read<RideRequestProvider>().updateMarker();
         context.read<RideRequestProvider>().getFare();
         context
             .read<RideRequestProvider>()
             .decodePolylineAndUpdatePolylineField();
+        // log("here 88");
         Navigator.push(
           context,
           PageTransition(

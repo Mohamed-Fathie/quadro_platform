@@ -13,7 +13,7 @@ class WorkshopPopupMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<WorkshopProfileMenu>(
       onSelected: (value) =>
-          context.read<WorkshopProfileCubit>().onSelectedMenu(value),
+          context.read<WorkshopProfileCubit>().onSelectedMenu(value, context),
       icon: ClipRRect(
         borderRadius: BorderRadius.circular(12), // Round the edges
         child: SizedBox(

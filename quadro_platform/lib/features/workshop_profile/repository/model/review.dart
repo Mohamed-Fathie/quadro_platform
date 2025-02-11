@@ -47,7 +47,7 @@ class Review extends Equatable {
       'rating': rating,
       'reviewComment': reviewComment,
       'workshopComment': workshopComment,
-      'dateCreated': dateCreated.toIso8601String(),
+      'dateCreated': Timestamp.fromDate(dateCreated),
     };
   }
 }

@@ -4,9 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/location_provider.dart';
-import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/commonn/controller/provider/location_provider.dart';
+import 'package:quadro_platform/commonn/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/login_bloc/bloc/login_bloc.dart';
 import 'package:quadro_platform/driver/controller/provider/bottom_nav_bar_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_location_provider.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_maps_provider.dart';
@@ -28,7 +29,7 @@ import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/quadro_route_configuration.dart';
 import 'package:quadro_platform/user/controller/provider/BottomNavBarProvider/bottom_nav_bar_provider.dart';
-import 'package:quadro_platform/user/controller/provider/trip_provider/ride_request_provider.dart';
+import 'package:quadro_platform/user/controller/provider/trip_providerr/ride_request_provider.dart';
 import 'package:sizer/sizer.dart';
 
 import 'features/google_map/views/workshop_location_map.dart';
@@ -84,21 +85,27 @@ class Quadro extends StatelessWidget {
                 offersRepository: OffersRepository(),
                 userRepository: UserRepository(),
                 workshopRepository: WorkshopRepository()),
-            child: MaterialApp(
-              locale: const Locale('ar'),
-              supportedLocales: const [Locale('ar')],
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate, // For Cupertino widgets
-              ],
-              navigatorKey: NavigationService().navigatorKey,
-              onGenerateRoute: RouteGenerator.generateRoutes,
-              debugShowCheckedModeBanner: false,
-              theme: GlobalThemData.lightThemeData,
-              darkTheme: GlobalThemData.darkThemeData,
-              themeMode: ThemeMode.system,
-              home: const LogInLogic(),
+            child: BlocProvider(
+              create: (context) =>
+                  LoginBloc(context.read<RepositoryManager>().userRepository)
+                    ..add(AppInitialization()),
+              child: MaterialApp(
+                locale: const Locale('ar'),
+                supportedLocales: const [Locale('ar')],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations
+                      .delegate, // For Cupertino widgets
+                ],
+                navigatorKey: NavigationService().navigatorKey,
+                onGenerateRoute: RouteGenerator.generateRoutes,
+                debugShowCheckedModeBanner: false,
+                theme: GlobalThemData.lightThemeData,
+                darkTheme: GlobalThemData.darkThemeData,
+                themeMode: ThemeMode.system,
+                home: const WidgetFlow(),
+              ),
             ),
           ),
         );

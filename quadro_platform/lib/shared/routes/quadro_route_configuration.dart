@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
-import 'package:quadro_platform/common/view/registration_screen.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/commonn/view/log_in_screen.dart';
+import 'package:quadro_platform/commonn/view/registration_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/trade_license.dart';
@@ -16,12 +16,15 @@ import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_ba
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 
-import '../../common/view/reset_password_screen.dart';
+import '../../commonn/view/reset_password_screen.dart';
+import '../../driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import '../../features/google_map/views/workshop_location_map.dart';
+import '../../features/onboarding/view/on_boarding_page.dart';
 import '../../features/request_details_screen/veiw/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import '../../features/workshop_profile/view/workshop_profile_page.dart';
+import '../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
 import '../../user/view/maintenance_request/views/maintenance_request_page.dart';
 import '../../user/view/workshop_search/views/workshop_search_page.dart';
 
@@ -30,18 +33,26 @@ class RouteGenerator {
     switch (settings.name) {
       case RoutesConstants.login:
         return _materialRoute(const LogInScreen());
+      case RoutesConstants.driverBottomNavBar:
+        return _materialRoute(DriverBottomNavBar());
+      case RoutesConstants.mainUserBottomNavbar:
+        return _materialRoute(const MainBottomNavbar());
       case RoutesConstants.maintenanceRequest:
         final workshop = settings.arguments;
         if (workshop is! Workshop) return _errorRoute("invalid arg");
         return _materialRoute(MaintenanceRequestPage(
           workshop: workshop,
         ));
+      case RoutesConstants.error:
+        return _materialRoute(const ErrorAuthWidget());
       case RoutesConstants.workshopBottomNavBar:
         return _materialRoute(const WorkshopNavBar());
       case RoutesConstants.workshopLocationMap:
         return _materialRoute(const WorkshopLocationMapPage());
       case RoutesConstants.workshopSearch:
         return _materialRoute(const WorkshopSearchPage());
+      case RoutesConstants.onBoardingPage:
+        return _materialRoute(const OnBoardingPage());
       case RoutesConstants.workshoProfile:
         final workshop = settings.arguments;
         if (workshop is! Map<String, dynamic>) {
@@ -76,11 +87,11 @@ class RouteGenerator {
           PageTransitionType.bottomToTop,
         );
 
-      case RoutesConstants.loginLogic:
-        return _pageTransition(
-          const LogInLogic(),
-          PageTransitionType.bottomToTop,
-        );
+      // case RoutesConstants.loginLogic:
+      //   return _pageTransition(
+      //     const LogInLogic(),
+      //     PageTransitionType.bottomToTop,
+      //   );
 
       case RoutesConstants.requestDetails:
         final argument = settings.arguments;
@@ -108,6 +119,11 @@ class RouteGenerator {
       case RoutesConstants.bottomNavBar:
         return _pageTransition(
           UserBottomNavBar(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.flow:
+        return _pageTransition(
+          const WidgetFlow(),
           PageTransitionType.bottomToTop,
         );
 

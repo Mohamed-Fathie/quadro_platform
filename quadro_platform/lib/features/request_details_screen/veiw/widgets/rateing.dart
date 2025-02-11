@@ -85,12 +85,12 @@ void _showRatingConfirmation(BuildContext context,
             ),
             onPressed: () {
               cubit.submitRating(
-                userId: request.user.id,
-                workshopId: request.workshop.ownerId,
-                requestId: request.id,
-                offerId: request.offer!.id!,
-                rating: rating,
-              );
+                  userId: request.user.id,
+                  workshopId: request.workshop.ownerId,
+                  requestId: request.id,
+                  offerId: request.offer!.id!,
+                  rating: rating,
+                  comment: "خدمة ممتازة");
 
               NavigationService().goBack(result: true);
             },

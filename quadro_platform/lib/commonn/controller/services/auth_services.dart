@@ -6,13 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
-import 'package:quadro_platform/common/controller/services/image_services.dart';
-import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/controller/services/toast_services.dart';
-import 'package:quadro_platform/common/modele/profile_data_model.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
-import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/commonn/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/commonn/controller/services/image_services.dart';
+import 'package:quadro_platform/commonn/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/commonn/controller/services/toast_services.dart';
+import 'package:quadro_platform/commonn/model/profile_data_model.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/commonn/view/logInLogic/login_bloc/bloc/login_bloc.dart';
+import 'package:quadro_platform/commonn/view/log_in_screen.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import 'package:quadro_platform/driver/view/DriverHomeScreen/driver_home_screen_builder.dart';
@@ -39,22 +40,18 @@ class AuthServices {
         await auth.signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
         showSnackBar(context, ' تم تسجيل الدخول بنجاح');
-        Navigator.push(
-          context,
-          PageTransition(
-              child: const LogInLogic(), type: PageTransitionType.bottomToTop),
-        );
+        // context.read<LoginBloc>().add(AppInitialization());
       }
-      if (context.mounted) {
-        await auth.signInWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        showSnackBar(context, ' تم تسجيل الدخول بنجاح');
-        Navigator.push(
-          context,
-          PageTransition(
-              child: const LogInLogic(), type: PageTransitionType.bottomToTop),
-        );
-      }
+      // if (context.mounted) {
+      //   await auth.signInWithEmailAndPassword(
+      //       email: emailController.text, password: passwordController.text);
+      //   showSnackBar(context, ' تم تسجيل الدخول بنجاح');
+      //   // Navigator.push(
+      //   //   context,
+      //   //   PageTransition(
+      //   //       child: const LogInLogic(), type: PageTransitionType.bottomToTop),
+      //   // );
+      // }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         log('user-not-found');
@@ -85,18 +82,22 @@ class AuthServices {
   }
 
   // ******************* checkAuthenticationAndNavigate function *****************//
-  static checkAuthenticationAndNavigate({required BuildContext context}) {
-    bool userAuthenticated = checkAuthentication();
-    userAuthenticated
-        ? checkUser(context)
-        : Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-              child: const LogInScreen(),
-              type: PageTransitionType.bottomToTop,
-            ),
-            (route) => false,
-          );
+  static void checkAuthenticationAndNavigate({required BuildContext context}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      bool userAuthenticated = checkAuthentication();
+      if (!context.mounted) return;
+      if (userAuthenticated) {
+        checkUser(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          PageTransition(
+            child: const LogInScreen(),
+            type: PageTransitionType.bottomToTop,
+          ),
+          (route) => false,
+        );
+      }
+    });
   }
 
   static void showSnackBar(BuildContext context, String message) {
@@ -214,44 +215,39 @@ class AuthServices {
 
 // ******************* checkUser function *****************//
 
-  static checkUser(BuildContext context) async {
+  static void checkUser(BuildContext context) async {
     try {
       if (context.mounted) {
         bool userIsRegistered =
             await ProfileDataCRUDServices.checkForRegisteredUser(context);
         if (userIsRegistered == true) {
-          ProfileDataModel profileData =
-              await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
-                  auth.currentUser!.uid);
+          // ProfileDataModel profileData =
+          //     await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
+          // auth.currentUser!.uid);
           // PushNotivicationServices.initializeFirebaseMessagingForUsers(
           //     profileData, context);
-          String userIsTowingDriver =
+          String userRole =
               await ProfileDataCRUDServices.userIsTowingDriver(context);
-          if (userIsTowingDriver == 'التسجيل كصاحب ساحبة') {
-            context.read<ProfileDataProvider>().getProfileData();
-            Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: DriverBottomNavBar(),
-                    type: PageTransitionType.bottomToTop),
-                (route) => false);
-          } else if (userIsTowingDriver == 'التسجيل كصاحب ورشة') {
-            context.read<ProfileDataProvider>().getProfileData();
+          if (userRole == 'التسجيل كصاحب ساحبة') {
+            FocusScope.of(context).unfocus();
 
-            return Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: const WorkshopNavBar(),
-                    type: PageTransitionType.bottomToTop),
-                (route) => false);
-          } else {
             context.read<ProfileDataProvider>().getProfileData();
-            Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: const MainBottomNavbar(),
-                    type: PageTransitionType.bottomToTop),
-                (route) => false);
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.driverBottomNavBar);
+            return;
+          } else if (userRole == 'التسجيل كصاحب ورشة') {
+            FocusScope.of(context).unfocus();
+
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.workshopBottomNavBar);
+            return;
+          } else {
+            FocusScope.of(context).unfocus();
+
+            context.read<ProfileDataProvider>().getProfileData();
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.mainUserBottomNavbar);
+            return;
           }
         } else {
           log('checkUser : No data for this user');
@@ -282,9 +278,10 @@ class AuthServices {
   }
 
 // ******************* logOutUser function *****************//
-  static logOutUser() async {
+  static logOutUser(BuildContext context) async {
     await auth.signOut();
-    NavigationService().clearAndNavigateTo(RoutesConstants.loginLogic);
+
+    // context.read<LoginBloc>().add(AppInitialization());
   }
 
   static registerTowingDriver(

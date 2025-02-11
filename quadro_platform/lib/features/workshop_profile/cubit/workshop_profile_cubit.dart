@@ -8,7 +8,7 @@ import 'package:quadro_platform/features/workshop_profile/model/Review_Domain.da
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/workshop_profile_menu.dart';
 
-import '../../../common/controller/services/auth_services.dart';
+import '../../../commonn/controller/services/auth_services.dart';
 import '../../workshop_authentication/models/firestore_exceptions.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_authentication/repository/workshop_repo.dart';
@@ -30,10 +30,10 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
           reviewslist: [],
           status: WorkshopProfileStatus.loading,
         ));
-  void onSelectedMenu(WorkshopProfileMenu clecked) async {
+  void onSelectedMenu(WorkshopProfileMenu clecked, BuildContext context) async {
     switch (clecked) {
       case WorkshopProfileMenu.logout:
-        AuthServices.logOutUser();
+        AuthServices.logOutUser(context);
         await workshopRepo.clearCachedUser();
       case WorkshopProfileMenu.edit:
     }

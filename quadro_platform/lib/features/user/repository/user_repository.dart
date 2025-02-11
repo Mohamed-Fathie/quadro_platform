@@ -7,6 +7,8 @@ import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../shared/enum/user_role.dart';
+
 class UserRepository {
   final FirebaseAuth _auth;
   final FirebaseDatabase _database;
@@ -97,6 +99,22 @@ class UserRepository {
       return QuadroUser.fromJson(userJson, userJson['user_id']);
     }
     return null;
+  }
+
+  Stream<UserRole?> get user {
+    return _auth.authStateChanges().asyncMap(
+      (firebaseUsre) async {
+        if (firebaseUsre == null) {
+          return null;
+        }
+        try {
+          final userRole = (await getUserById(firebaseUsre.uid))?.role;
+          return userRole;
+        } on FirebaseException catch (e) {
+          throw FirestoreReadWriteFailure.fromCode(e.code);
+        }
+      },
+    );
   }
 
   // Clear Cached User Data when log out or delete account

@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quadro_platform/features/google_map/model/marker_model.dart';
 import 'package:quadro_platform/features/google_map/repository/geo_conding_repository.dart';
 
-import '../../../common/controller/services/location_services.dart';
+import '../../../commonn/controller/services/location_services.dart';
 import '../model/location_service_exception.dart';
 part 'workshop_location_map_event.dart';
 part 'workshop_location_map_state.dart';

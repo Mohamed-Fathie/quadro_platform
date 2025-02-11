@@ -4,11 +4,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_services.dart';
-import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
-import 'package:quadro_platform/common/modele/direction_model.dart';
-import 'package:quadro_platform/common/modele/pickup&drop_location_model.dart';
-import 'package:quadro_platform/common/modele/profile_data_model.dart';
+import 'package:quadro_platform/commonn/controller/services/firebasePushNotificationServices/push_notification_services.dart';
+import 'package:quadro_platform/commonn/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/commonn/model/direction_model.dart';
+import 'package:quadro_platform/commonn/model/pickup&drop_location_model.dart';
+import 'package:quadro_platform/commonn/model/profile_data_model.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/user/model/nearby_drivers_model.dart';
@@ -56,7 +56,7 @@ class RideRequestProvider extends ChangeNotifier {
     int quadroGoHookDurationPerMinute = 2;
     double quadroWheelLeftDurationPerMinute = 2.5;
     int quadroIntegratedTowDurationPerMinute = 3;
-
+    log(directionDetails!.toJson().toString());
     quadroHookFare = (baseFare +
             quadroGoHookDistancePerKM *
                 double.parse(
@@ -179,60 +179,75 @@ class RideRequestProvider extends ChangeNotifier {
     }
   }
 
-  updateMarker() async {
-    riderMarker.clear();
-    Marker pickupMarker = Marker(
-      markerId: const MarkerId('PickupMarker'),
-      position: LatLng(pickupLocation!.latitude!, pickupLocation!.longitude!),
-      icon: pickupIconForMap!,
-    );
-    Marker destinationMarker = Marker(
-      markerId: const MarkerId('destinationMarker'),
-      position: LatLng(dropLocation!.latitude!, dropLocation!.longitude!),
-      icon: destinationIconForMap!,
-    );
-    if (fechNearbyDrivers == true) {
-      math.Random random = math.Random();
-      for (var driver in nearbyDrivers) {
-        double rotation = random.nextInt(360).toDouble();
-        Marker truckMarker = Marker(
-          markerId: MarkerId(driver.driverID),
-          rotation: rotation,
-          position: LatLng(driver.latitude, driver.longitude),
-          icon: truckIconForMap!,
-        );
-        riderMarker.add(truckMarker);
-      }
-    }
-    if (updateMarkerBool == true) {
-      Marker truckMarker = Marker(
-        markerId: MarkerId(auth.currentUser!.uid),
-        position: LatLng(pickupLocation!.latitude!, pickupLocation!.longitude!),
-        icon: truckIconForMap!,
-      );
-      riderMarker.add(truckMarker);
-    }
-    riderMarker.add(pickupMarker);
-    riderMarker.add(destinationMarker);
-    notifyListeners();
-    if (updateMarkerBool == true) {
-      await Future.delayed(const Duration(seconds: 5), () async {
-        await updateMarker();
-      });
-    }
-  }
+  // updateMarker() async {
+  //   riderMarker.clear();
+  //   Marker pickupMarker = Marker(
+  //     markerId: const MarkerId('PickupMarker'),
+  //     position: LatLng(pickupLocation!.latitude!, pickupLocation!.longitude!),
+  //     icon: pickupIconForMap!,
+  //   );
+  //   Marker destinationMarker = Marker(
+  //     markerId: const MarkerId('destinationMarker'),
+  //     position: LatLng(dropLocation!.latitude!, dropLocation!.longitude!),
+  //     icon: destinationIconForMap!,
+  //   );
+  //   if (fechNearbyDrivers == true) {
+  //     math.Random random = math.Random();
+  //     for (var driver in nearbyDrivers) {
+  //       double rotation = random.nextInt(360).toDouble();
+  //       Marker truckMarker = Marker(
+  //         markerId: MarkerId(driver.driverID),
+  //         rotation: rotation,
+  //         position: LatLng(driver.latitude, driver.longitude),
+  //         icon: truckIconForMap!,
+  //       );
+  //       riderMarker.add(truckMarker);
+  //     }
+  //   }
+  //   if (updateMarkerBool == true) {
+  //     Marker truckMarker = Marker(
+  //       markerId: MarkerId(auth.currentUser!.uid),
+  //       position: LatLng(pickupLocation!.latitude!, pickupLocation!.longitude!),
+  //       icon: truckIconForMap!,
+  //     );
+  //     riderMarker.add(truckMarker);
+  //   }
+  //   riderMarker.add(pickupMarker);
+  //   riderMarker.add(destinationMarker);
+  //   notifyListeners();
+  //   if (updateMarkerBool == true) {
+  //     await Future.delayed(const Duration(seconds: 5), () async {
+  //       await updateMarker();
+  //     });
+  //   }
+  // }
 
 // nearby drivers functions
 
   sendPushNotificationToNearbyDrivers() async {
-    for (var driver in nearbyDrivers) {
+    // final n = nearbyDrivers;
+    // n.map(
+    //   (e) async {
+    //     ProfileDataModel driverProfileData =
+    //         await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
+    //             e.driverID);
+    //     log(driverProfileData.cloudMessagingToken!);
+    //     await PushNotivicationServices.sendRideRequestToNearbyDrivers(
+    //         driverProfileData.cloudMessagingToken!);
+    //   },
+    // );
+    // Create a copy of the list
+    final driversCopy = [...nearbyDrivers];
+
+    // Now iterate over the copy.
+    await Future.wait(driversCopy.map((e) async {
       ProfileDataModel driverProfileData =
           await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
-              driver.driverID);
+              e.driverID);
       log(driverProfileData.cloudMessagingToken!);
       await PushNotivicationServices.sendRideRequestToNearbyDrivers(
           driverProfileData.cloudMessagingToken!);
-    }
+    }));
   }
 
   addDriver(NearbyDriversModel driver) {

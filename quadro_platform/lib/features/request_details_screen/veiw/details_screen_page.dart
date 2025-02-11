@@ -61,7 +61,7 @@ class DetailsView extends StatelessWidget {
   final RequestType requestType;
   final MaintenanceRequestDomainModel request;
   final bool canRespond;
-  const DetailsView(
+  DetailsView(
       {super.key,
       required this.isDeletable,
       required this.requestType,

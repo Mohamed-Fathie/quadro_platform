@@ -15,4 +15,9 @@ class RoutesConstants {
   static const String workshopSearch = 'workshopSearch';
   static const String workshoProfile = 'workshopProfile';
   static const String maintenanceRequest = 'maintenanceRequest';
+  static const String driverBottomNavBar = 'DriverBottomNavBar';
+  static const String mainUserBottomNavbar = 'mainUserBottomNavbar';
+  static const String onBoardingPage = 'OnBoardingPage';
+  static const String error = 'error';
+  static const String flow = 'flow';
 }

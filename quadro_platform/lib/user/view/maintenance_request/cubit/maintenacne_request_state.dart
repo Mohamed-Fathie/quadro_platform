@@ -9,7 +9,7 @@ enum MaintenanceRequestCubitStatues {
 }
 
 @immutable
-class MaintenanceRequestState {
+class MaintenanceRequestState extends Equatable {
   final CarBrand? selectedCarBrand;
   final CarModels? selectedCarModel;
   final String description;
@@ -43,4 +43,15 @@ class MaintenanceRequestState {
       errorMessage: errorMessage,
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        selectedCarBrand,
+        status,
+        errorMessage,
+        image,
+        description,
+        selectedCarModel
+      ];
 }
