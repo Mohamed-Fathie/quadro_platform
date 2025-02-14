@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
+import 'package:quadro_platform/common/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/commonWidgets/custom_elevated_button.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
@@ -17,8 +17,8 @@ import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dart:math' as math;
 
-import '../../../commonn/controller/provider/profile_data_provider.dart';
-import '../../../commonn/model/pickup&drop_location_model.dart';
+import '../../../common/controller/provider/profile_data_provider.dart';
+import '../../../common/model/pickup&drop_location_model.dart';
 import '../../controller/provider/trip_providerr/ride_request_provider.dart';
 import '../../controller/services/nearbyDriverServicess/nearby_driver_services.dart';
 

@@ -8,7 +8,7 @@ import 'package:quadro_platform/features/workshop_profile/model/Review_Domain.da
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/workshop_profile_menu.dart';
 
-import '../../../commonn/controller/services/auth_services.dart';
+import '../../../common/controller/services/auth_services.dart';
 import '../../workshop_authentication/models/firestore_exceptions.dart';
 import '../../workshop_authentication/models/workshop_user.dart';
 import '../../workshop_authentication/repository/workshop_repo.dart';
@@ -36,18 +36,35 @@ class WorkshopProfileCubit extends Cubit<WorkshopProfileState> {
         AuthServices.logOutUser(context);
         await workshopRepo.clearCachedUser();
       case WorkshopProfileMenu.edit:
+        emit(state.copyWith(status: WorkshopProfileStatus.editing));
     }
+  }
+
+  void refereshe() async {
+    emit(state.copyWith(status: WorkshopProfileStatus.edited));
+    emit(state.copyWith(
+      status: WorkshopProfileStatus.loading,
+    ));
+    Workshop? refershedWorkshop = await workshopRepo.getCachedUser();
+    refershedWorkshop ??=
+        await workshopRepo.getWorkshopById(id: repoManager.authUserId);
+    workshop = refershedWorkshop;
+    await initialize();
   }
 
   Future<void> initialize() async {
     try {
       // Resolve the workshop either from the provided data or cached data
+      // workshop = null;
+      // log("first workshop: ${workshop?.toJson().toString() ?? "workshop is null "}");
+
       workshop ??= await workshopRepo.getCachedUser();
+      // log("second workshop: ${workshop?.toJson().toString() ?? "workshop is null "}");
+
       workshop ??=
           await workshopRepo.getWorkshopById(id: repoManager.authUserId);
+      // log("third workshop: ${workshop?.toJson().toString() ?? "workshop is null "}");
 
-      //workshop!.ownerId
-      // "1LQiEMpL1MMSvTwizkuhCMuO8iW2"
       reviewsRepo = ReviewsRepository(workshopId: workshop!.ownerId);
       final average = await reviewsRepo?.getAverageRatingAndReviewCount();
       emit(state.copyWith(

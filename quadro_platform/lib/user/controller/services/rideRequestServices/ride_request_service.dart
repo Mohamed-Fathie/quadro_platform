@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:quadro_platform/commonn/controller/services/toast_services.dart';
-import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
+import 'package:quadro_platform/common/controller/services/toast_services.dart';
+import 'package:quadro_platform/common/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 class RideRequestService {

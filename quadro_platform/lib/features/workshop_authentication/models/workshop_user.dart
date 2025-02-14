@@ -52,6 +52,32 @@ class Workshop {
       city: json['city'] as String?,
     );
   }
+// Add copyWith method
+  Workshop copyWith({
+    String? name,
+    String? imagePath,
+    String? ownerId,
+    String? description,
+    String? phone,
+    String? street,
+    String? city,
+    List<SparePartsStatus>? status,
+    List<CarBrand>? carBrands,
+    GeoFirePoint? coordination,
+  }) {
+    return Workshop(
+      name: name ?? this.name,
+      imagePath: imagePath ?? this.imagePath,
+      ownerId: ownerId ?? this.ownerId,
+      description: description ?? this.description,
+      phone: phone ?? this.phone,
+      street: street ?? this.street,
+      city: city ?? this.city,
+      status: status ?? this.status,
+      carBrands: carBrands ?? this.carBrands,
+      coordination: coordination ?? this.coordination,
+    );
+  }
 
   // Convert a JSON map into a Workshop instance
   factory Workshop.fromJson(Map<String, dynamic> json) {

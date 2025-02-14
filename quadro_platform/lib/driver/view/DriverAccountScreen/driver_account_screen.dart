@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/commonn/controller/provider/profile_data_provider.dart';
-import 'package:quadro_platform/commonn/controller/services/auth_services.dart';
+import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/common/controller/services/auth_services.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:sizer/sizer.dart';

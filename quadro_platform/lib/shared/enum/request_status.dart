@@ -3,6 +3,8 @@ import '../../user/view/mainUserScreen/bloc/main_screen_bloc.dart';
 
 enum RequestStatus {
   loading,
+  requestloading,
+  offerloading,
   failure,
   success,
 }
@@ -26,7 +28,9 @@ extension MainScreenStatusMapper on MainScreenState {
   RequestStatus get requestStatus {
     switch (status) {
       case MainScreenStatus.reqestloading:
-        return RequestStatus.loading;
+        return RequestStatus.requestloading;
+      case MainScreenStatus.offerloading:
+        return RequestStatus.offerloading;
       case MainScreenStatus.requestFailure:
         return RequestStatus.failure;
       case MainScreenStatus.success:

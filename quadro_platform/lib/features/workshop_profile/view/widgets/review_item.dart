@@ -67,7 +67,7 @@ class ReviewItem extends StatelessWidget {
 
           // User Comment
           ReadMoreText(
-            review.reviewComment,
+            review.reviewComment!,
             trimLines: 2,
             trimMode: TrimMode.Line,
             trimCollapsedText: "...عرض المزيد",

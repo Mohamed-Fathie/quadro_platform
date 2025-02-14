@@ -20,4 +20,5 @@ class RoutesConstants {
   static const String onBoardingPage = 'OnBoardingPage';
   static const String error = 'error';
   static const String flow = 'flow';
+  static const String workshopEdit = 'workshopEdit';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quadro_platform/features/google_map/bloc/workshop_location_map_bloc.dart';
 
 import 'widgets/confirm_button.dart';
@@ -8,13 +9,14 @@ import 'widgets/map_view.dart';
 import 'widgets/reset_location.dart';
 
 class WorkshopLocationMapPage extends StatelessWidget {
-  const WorkshopLocationMapPage({super.key});
+  final LatLng? loc;
+  const WorkshopLocationMapPage({super.key, this.loc});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          WorkshopLocationMapBloc()..add(WorkshopLocationMapStarted()),
+      create: (context) => WorkshopLocationMapBloc(location: loc)
+        ..add(WorkshopLocationMapStarted()),
       child: const WorkshopLocationMap(),
     );
   }

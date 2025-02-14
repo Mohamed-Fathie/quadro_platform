@@ -32,7 +32,11 @@ class ReviewList extends StatelessWidget {
               Divider(color: Colors.grey.shade400, thickness: 0.5.w),
           itemBuilder: (context, index) {
             final review = reviewslist[index] as ReviewDomainModel;
-            return ReviewItem(review: review);
+            if (review.reviewComment == null) {
+              return const SizedBox.shrink();
+            } else {
+              return ReviewItem(review: review);
+            }
           },
         );
       },

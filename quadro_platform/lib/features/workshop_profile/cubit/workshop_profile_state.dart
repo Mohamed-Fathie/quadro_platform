@@ -8,6 +8,8 @@ enum WorkshopProfileStatus {
   fetchreviewsuccess,
   sendingLoading,
   logout,
+  editing,
+  edited,
 }
 
 @immutable

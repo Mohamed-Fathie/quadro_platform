@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/shared/utils/serivces/image_picker_service.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
+import 'package:quadro_platform/shared/widgets/gradient_circular_progress.dart';
 
 class PickImageWidget extends StatelessWidget {
   const PickImageWidget({
@@ -33,11 +33,7 @@ class PickImageWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
-                  value: state.progress != null ? state.progress! / 100 : null,
-                  color: Qcolors.primarycolor,
-                  strokeWidth: 8.0,
-                ),
+                const GradientCircularProgress(),
                 const SizedBox(height: 10),
                 Text('${state.progress?.toStringAsFixed(2)}% تم تحميل'),
               ],
@@ -50,9 +46,14 @@ class PickImageWidget extends StatelessWidget {
             height: 130,
             child: CircleAvatar(
               backgroundColor: Colors.grey.shade200,
-              backgroundImage: state.imageProfile == null
-                  ? const AssetImage("assets/images/uberLogo/quadroLogo.png")
-                  : FileImage(File(state.imageProfile!.path)),
+              // Inside PickImageWidget's build method
+              backgroundImage: state.imageProfile != null
+                  ? FileImage(File(state.imageProfile!.path))
+                  : (state.profilImageUrl != null &&
+                          state.profilImageUrl!.isNotEmpty
+                      ? NetworkImage(state.profilImageUrl!)
+                      : const AssetImage(
+                          "assets/images/uberLogo/quadroLogo.png")),
               child: Stack(
                 children: [
                   Stack(

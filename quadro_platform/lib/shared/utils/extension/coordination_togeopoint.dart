@@ -15,3 +15,9 @@ extension LatLngExtensions on LatLng {
     return GeoFirePoint(GeoPoint(latitude, longitude));
   }
 }
+
+extension GeoPointExtension on GeoPoint {
+  LatLng toLatLng() {
+    return LatLng(latitude, longitude);
+  }
+}

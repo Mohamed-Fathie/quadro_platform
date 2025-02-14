@@ -70,6 +70,7 @@ class WorkshopRepository {
   Future<void> cacheUser(Workshop workshop) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = workshop.toJsonMap();
+    await clearCachedUser();
     await prefs.setString('cached_workshop', jsonEncode(userJson));
   }
 

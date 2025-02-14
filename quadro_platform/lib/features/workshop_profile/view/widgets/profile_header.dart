@@ -57,7 +57,7 @@ class ProfileHeader extends StatelessWidget {
                   children: [
                     RatingWidget(rating: workshopReview!["averageRating"]),
                     Text(
-                      " ${workshopReview["averageRating"]}",
+                      " ${workshopReview["averageRating"].toStringAsFixed(1)}",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],

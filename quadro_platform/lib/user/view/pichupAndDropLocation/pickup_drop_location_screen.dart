@@ -12,11 +12,11 @@ import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/user/view/bookRideScreen/book_ride_screen.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../commonn/controller/provider/location_provider.dart';
-import '../../../commonn/controller/services/firebasePushNotificationServices/direction_services.dart';
-import '../../../commonn/controller/services/location_services.dart';
-import '../../../commonn/model/pickup&drop_location_model.dart';
-import '../../../commonn/model/searched_address_model.dart';
+import '../../../common/controller/provider/location_provider.dart';
+import '../../../common/controller/services/firebasePushNotificationServices/direction_services.dart';
+import '../../../common/controller/services/location_services.dart';
+import '../../../common/model/pickup&drop_location_model.dart';
+import '../../../common/model/searched_address_model.dart';
 import '../../controller/provider/trip_providerr/ride_request_provider.dart';
 
 class PickupAndDropLocationScreen extends StatefulWidget {

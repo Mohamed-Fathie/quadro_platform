@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quadro_platform/features/google_map/model/marker_model.dart';
 import 'package:quadro_platform/features/google_map/repository/geo_conding_repository.dart';
 
-import '../../../commonn/controller/services/location_services.dart';
+import '../../../common/controller/services/location_services.dart';
 import '../model/location_service_exception.dart';
 part 'workshop_location_map_event.dart';
 part 'workshop_location_map_state.dart';
@@ -15,9 +17,11 @@ class WorkshopLocationMapBloc
     extends Bloc<WorkshopLocationMapEvent, WorkshopLocationState> {
   final GeoCodingRepository _geocoding;
   GoogleMapController? _mapController;
-  WorkshopLocationMapBloc()
+  LatLng? workshopselectedlocation;
+  WorkshopLocationMapBloc({LatLng? location})
       : _geocoding =
             GeoCodingRepository("AIzaSyBy4vQeOdM4OZlqi6Cyj6oil43a6pi-Iqg"),
+        workshopselectedlocation = location,
         super(WorkshopLocationLoading()) {
     on<WorkshopLocationConfirmed>(
       (event, emit) async {
@@ -114,7 +118,9 @@ class WorkshopLocationMapBloc
   ) async {
     emit(WorkshopLocationLoading());
     try {
-      LatLng currentLocation = await LocationServices.getCurrentLocation();
+      log("workshoplocation:${workshopselectedlocation?.toJson()}");
+      LatLng currentLocation = workshopselectedlocation ??=
+          await LocationServices.getCurrentLocation();
       List<MarkerModel> customMarkers = [
         MarkerModel(
           id: currentLocation.toString(),

@@ -10,15 +10,15 @@ import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
-import 'package:quadro_platform/commonn/controller/services/location_services.dart';
-import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
+import 'package:quadro_platform/common/controller/services/location_services.dart';
+import 'package:quadro_platform/common/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
 import 'package:quadro_platform/driver/controller/provider/driver_ride_request_provider.dart';
 import 'package:quadro_platform/driver/controller/services/rideRequestServicesForDriver/ride_request_services_for_driver.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../commonn/controller/services/firebasePushNotificationServices/direction_services.dart';
+import '../../../common/controller/services/firebasePushNotificationServices/direction_services.dart';
 
 class TripScreen extends StatefulWidget {
   TripScreen({super.key, required this.rideID});

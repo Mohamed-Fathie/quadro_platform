@@ -104,6 +104,8 @@ class UserRepository {
   Stream<UserRole?> get user {
     return _auth.authStateChanges().asyncMap(
       (firebaseUsre) async {
+        log(firebaseUsre?.uid ?? "");
+        log("we are in the listener");
         if (firebaseUsre == null) {
           return null;
         }

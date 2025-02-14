@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quadro_platform/features/google_map/model/selected_location.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/brand_list.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/dropdown_minu.dart';
@@ -8,11 +7,9 @@ import 'package:quadro_platform/features/workshop_authentication/views/widgets/p
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/save_button.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/spare_parts.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/text_area.dart';
-import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
-import 'package:quadro_platform/shared/widgets/custom_elevated_button.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';

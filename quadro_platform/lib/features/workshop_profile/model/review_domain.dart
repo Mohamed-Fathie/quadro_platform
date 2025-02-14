@@ -7,7 +7,7 @@ class ReviewDomainModel extends Equatable {
   final QuadroUser user;
 
   final double rating;
-  final String reviewComment;
+  final String? reviewComment;
   final String id;
   final String? workshopComment;
   final DateTime dateCreated;

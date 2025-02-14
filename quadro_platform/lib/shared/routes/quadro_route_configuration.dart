@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:quadro_platform/commonn/view/logInLogic/log_in_logic.dart';
-import 'package:quadro_platform/commonn/view/log_in_screen.dart';
-import 'package:quadro_platform/commonn/view/registration_screen.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/trade_license.dart';
@@ -16,12 +17,13 @@ import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_ba
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
 import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
 
-import '../../commonn/view/reset_password_screen.dart';
+import '../../common/view/reset_password_screen.dart';
 import '../../driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import '../../features/google_map/views/workshop_location_map.dart';
 import '../../features/onboarding/view/on_boarding_page.dart';
-import '../../features/request_details_screen/veiw/details_screen_page.dart';
+import '../../features/request_details_screen/view/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
+import '../../features/workshop_Editing/view/workshop_edit_page.dart';
 import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
 import '../../features/workshop_profile/view/workshop_profile_page.dart';
 import '../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
@@ -48,7 +50,11 @@ class RouteGenerator {
       case RoutesConstants.workshopBottomNavBar:
         return _materialRoute(const WorkshopNavBar());
       case RoutesConstants.workshopLocationMap:
-        return _materialRoute(const WorkshopLocationMapPage());
+        final coord = settings.arguments as LatLng?;
+        log("the location is ${coord}");
+        return _materialRoute(WorkshopLocationMapPage(
+          loc: coord,
+        ));
       case RoutesConstants.workshopSearch:
         return _materialRoute(const WorkshopSearchPage());
       case RoutesConstants.onBoardingPage:
@@ -123,7 +129,12 @@ class RouteGenerator {
         );
       case RoutesConstants.flow:
         return _pageTransition(
-          const WidgetFlow(),
+          const FlowLogin(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.workshopEdit:
+        return _pageTransition(
+          const WorkshopEditPage(),
           PageTransitionType.bottomToTop,
         );
 

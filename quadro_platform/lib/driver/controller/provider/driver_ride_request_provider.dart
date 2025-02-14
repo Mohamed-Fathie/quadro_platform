@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:quadro_platform/commonn/controller/services/location_services.dart';
-import 'package:quadro_platform/commonn/model/direction_model.dart';
-import 'package:quadro_platform/commonn/model/pickup&drop_location_model.dart';
-import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
+import 'package:quadro_platform/common/controller/services/location_services.dart';
+import 'package:quadro_platform/common/model/direction_model.dart';
+import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
+import 'package:quadro_platform/common/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/routes/navigation_service.dart';
@@ -75,7 +77,7 @@ class WorkshopList extends StatelessWidget {
                         spacing: 1.w,
                         children: [
                           Text(
-                            workshopModel.average.toString(),
+                            workshopModel.average.toStringAsFixed(1).toString(),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           RatingWidget(rating: workshopModel.average),
@@ -94,6 +96,7 @@ class WorkshopList extends StatelessWidget {
                         buttonColor: Qcolors.secondary,
                         buttonTitle: "ارسل طلب",
                         onPressed: () {
+                          log("in workshop:${workshop.toJson().toString()}");
                           NavigationService().routeTo(
                               RoutesConstants.maintenanceRequest,
                               arguments: workshop);

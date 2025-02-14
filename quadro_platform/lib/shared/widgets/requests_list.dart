@@ -69,10 +69,17 @@ class SharedRequestsList extends StatelessWidget {
               ),
             );
           }
+
+          // Check for loading specific to the list type (offers vs. requests)
+          if (status ==
+              (isOffer == true
+                  ? RequestStatus.offerloading
+                  : RequestStatus.requestloading)) {
+            return const GradientCircularProgress();
+          }
           if (status == RequestStatus.loading) {
             return const GradientCircularProgress();
           }
-
           return requests == null
               ? const GradientCircularProgress()
               : requests!.isEmpty

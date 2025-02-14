@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
@@ -76,18 +78,22 @@ class ListOfOffers extends StatelessWidget {
                 buttonTitle: "تفاصيل",
                 offerStatus: request.offer!.status.arabicName,
                 servicePrice: request.offer!.servicePrice.toString(),
-                navigatorCall: () {
-                  final re = NavigationService().routeTo(
+                navigatorCall: () async {
+                  final result = await NavigationService().routeTo(
                     RoutesConstants.requestDetails,
                     arguments: {
                       'request': request,
                       'requestType': requestType,
                     },
                   );
-                  if (re != null) {
+
+                  // Refresh if result indicates a change
+                  if (result == true) {
+                    final currentState = context.read<OffersCubit>().state;
+                    final currentIndex = currentState.index;
                     context
                         .read<OffersCubit>()
-                        .handleOfferFilterChange(0, requestType);
+                        .handleOfferFilterChange(currentIndex, requestType);
                   }
                 },
                 carBrand: request.carCompany.name,

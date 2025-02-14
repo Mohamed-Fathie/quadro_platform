@@ -10,11 +10,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:googleapis_auth/auth_io.dart' as gauth;
 import 'package:http/http.dart' as http;
-import 'package:quadro_platform/commonn/controller/services/APIS&KEYS/apis.dart';
-import 'package:quadro_platform/commonn/controller/services/APIS&KEYS/keys.dart';
-import 'package:quadro_platform/commonn/controller/services/firebasePushNotificationServices/push_notification_dialouge.dart';
-import 'package:quadro_platform/commonn/model/profile_data_model.dart';
-import 'package:quadro_platform/commonn/model/rider_request_modele.dart';
+import 'package:quadro_platform/common/controller/services/APIS&KEYS/apis.dart';
+import 'package:quadro_platform/common/controller/services/APIS&KEYS/keys.dart';
+import 'package:quadro_platform/common/controller/services/firebasePushNotificationServices/push_notification_dialouge.dart';
+import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/model/rider_request_modele.dart';
 import 'package:quadro_platform/constants/constants.dart';
 
 class PushNotivicationServices {
