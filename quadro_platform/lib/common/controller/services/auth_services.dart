@@ -271,7 +271,8 @@ class AuthServices {
 // ******************* logOutUser function *****************//
   static logOutUser(BuildContext context) async {
     await auth.signOut();
-
+    context.read<LoginBloc>().add(AppInitialization());
+    NavigationService().clearAndNavigateTo(RoutesConstants.flow);
     // context.read<LoginBloc>().add(AppInitialization());
   }
 
