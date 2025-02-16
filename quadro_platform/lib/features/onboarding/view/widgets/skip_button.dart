@@ -36,7 +36,7 @@ class SkipButton extends StatelessWidget {
                 ? TextButton(
                     onPressed: () {
                       // Skip to the main app
-                      NavigationService().replaceRoute(RoutesConstants.login);
+                      NavigationService().replaceRoute(RoutesConstants.signUp);
                     },
                     child: const Text(
                       'تخطي',

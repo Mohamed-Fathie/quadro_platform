@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quadro_platform/constants/commonWidgets/activiyt_records.dart';
-import 'package:quadro_platform/constants/utils/colors.dart';
+import 'package:quadro_platform/shared/widgets/activiyt_records.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
-import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 
 class RiderActivityScreen extends StatelessWidget {
   const RiderActivityScreen({super.key});
@@ -13,8 +10,8 @@ class RiderActivityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quadro',
-          style: AppTextStyles.heading20Bold,
+          'النشاطات',
+          style: AppTextStyles.Mheading20Bold,
         ),
       ),
       body: const ActiviytRecords()

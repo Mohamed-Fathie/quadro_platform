@@ -1,0 +1,496 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:quadro_platform/common/controller/provider/profile_data_provider.dart';
+import 'package:quadro_platform/common/controller/services/image_services.dart';
+import 'package:quadro_platform/common/controller/services/profile_data_crud_service.dart';
+import 'package:quadro_platform/common/controller/services/toast_services.dart';
+import 'package:quadro_platform/common/model/profile_data_model.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
+import 'package:quadro_platform/common/view/logInLogic/login_bloc/bloc/login_bloc.dart';
+import 'package:quadro_platform/common/view/log_in_screen.dart';
+import 'package:quadro_platform/constants/constants.dart';
+import 'package:quadro_platform/driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
+import 'package:quadro_platform/driver/view/DriverHomeScreen/driver_home_screen_builder.dart';
+import 'package:quadro_platform/features/workshop_main_screen/views/main_screen_page.dart';
+import 'package:quadro_platform/shared/routes/navigation_service.dart';
+import 'package:quadro_platform/shared/routes/routes_constants.dart';
+
+import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
+import '../../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
+import 'firebasePushNotificationServices/push_notification_services.dart';
+
+class AuthServices {
+  // ******************* loginUser function *****************//
+  static loginUser(
+      {required BuildContext context,
+      required TextEditingController emailController,
+      required TextEditingController passwordController}) async {
+    try {
+      if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+        showSnackBar(context, 'الرجاء إدخال البريد الإلكتروني وكلمة المرور.');
+        return;
+      }
+      if (context.mounted) {
+        await auth.signInWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        showSnackBar(context, ' تم تسجيل الدخول بنجاح');
+        context.read<LoginBloc>().add(AppInitialization());
+        NavigationService().clearAndNavigateTo(RoutesConstants.flow);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        log('user-not-found');
+        showSnackBar(context, 'هذا الحساب غير موجود , قم بالتسجيل اولا!');
+      } else if (e.code == 'wrong-password') {
+        showSnackBar(context, 'كلمة مرور خاطئة!');
+      } else if (e.code == 'invalid-email') {
+        showSnackBar(context, 'الرجاء ادخال البريد الالكتروني بشكل صحيح');
+      } else if (e.code == 'user-disabled') {
+        showSnackBar(context, 'تم تعطيل حسابك مؤقتا!');
+      } else if (e.code == 'invalid-credential') {
+        showSnackBar(
+            context, 'خطأ في كلمة المرور او ان البريد الالكتروني غير موجود');
+      }
+    } catch (e) {
+      showSnackBar(context, 'There was an error, please try again.');
+    }
+  }
+
+  // ******************* checkAuthentication function *****************//
+  static bool checkAuthentication() {
+    User? user = auth.currentUser;
+    if (user != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // ******************* checkAuthenticationAndNavigate function *****************//
+  static void checkAuthenticationAndNavigate({required BuildContext context}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      bool userAuthenticated = checkAuthentication();
+      if (!context.mounted) return;
+      if (userAuthenticated) {
+        checkUser(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          PageTransition(
+            child: const LogInScreen(),
+            type: PageTransitionType.bottomToTop,
+          ),
+          (route) => false,
+        );
+      }
+    });
+  }
+
+  static void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
+// ******************* registerUser function *****************//
+  static Future<bool> registerUser(
+      {required String emailController,
+      required String passwordController,
+      required BuildContext context}) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+          email: emailController, password: passwordController);
+      log('create User With Email And Password is done ');
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg: ' تم التسجيل بنجاح',
+          toastStatus: 'SUCCESS',
+          context: context,
+        );
+      }
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg: ' تم التسجيل بنجاح',
+          toastStatus: 'SUCCESS',
+          context: context,
+        );
+      }
+
+      // await Future.delayed(const Duration(seconds: 1));
+      // NavigationService().goBack();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'password_does_not_meet_requirements') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+      } else if (e.code == 'weak-password') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg:
+                'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز ',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+      } else if (e.code == 'email-already-in-use') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'هذا الحساب مسجل مسبقا',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'هذا الحساب مسجل مسبقا',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+      } else if (e.code == 'invalid-email') {
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'الرجاء ادخال البريد الالكتروني بشكل صحيح',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+        if (context.mounted) {
+          ToastService.sendScaffoldAlert(
+            msg: 'الرجاء ادخال البريد الالكتروني بشكل صحيح',
+            toastStatus: 'WARNING',
+            context: context,
+          );
+        }
+      }
+      return false;
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, 'There was an error, please try again.');
+      }
+      if (context.mounted) {
+        showSnackBar(context, 'There was an error, please try again.');
+      }
+      return false;
+    }
+  }
+
+// ******************* checkUser function *****************//
+
+  static void checkUser(BuildContext context) async {
+    try {
+      if (context.mounted) {
+        bool userIsRegistered =
+            await ProfileDataCRUDServices.checkForRegisteredUser(context);
+        if (userIsRegistered == true) {
+          // ProfileDataModel profileData =
+          //     await ProfileDataCRUDServices.getProfileDataFromRealTimeDatabase(
+          // auth.currentUser!.uid);
+          // PushNotivicationServices.initializeFirebaseMessagingForUsers(
+          //     profileData, context);
+          String userRole =
+              await ProfileDataCRUDServices.userIsTowingDriver(context);
+          if (userRole == 'التسجيل كصاحب ساحبة') {
+            FocusScope.of(context).unfocus();
+
+            context.read<ProfileDataProvider>().getProfileData();
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.driverBottomNavBar);
+            return;
+          } else if (userRole == 'التسجيل كصاحب ورشة') {
+            FocusScope.of(context).unfocus();
+
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.workshopBottomNavBar);
+            return;
+          } else {
+            FocusScope.of(context).unfocus();
+
+            context.read<ProfileDataProvider>().getProfileData();
+            NavigationService()
+                .clearAndNavigateTo(RoutesConstants.mainUserBottomNavbar);
+            return;
+          }
+        } else {
+          log('checkUser : No data for this user');
+          Navigator.pushAndRemoveUntil(
+              context,
+              PageTransition(
+                  child: const LogInScreen(),
+                  type: PageTransitionType.bottomToTop),
+              (route) => false);
+        }
+      }
+    } catch (e, stackTrace) {
+      log('userCheck error : $e');
+      log('Stack Trace: $stackTrace');
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+            msg: '!!حدث خطأ , حاول مجددا بعد قليل',
+            toastStatus: 'WARNING',
+            context: context);
+      }
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+            msg: '!!حدث خطأ , حاول مجددا بعد قليل',
+            toastStatus: 'WARNING',
+            context: context);
+      }
+    }
+  }
+
+// ******************* logOutUser function *****************//
+  static logOutUser(BuildContext context) async {
+    await auth.signOut();
+    context.read<LoginBloc>().add(AppInitialization());
+    NavigationService().clearAndNavigateTo(RoutesConstants.flow);
+    // context.read<LoginBloc>().add(AppInitialization());
+  }
+
+  static registerTowingDriver(
+      {required String userType,
+      required File? profilePic,
+      required String nameController,
+      required String mobileController,
+      required String emailController,
+      required String passwordController,
+      required String vehicleBrandController,
+      required String vehicleModelController,
+      required String selectVehicleType,
+      required String vehicleRegistrationNumberController,
+      required String drivingLicenceNumberController,
+      required context}) async {
+    if (profilePic == null) {
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg:
+              'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
+          toastStatus: 'WARNING',
+          context: context,
+        );
+      }
+      if (context.mounted) {
+        ToastService.sendScaffoldAlert(
+          msg:
+              'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
+          toastStatus: 'WARNING',
+          context: context,
+        );
+      }
+    } else if (nameController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال اسمك ',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (mobileController.isEmpty ||
+        mobileController.length < 9 ||
+        mobileController.length > 10) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال رقم هاتفك بشكل صحيح',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (emailController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال بريدك الالكتروني',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (passwordController.isEmpty || passwordController.length < 8) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال كلمة مرور قوية مكونة من 8 ارقام او اكثر',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (vehicleBrandController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'ادخل نوع المركبة , مثلا "افيكو"',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (vehicleModelController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'ادخل موديل الساحبة',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (selectVehicleType == 'اختر نوع مركبتك') {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء اختيار نوع السحب',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (vehicleRegistrationNumberController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال رقم هيكل السيارة',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (drivingLicenceNumberController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'يرجى ادخال رقم رخصتك',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else {
+      bool isRegistered = await AuthServices.registerUser(
+          emailController: emailController,
+          passwordController: passwordController,
+          context: context);
+      if (!isRegistered) return;
+      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
+          image: File(profilePic.path), context: context);
+      ProfileDataModel profileData = ProfileDataModel(
+        profilePicUrl: profilePicURL,
+        name: nameController.trim(),
+        mobileNumber: mobileController.trim(),
+        email: auth.currentUser!.email!,
+        password: passwordController.trim(),
+        userType: userType,
+        vehicleBrandName: vehicleBrandController.trim(),
+        vehicleModel: vehicleModelController.trim(),
+        vehicleType: selectVehicleType,
+        vehicleRegistrationNumber: vehicleRegistrationNumberController.trim(),
+        drivingLicenseNumber: drivingLicenceNumberController.trim(),
+        registeredDateTime: DateTime.now(),
+      );
+      await ProfileDataCRUDServices.registerUserToDatabase(
+          profileData: profileData, context: context);
+    }
+  }
+
+  static registerCustomerAndWorkShopPartner(
+      {required String userType,
+      required File? profilePic,
+      required String nameController,
+      required String mobileController,
+      required String emailController,
+      required String passwordController,
+      required context}) async {
+    if (profilePic == null) {
+      ToastService.sendScaffoldAlert(
+        msg:
+            'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (nameController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال اسمك ',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (mobileController.isEmpty ||
+        mobileController.length < 9 ||
+        mobileController.length > 10) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال رقم هاتفك بشكل صحيح',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (emailController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال بريدك الالكتروني',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else if (passwordController.isEmpty || passwordController.length < 8) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال كلمة مرور قوية مكونة من 8 ارقام او اكثر',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+    } else {
+      bool isRegistered = await AuthServices.registerUser(
+          emailController: emailController,
+          passwordController: passwordController,
+          context: context);
+
+      if (!isRegistered) return;
+      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
+          image: File(profilePic.path), context: context);
+
+      ProfileDataModel profileData = ProfileDataModel(
+        profilePicUrl: profilePicURL,
+        name: nameController.trim(),
+        mobileNumber: mobileController.trim(),
+        email: auth.currentUser!.email!,
+        password: passwordController.trim(),
+        userType: userType,
+        registeredDateTime: DateTime.now(),
+      );
+
+      await ProfileDataCRUDServices.registerUserToDatabase(
+          profileData: profileData, context: context);
+    }
+  }
+
+  static resetPassword({required String emailController, required context}) {
+    if (emailController.isEmpty) {
+      ToastService.sendScaffoldAlert(
+        msg: 'الرجاء ادخال بريدك الالكتروني',
+        toastStatus: 'WARNING',
+        context: context,
+      );
+      return;
+    }
+    auth.sendPasswordResetEmail(email: emailController).then((value) {
+      log("تم إرسال رابط إعادة التعيين");
+      ToastService.sendScaffoldAlert(
+        msg:
+            'تم ارسال رابط تعيين كلمة المرور الجديدة على بريدك الالكتروني ، الرجاء التحقق من بريدك الالكتروني',
+        toastStatus: 'SUCCESS',
+        context: context,
+      );
+      NavigationService().goBack();
+    }).catchError((error) {
+      String errorMessage = 'حدث خطأ، يرجى المحاولة لاحقًا.';
+      if (error is FirebaseAuthException) {
+        switch (error.code) {
+          case 'invalid-email':
+            errorMessage = 'البريد الإلكتروني الذي أدخلته غير صالح.';
+            break;
+          case 'user-not-found':
+            errorMessage = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+            break;
+        }
+      }
+      ToastService.sendScaffoldAlert(
+        msg: errorMessage,
+        toastStatus: 'WARNING',
+        context: context,
+      );
+      log("حدث خطأ: $error");
+    });
+  }
+}
