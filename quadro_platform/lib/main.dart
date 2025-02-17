@@ -33,6 +33,7 @@ import 'package:quadro_platform/user/controller/provider/trip_providerr/ride_req
 import 'package:sizer/sizer.dart';
 
 import 'features/google_map/views/workshop_location_map.dart';
+import 'features/quadro_sing_up/views/sing_up_page.dart';
 import 'features/workshop_profile/repository/reviews_repository.dart';
 
 void main() async {

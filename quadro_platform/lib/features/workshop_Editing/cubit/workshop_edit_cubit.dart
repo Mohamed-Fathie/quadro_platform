@@ -33,6 +33,8 @@ class WorkshopEditBloc extends Cubit<WorkshopEditState> {
   @override
   Future<void> close() {
     descriptionController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
     return super.close();
   }
 

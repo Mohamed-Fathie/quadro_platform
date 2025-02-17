@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/common/view/logInLogic/login_bloc/bloc/login_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/brand_list.dart';
 import 'package:quadro_platform/features/workshop_authentication/views/widgets/dropdown_minu.dart';
@@ -14,8 +15,11 @@ import 'package:quadro_platform/shared/widgets/section_header.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../common/controller/services/toast_services.dart';
 import '../../../shared/enum/maitenance_request_status.dart';
 import 'widgets/location_button.dart';
+import 'widgets/workshop_name_auth.dart';
+import 'widgets/workshop_phone_auth.dart';
 
 class WorkshopDetainsPage extends StatelessWidget {
   final WorkshopAuthbloc detailscubit;
@@ -57,18 +61,20 @@ class WorkshopRegisterationView extends StatelessWidget {
     return BlocListener<WorkshopAuthbloc, WorkshopAuthblocState>(
       listener: (context, state) {
         if (state.status == WorkshopAuthStatus.failure) {
-          debugPrint('Error: ${state.exception}');
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.exception ?? 'حدث خطأ أثناء المصادقة'),
-              ),
-            );
+          ToastService.sendScaffoldAlert(
+            msg: state.exception!,
+            toastStatus: 'WARNING',
+            context: context,
+          );
         }
         if (state.status == WorkshopAuthStatus.workshopAuthenticated) {
-          NavigationService()
-              .clearAndNavigateTo(RoutesConstants.workshopBottomNavBar);
+          ToastService.sendScaffoldAlert(
+            msg: "تم التسجيل بنجاح",
+            toastStatus: 'SUCCESS',
+            context: context,
+          );
+          context.read<LoginBloc>().add(AppInitialization());
+          NavigationService().clearAndNavigateTo(RoutesConstants.flow);
         }
       },
       child: SingleChildScrollView(
@@ -83,6 +89,17 @@ class WorkshopRegisterationView extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             const VerticalSpacing(height: 40),
+            const SectionHeader(
+                requestType: RequestType.workshop_id, text: "اضف اسم للورشة"),
+            const VerticalSpacing(height: 25),
+            const WorkshopName(),
+            const VerticalSpacing(height: 25),
+            const SectionHeader(
+                requestType: RequestType.workshop_id,
+                text: "اضف رقم الهاتف للورشة"),
+            const VerticalSpacing(height: 25),
+            const WorkshopPhone(),
+            const VerticalSpacing(height: 25),
             const SectionHeader(
                 requestType: RequestType.workshop_id, text: "اضف وصف للورشة"),
             const VerticalSpacing(height: 25),

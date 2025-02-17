@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/common/view/registration_screen.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
@@ -21,6 +19,10 @@ import '../../common/view/reset_password_screen.dart';
 import '../../driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import '../../features/google_map/views/workshop_location_map.dart';
 import '../../features/onboarding/view/on_boarding_page.dart';
+import '../../features/quadro_sing_up/views/role_selection_page.dart';
+import '../../features/quadro_sing_up/views/sing_up_page.dart';
+import '../../features/quadro_sing_up/views/tow_owner_page.dart';
+import '../../features/quadro_sing_up/views/vehicle_owner_page.dart';
 import '../../features/request_details_screen/view/details_screen_page.dart';
 import '../../features/sending_offers/view/sending_offer_page.dart';
 import '../../features/workshop_Editing/view/workshop_edit_page.dart';
@@ -127,9 +129,24 @@ class RouteGenerator {
           UserBottomNavBar(),
           PageTransitionType.bottomToTop,
         );
+      case RoutesConstants.vehicleonwerpage:
+        return _pageTransition(
+          const VehicleOwnerScreen(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.roleSelection:
+        return _pageTransition(
+          const RegisterationPage(),
+          PageTransitionType.bottomToTop,
+        );
       case RoutesConstants.flow:
         return _pageTransition(
           const FlowLogin(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.singUpPage:
+        return _pageTransition(
+          const SingUpPage(),
           PageTransitionType.bottomToTop,
         );
       case RoutesConstants.workshopEdit:
@@ -141,6 +158,11 @@ class RouteGenerator {
       case RoutesConstants.resetPassWordScreen:
         return _pageTransition(
           ResetPassWordScreen(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.towOwnerPage:
+        return _pageTransition(
+          const TowOwnerPage(),
           PageTransitionType.bottomToTop,
         );
 

@@ -81,6 +81,7 @@ class FlowLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<LoginBloc>().add(AppInitialization());
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         if (state is Authenticated) {

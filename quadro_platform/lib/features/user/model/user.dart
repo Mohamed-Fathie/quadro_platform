@@ -2,7 +2,7 @@ import 'package:quadro_platform/shared/enum/user_role.dart';
 
 class QuadroUser {
   final String id;
-  final String name;
+  final String? name;
   final String email;
   final String? phone;
   final UserRole? role;
@@ -39,7 +39,7 @@ class QuadroUser {
   factory QuadroUser.fromJson(Map<String, dynamic> json, String id) {
     return QuadroUser(
       id: id, // Use email as ID if no user_id is provided
-      name: json['name'] as String,
+      name: json['name'] as String?,
       email: json['email'] as String,
       phone:
           json['mobileNumber']?.toString(), // Convert to string if it's an int
@@ -55,9 +55,9 @@ class QuadroUser {
       'user_id': id,
       'name': name,
       'email': email,
-      'phone': phone,
-      'role': "", // Convert enum to string
-      'profile_picture': pictureUrl,
+      'mobileNumber': phone,
+      'userType': role?.toLabel(), // Convert enum to string
+      'profilePicUrl': pictureUrl,
     };
   }
 }

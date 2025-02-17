@@ -120,7 +120,7 @@ class SharedRequestsList extends StatelessWidget {
                               carBrand: offer.carCompany.name,
                               carModel: offer.carModel.name,
                               dateCreated: offer.offer!.dateCreated.toDate(),
-                              userName: offer.user.name,
+                              userName: offer.user.name ?? "null user",
                             );
                           },
                         )
@@ -144,7 +144,7 @@ class SharedRequestsList extends StatelessWidget {
                                   carBrand: request.carCompany.name,
                                   carModel: request.carModel.name,
                                   dateCreated: request.dateCreated,
-                                  userName: request.user.name,
+                                  userName: request.user.name ?? "null user",
                                 );
                               },
                             )
@@ -195,7 +195,8 @@ class SharedRequestsList extends StatelessWidget {
                                       carBrand: request.carCompany.name,
                                       carModel: request.carModel.name,
                                       dateCreated: request.dateCreated,
-                                      userName: request.user.name,
+                                      userName:
+                                          request.user.name ?? "null user",
                                     );
                                   },
                                 );

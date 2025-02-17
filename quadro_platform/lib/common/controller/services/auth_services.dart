@@ -204,6 +204,32 @@ class AuthServices {
     }
   }
 
+  //*************************edited sign up ************************ */
+  static Future<String?> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return null; // Sign-up succeeded
+    } on FirebaseAuthException catch (e) {
+      // Map FirebaseAuthException codes to user-friendly messages
+      if (e.code == 'password_does_not_meet_requirements' ||
+          e.code == 'weak-password') {
+        return 'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز';
+      } else if (e.code == 'email-already-in-use') {
+        return 'هذا الحساب مسجل مسبقا';
+      } else if (e.code == 'invalid-email') {
+        return 'الرجاء ادخال البريد الالكتروني بشكل صحيح';
+      }
+      return 'حدث خطأ غير متوقع. الرجاء المحاولة مرة اخرى.';
+    } catch (e) {
+      // For any other exceptions, return a generic error message
+      return 'حدث خطأ غير متوقع. الرجاء المحاولة مرة اخرى.';
+    }
+  }
+
 // ******************* checkUser function *****************//
 
   static void checkUser(BuildContext context) async {
