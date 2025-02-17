@@ -61,7 +61,6 @@ class RideRequestProvider extends ChangeNotifier {
     int quadroGoHookDurationPerMinute = 2;
     double quadroWheelLeftDurationPerMinute = 2.5;
     int quadroIntegratedTowDurationPerMinute = 3;
-
     quadroHookFare = (baseFare +
             quadroGoHookDistancePerKM *
                 double.parse(

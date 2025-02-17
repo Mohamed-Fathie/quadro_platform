@@ -58,9 +58,10 @@ class ProfileDataCRUDServices {
     }
   }
 
-  static registerUserToDatabase(
-      {required ProfileDataModel profileData,
-      required BuildContext context}) async {
+  static registerUserToDatabase({
+    required ProfileDataModel profileData,
+    // required BuildContext context
+  }) async {
     // if (auth.currentUser == null) {
     //   Navigator.pushAndRemoveUntil(
     //       context,
@@ -82,11 +83,11 @@ class ProfileDataCRUDServices {
         .child('User/${auth.currentUser!.uid}')
         .set(profileData.toMap())
         .then((value) {
-      ToastService.sendScaffoldAlert(
-        msg: 'تم تسجيلك بنجاح',
-        toastStatus: 'SUCCESS',
-        context: context,
-      );
+      // ToastService.sendScaffoldAlert(
+      //   msg: 'تم تسجيلك بنجاح',
+      //   toastStatus: 'SUCCESS',
+      //   context: context,
+      // );
       log("message");
       if (profileData.userType != null &&
           profileData.userType!.contains("التسجيل كصاحب ورشة")) {
@@ -101,11 +102,11 @@ class ProfileDataCRUDServices {
         //     (route) => false);
       }
     }).onError((error, stackTrace) {
-      ToastService.sendScaffoldAlert(
-        msg: 'Opps! Error getting Registered',
-        toastStatus: 'SUCCESS',
-        context: context,
-      );
+      // ToastService.sendScaffoldAlert(
+      //   msg: 'Opps! Error getting Registered',
+      //   toastStatus: 'SUCCESS',
+      //   context: context,
+      // );
     });
   }
 

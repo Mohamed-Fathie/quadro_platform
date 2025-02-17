@@ -31,6 +31,18 @@ class UserRepository {
     }
   }
 
+  Future<void> updateUserFields(
+      String id, Map<String, dynamic> fieldsToUpdate) async {
+    try {
+      // This updates only the fields provided in the fieldsToUpdate map,
+      // leaving any other fields intact.
+      await userRef.child('User/$id').update(fieldsToUpdate);
+    } on FirebaseException catch (e) {
+      // Customize this error handling as needed for your app.
+      throw FirestoreReadWriteFailure.fromCode(e.code);
+    }
+  }
+
   Future<void> addUserToFirebaseAuth(
       String name, String email, String? phone, String imageUrl) async {
     final user = _auth.currentUser!;
@@ -46,6 +58,7 @@ class UserRepository {
 
 // getter for user id from firebase auth
   String? get getuserId => _auth.currentUser?.uid;
+  User? get getUser => _auth.currentUser;
 
   /// Gets the current user, if authenticated.
   Future<QuadroUser?> getCurrentUser() async {
@@ -69,7 +82,6 @@ class UserRepository {
     try {
       final docSnapshot = await userRef.child('User/$id').get();
       // Check if the snapshot contains data
-      log(docSnapshot.value.toString());
       if (docSnapshot.exists) {
         // Convert the snapshot value to a Map and then to a QuadroUser object
         return QuadroUser.fromJson(
@@ -104,8 +116,6 @@ class UserRepository {
   Stream<UserRole?> get user {
     return _auth.authStateChanges().asyncMap(
       (firebaseUsre) async {
-        log(firebaseUsre?.uid ?? "");
-        log("we are in the listener");
         if (firebaseUsre == null) {
           return null;
         }

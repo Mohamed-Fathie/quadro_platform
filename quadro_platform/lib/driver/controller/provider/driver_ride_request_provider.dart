@@ -7,7 +7,6 @@ import 'package:quadro_platform/common/controller/services/location_services.dar
 import 'package:quadro_platform/common/model/direction_model.dart';
 import 'package:quadro_platform/common/model/pickup&drop_location_model.dart';
 import 'package:quadro_platform/common/model/rider_request_modele.dart';
-
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 

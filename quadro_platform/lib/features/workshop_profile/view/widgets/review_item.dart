@@ -35,7 +35,7 @@ class ReviewItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      review.user.name,
+                      review.user.name ?? " null user",
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     Text(

@@ -13,7 +13,8 @@ enum WorkshopAuthStatus {
 @immutable
 class WorkshopAuthblocState extends Equatable {
   final XFile? imageProfile;
-
+  final String name;
+  final String phone;
   final String? profilImageUrl;
   final String? idcardUrl;
   final String? licensUrl;
@@ -35,6 +36,8 @@ class WorkshopAuthblocState extends Equatable {
     this.location = null,
     this.status = WorkshopAuthStatus.initial,
     this.description = "",
+    this.name = '',
+    this.phone = '',
     this.brands = const <CarBrand>[],
     this.partsStatus = const <SparePartsStatus, bool>{
       SparePartsStatus.New: false,
@@ -56,6 +59,8 @@ class WorkshopAuthblocState extends Equatable {
     Map<SparePartsStatus, bool>? partsStatus,
     WorkshopAuthStatus? status,
     SelectedLocation? location,
+    String? name,
+    String? phone,
   }) {
     return WorkshopAuthblocState(
         progress: progress ?? this.progress,
@@ -68,6 +73,8 @@ class WorkshopAuthblocState extends Equatable {
         brands: brands ?? this.brands,
         partsStatus: partsStatus ?? this.partsStatus,
         location: location ?? this.location,
+        name: name ?? this.name,
+        phone: phone ?? this.phone,
         status: status ?? this.status);
   }
 
@@ -83,7 +90,9 @@ class WorkshopAuthblocState extends Equatable {
         brands,
         partsStatus,
         status,
-        location
+        location,
+        name,
+        phone,
       ];
 
   /// Filters and returns only the `true` keys from `partsStatus`

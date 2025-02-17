@@ -21,4 +21,8 @@ class RoutesConstants {
   static const String error = 'error';
   static const String flow = 'flow';
   static const String workshopEdit = 'workshopEdit';
+  static const String roleSelection = 'roleSelection';
+  static const String vehicleonwerpage = 'vehicleonwerpage';
+  static const String towOwnerPage = 'TowOwnerPage';
+  static const String singUpPage = 'SingUpPage';
 }

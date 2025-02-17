@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
 import 'package:quadro_platform/shared/utils/serivces/image_picker_service.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
-import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:quadro_platform/shared/widgets/gradient_circular_progress.dart';
 
 class PickImageWidget extends StatelessWidget {
@@ -15,18 +14,7 @@ class PickImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WorkshopAuthbloc, WorkshopAuthblocState>(
-      listener: (context, state) {
-        if (state.exception != null) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                content: Text("فشل تحميل الصورة"),
-              ),
-            );
-        }
-      },
+    return BlocBuilder<WorkshopAuthbloc, WorkshopAuthblocState>(
       builder: (context, state) {
         if (state.status == WorkshopAuthStatus.loading) {
           return Center(

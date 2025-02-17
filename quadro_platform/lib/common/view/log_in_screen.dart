@@ -113,7 +113,7 @@ class _LogInScreenState extends State<LogInScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    NavigationService().routeTo(RoutesConstants.signUp);
+                    NavigationService().routeTo(RoutesConstants.singUpPage);
                   },
                   child: Text(
                     "انشاء حساب ",

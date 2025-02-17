@@ -6,7 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:quadro_platform/common/controller/services/location_services.dart';
 import 'package:quadro_platform/common/model/rider_request_modele.dart';
-
 import 'package:quadro_platform/constants/constants.dart';
 import 'package:quadro_platform/constants/utils/colors.dart';
 import 'package:quadro_platform/constants/utils/textStyles.dart';
@@ -129,73 +128,84 @@ class PushNotificationDialouge {
                     width: 6.w,
                   ),
                   Consumer<DriverRideRequestProvider>(
-  builder: (context, driverProvider, child) {
-    return SwipeButton(
-      thumbPadding: EdgeInsets.all(1.3.w),
-      thumb: Icon(
-        Icons.chevron_right,
-        color: white,
-      ),
-      inactiveThumbColor: success,
-      activeThumbColor: success,
-      inactiveTrackColor: grey,
-      activeTrackColor: grey,
-      elevationThumb: 2,
-      elevationTrack: 2,
-      onSwipe: () async {
-        driverProvider.setLoading(true); // تفعيل التحميل
+                    builder: (context, driverProvider, child) {
+                      return SwipeButton(
+                        thumbPadding: EdgeInsets.all(1.3.w),
+                        thumb: Icon(
+                          Icons.chevron_right,
+                          color: white,
+                        ),
+                        inactiveThumbColor: success,
+                        activeThumbColor: success,
+                        inactiveTrackColor: grey,
+                        activeTrackColor: grey,
+                        elevationThumb: 2,
+                        elevationTrack: 2,
+                        onSwipe: () async {
+                          driverProvider.setLoading(true); // تفعيل التحميل
 
-        try {
-          driverProvider.updateRideRequestData(rideRequestModel, rideID);
-          driverProvider.updateTripPickupAndDropLocation(
-            rideRequestModel.pickupLocation,
-            rideRequestModel.dropLocation,
-          );
-          driverProvider.createIcons(context);
+                          try {
+                            driverProvider.updateRideRequestData(
+                                rideRequestModel, rideID);
+                            driverProvider.updateTripPickupAndDropLocation(
+                              rideRequestModel.pickupLocation,
+                              rideRequestModel.dropLocation,
+                            );
+                            driverProvider.createIcons(context);
 
-          LatLng currentDriverLocation =
-              await LocationServices.getCurrentLocation();
-          driverProvider.updateRideAcceptLocation(currentDriverLocation);
+                            LatLng currentDriverLocation =
+                                await LocationServices.getCurrentLocation();
+                            driverProvider.updateRideAcceptLocation(
+                                currentDriverLocation);
 
-          LatLng pickupLocation = LatLng(
-            rideRequestModel.pickupLocation.latitude!,
-            rideRequestModel.pickupLocation.longitude!,
-          );
+                            LatLng pickupLocation = LatLng(
+                              rideRequestModel.pickupLocation.latitude!,
+                              rideRequestModel.pickupLocation.longitude!,
+                            );
 
-          await DirectionServices.getDirectionDetailsForDriver(
-              currentDriverLocation, pickupLocation, context);
+                            await DirectionServices
+                                .getDirectionDetailsForDriver(
+                                    currentDriverLocation,
+                                    pickupLocation,
+                                    context);
 
-          driverProvider.decodePolylineAndUpdatePolylineField();
-          driverProvider.updateUpdateMarkerStatus(true);
-          driverProvider.updateMovingFromCurrentLocationToPickupLocationStatus(
-              true);
-          driverProvider.updateMarker();
+                            driverProvider
+                                .decodePolylineAndUpdatePolylineField();
+                            driverProvider.updateUpdateMarkerStatus(true);
+                            driverProvider
+                                .updateMovingFromCurrentLocationToPickupLocationStatus(
+                                    true);
+                            driverProvider.updateMarker();
 
-          RideRequestServicesForDriver.acceptRideRequest(rideID, context);
-          RideRequestServicesForDriver.updateRideRequestStatus(
-              RideRequestServicesForDriver.getRideStatus(1), rideID);
-          RideRequestServicesForDriver.updateRideRequestID(rideID);
+                            RideRequestServicesForDriver.acceptRideRequest(
+                                rideID, context);
+                            RideRequestServicesForDriver
+                                .updateRideRequestStatus(
+                                    RideRequestServicesForDriver.getRideStatus(
+                                        1),
+                                    rideID);
+                            RideRequestServicesForDriver.updateRideRequestID(
+                                rideID);
 
-          log('on Swipe rideID : $rideID');
+                            log('on Swipe rideID : $rideID');
 
-          audioPlayer.stop();
-          Navigator.pop(context);
-        } finally {
-          driverProvider.setLoading(false); // تعطيل التحميل
-        }
-      },
-      child: driverProvider.isLoading
-          ? CircularProgressIndicator(
-              color: Colors.white,
-            )
-          : Text(
-              'قبول طلب السحب',
-              style: AppTextStyles.Mbody18Bold,
-            ),
-    );
-  },
-),
-
+                            audioPlayer.stop();
+                            Navigator.pop(context);
+                          } finally {
+                            driverProvider.setLoading(false); // تعطيل التحميل
+                          }
+                        },
+                        child: driverProvider.isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                'قبول طلب السحب',
+                                style: AppTextStyles.Mbody18Bold,
+                              ),
+                      );
+                    },
+                  ),
                   SizedBox(
                     height: 2.h,
                   ),

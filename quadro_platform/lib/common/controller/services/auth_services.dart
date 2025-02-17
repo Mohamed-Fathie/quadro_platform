@@ -204,6 +204,32 @@ class AuthServices {
     }
   }
 
+  //*************************edited sign up ************************ */
+  static Future<String?> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return null; // Sign-up succeeded
+    } on FirebaseAuthException catch (e) {
+      // Map FirebaseAuthException codes to user-friendly messages
+      if (e.code == 'password_does_not_meet_requirements' ||
+          e.code == 'weak-password') {
+        return 'يجب ان تكون كلمة السر مكونة من 8 احرف او اكثر مع مزيج من الارقام والرموز';
+      } else if (e.code == 'email-already-in-use') {
+        return 'هذا الحساب مسجل مسبقا';
+      } else if (e.code == 'invalid-email') {
+        return 'الرجاء ادخال البريد الالكتروني بشكل صحيح';
+      }
+      return 'حدث خطأ غير متوقع. الرجاء المحاولة مرة اخرى.';
+    } catch (e) {
+      // For any other exceptions, return a generic error message
+      return 'حدث خطأ غير متوقع. الرجاء المحاولة مرة اخرى.';
+    }
+  }
+
 // ******************* checkUser function *****************//
 
   static void checkUser(BuildContext context) async {
@@ -276,117 +302,38 @@ class AuthServices {
     // context.read<LoginBloc>().add(AppInitialization());
   }
 
-  static registerTowingDriver(
-      {required String userType,
-      required File? profilePic,
-      required String nameController,
-      required String mobileController,
-      required String emailController,
-      required String passwordController,
-      required String vehicleBrandController,
-      required String vehicleModelController,
-      required String selectVehicleType,
-      required String vehicleRegistrationNumberController,
-      required String drivingLicenceNumberController,
-      required context}) async {
-    if (profilePic == null) {
-      if (context.mounted) {
-        ToastService.sendScaffoldAlert(
-          msg:
-              'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
-          toastStatus: 'WARNING',
-          context: context,
-        );
-      }
-      if (context.mounted) {
-        ToastService.sendScaffoldAlert(
-          msg:
-              'الرجاء اختيار صورة شخصية واضحة المعالم لك , لغرض الامان والموثوقية',
-          toastStatus: 'WARNING',
-          context: context,
-        );
-      }
-    } else if (nameController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء ادخال اسمك ',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (mobileController.isEmpty ||
-        mobileController.length < 9 ||
-        mobileController.length > 10) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء ادخال رقم هاتفك بشكل صحيح',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (emailController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء ادخال بريدك الالكتروني',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (passwordController.isEmpty || passwordController.length < 8) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء ادخال كلمة مرور قوية مكونة من 8 ارقام او اكثر',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleBrandController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'ادخل نوع المركبة , مثلا "افيكو"',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleModelController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'ادخل موديل الساحبة',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (selectVehicleType == 'اختر نوع مركبتك') {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء اختيار نوع السحب',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (vehicleRegistrationNumberController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'الرجاء ادخال رقم هيكل السيارة',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else if (drivingLicenceNumberController.isEmpty) {
-      ToastService.sendScaffoldAlert(
-        msg: 'يرجى ادخال رقم رخصتك',
-        toastStatus: 'WARNING',
-        context: context,
-      );
-    } else {
-      bool isRegistered = await AuthServices.registerUser(
-          emailController: emailController,
-          passwordController: passwordController,
-          context: context);
-      if (!isRegistered) return;
-      String profilePicURL = await ImageServices.uploadImageToFirebaseStorage(
-          image: File(profilePic.path), context: context);
-      ProfileDataModel profileData = ProfileDataModel(
-        profilePicUrl: profilePicURL,
-        name: nameController.trim(),
-        mobileNumber: mobileController.trim(),
-        email: auth.currentUser!.email!,
-        password: passwordController.trim(),
-        userType: userType,
-        vehicleBrandName: vehicleBrandController.trim(),
-        vehicleModel: vehicleModelController.trim(),
-        vehicleType: selectVehicleType,
-        vehicleRegistrationNumber: vehicleRegistrationNumberController.trim(),
-        drivingLicenseNumber: drivingLicenceNumberController.trim(),
-        registeredDateTime: DateTime.now(),
-      );
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
-    }
+  static registerTowingDriver({
+    required String userType,
+    required String? profilePic,
+    required String nameController,
+    required String mobileController,
+    required String emailController,
+    required String passwordController,
+    required String vehicleBrandController,
+    required String vehicleModelController,
+    required String selectVehicleType,
+    required String vehicleRegistrationNumberController,
+    required String drivingLicenceNumberController,
+    // required context
+  }) async {
+    ProfileDataModel profileData = ProfileDataModel(
+      profilePicUrl: profilePic,
+      name: nameController.trim(),
+      mobileNumber: mobileController.trim(),
+      email: auth.currentUser!.email!,
+      password: passwordController.trim(),
+      userType: userType,
+      vehicleBrandName: vehicleBrandController.trim(),
+      vehicleModel: vehicleModelController.trim(),
+      vehicleType: selectVehicleType,
+      vehicleRegistrationNumber: vehicleRegistrationNumberController.trim(),
+      drivingLicenseNumber: drivingLicenceNumberController.trim(),
+      registeredDateTime: DateTime.now(),
+    );
+    await ProfileDataCRUDServices.registerUserToDatabase(
+      profileData: profileData,
+      // context: context
+    );
   }
 
   static registerCustomerAndWorkShopPartner(
@@ -450,8 +397,8 @@ class AuthServices {
         registeredDateTime: DateTime.now(),
       );
 
-      await ProfileDataCRUDServices.registerUserToDatabase(
-          profileData: profileData, context: context);
+      // await ProfileDataCRUDServices.registerUserToDatabase(
+      //     profileData: profileData, context: context);
     }
   }
 

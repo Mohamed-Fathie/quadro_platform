@@ -49,8 +49,6 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
             errorMessage: "مستخدم غير مصرح"));
         return;
       }
-      log(user.name);
-      log(user.phone ?? "phone is null");
       emit(state.copyWith(
           status: MainUserScreenStatus.success, userName: user.name));
     } on Exception catch (e) {

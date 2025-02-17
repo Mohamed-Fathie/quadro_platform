@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quadro_platform/features/google_map/model/selected_location.dart';
+import 'package:quadro_platform/features/user/model/user.dart';
 import 'package:quadro_platform/features/user/repository/user_repository.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/firestore_exceptions.dart';
 import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
@@ -14,6 +15,7 @@ import 'package:quadro_platform/shared/enum/car_brands.dart';
 import 'package:quadro_platform/shared/enum/image_type.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
+import '../../../shared/enum/user_role.dart';
 import '../../../shared/utils/extension/coordination_togeopoint.dart';
 
 part 'authbloc_state.dart';
@@ -29,12 +31,26 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
 
   final TextEditingController menuController = TextEditingController();
   final TextEditingController textareaController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   @override
   Future<void> close() {
     menuController.dispose();
     textareaController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
     return super.close();
+  }
+
+  void updateName(String value) {
+    nameController.text = value;
+    emit(state.copyWith(name: value, status: WorkshopAuthStatus.success));
+  }
+
+  void updatePhone(String value) {
+    phoneController.text = value;
+    emit(state.copyWith(phone: value, status: WorkshopAuthStatus.success));
   }
 
   // Add image for workshop
@@ -90,7 +106,6 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
         case ImageType.maintenance:
       }
     } catch (e) {
-      log(e.toString());
       emit(state.copyWith(
         exception: e.toString(),
         status: WorkshopAuthStatus.failure,
@@ -114,7 +129,7 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
   }
 
   void updateText(String text) {
-    emit(state.copyWith(description: text));
+    emit(state.copyWith(description: text, status: WorkshopAuthStatus.success));
   }
 
   // Select spare parts status
@@ -130,19 +145,29 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
   }
 
   void onSelectedLocation(SelectedLocation location) {
-    emit(state.copyWith(location: location));
+    emit(
+        state.copyWith(location: location, status: WorkshopAuthStatus.success));
   }
 
   // Save data to repository
   Future<void> saveData() async {
-    final currentUser = await _user.getUserById((_user.getuserId!));
-
-    if (currentUser == null) {
+    if (state.phone.isEmpty || !RegExp(r'^[0-9]{10}$').hasMatch(state.phone)) {
       emit(state.copyWith(
-          exception: "المستخدم ليس موثق", status: WorkshopAuthStatus.failure));
+        status: WorkshopAuthStatus.failure,
+        exception: 'رقم الهاتف غير صحيح',
+      ));
+      return;
+    }
+
+    if (state.name.isEmpty) {
+      emit(state.copyWith(
+        status: WorkshopAuthStatus.failure,
+        exception: 'يرجى إدخال اسم الورشة',
+      ));
       return;
     }
     // Check for location
+
     if (state.location == null) {
       emit(state.copyWith(
         exception: "يرجى اختيار الموقع", // "Please select a location"
@@ -159,15 +184,47 @@ class WorkshopAuthbloc extends Cubit<WorkshopAuthblocState> {
       ));
       return;
     }
+    if (state.partsStatus.isEmpty) {
+      emit(state.copyWith(
+        exception:
+            "يرجى اختيار نوع القطع", // "Please select at least one brand"
+        status: WorkshopAuthStatus.failure,
+      ));
+      return;
+    }
+    if (state.profilImageUrl == null) {
+      emit(state.copyWith(
+        exception:
+            "يرجى اختيار صورة للورشة", // "Please select at least one brand"
+        status: WorkshopAuthStatus.failure,
+      ));
+      return;
+    }
 
     try {
+      final authUser = _user.getUser;
+      await _user.addUser(QuadroUser(
+          id: authUser!.uid,
+          name: state.name,
+          email: authUser.email ?? "",
+          phone: state.phone,
+          pictureUrl: state.profilImageUrl,
+          role: UserRole.workshopOwner));
+      final currentUser = await _user.getUserById((_user.getuserId!));
+
+      if (currentUser == null) {
+        emit(state.copyWith(
+            exception: "المستخدم ليس موثق",
+            status: WorkshopAuthStatus.failure));
+        return;
+      }
       emit(state.copyWith(status: WorkshopAuthStatus.loading));
       final workshop = Workshop(
         imagePath: currentUser.pictureUrl ?? "",
         city: state.location?.city,
         coordination: state.location!.coordinates.toGeoFirePoint(),
         street: state.location?.street,
-        name: currentUser.name,
+        name: currentUser.name!,
         ownerId: currentUser.id,
         description: state.description,
         phone: currentUser.phone ?? "",

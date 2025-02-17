@@ -63,7 +63,7 @@ class ListOfOffers extends StatelessWidget {
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,
                 dateCreated: request.dateCreated,
-                userName: request.user.name,
+                userName: request.user.name ?? "null user",
               ),
             );
           }
@@ -99,7 +99,7 @@ class ListOfOffers extends StatelessWidget {
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,
                 dateCreated: request.offer!.dateCreated.toDate(),
-                userName: request.user.name,
+                userName: request.user.name ?? "null user",
               ));
         },
       ).toList(),
