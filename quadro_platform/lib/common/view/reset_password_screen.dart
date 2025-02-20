@@ -87,7 +87,7 @@ class ResetPassWordScreen extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    NavigationService().routeTo(RoutesConstants.signUp);
+                    NavigationService().routeTo(RoutesConstants.singUpPage);
                   },
                   child: Text(
                     "انشاء حساب ",

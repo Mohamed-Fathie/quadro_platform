@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -17,7 +18,7 @@ class RatingWidget extends StatelessWidget {
         color: Colors.amber,
       ),
       itemCount: 5,
-      itemSize: 5.w,
+      itemSize: kIsWeb ? 2.w : 5.w,
       direction: Axis.horizontal,
     );
   }

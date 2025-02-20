@@ -17,8 +17,10 @@ class MainScreenState extends Equatable {
   final List<MaintenanceRequestDomainModel>? requests;
   final Workshop? workshop;
   final String errorMessage;
+  final int? requestNumber;
 
   const MainScreenState({
+    this.requestNumber,
     this.errorMessage = "",
     this.status = MainScreenStatus.reqestloading,
     this.offers,
@@ -27,6 +29,7 @@ class MainScreenState extends Equatable {
   });
 
   MainScreenState copyWith({
+    int? requestNumber,
     MainScreenStatus? status,
     List<MaintenanceRequestDomainModel>? offers,
     List<MaintenanceRequestDomainModel>? requests,
@@ -34,6 +37,7 @@ class MainScreenState extends Equatable {
     String? errorMessage,
   }) {
     return MainScreenState(
+      requestNumber: requestNumber ?? this.requestNumber,
       status: status ?? this.status,
       offers: offers ?? this.offers,
       requests: requests ?? this.requests,
@@ -43,5 +47,6 @@ class MainScreenState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, offers, requests, workshop, errorMessage];
+  List<Object?> get props =>
+      [status, offers, requests, workshop, errorMessage, requestNumber];
 }

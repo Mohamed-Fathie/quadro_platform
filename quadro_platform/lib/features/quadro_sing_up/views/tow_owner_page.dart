@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../common/controller/services/toast_services.dart';
 import '../../../common/view/logInLogic/login_bloc/bloc/login_bloc.dart';
+import '../../../constants/utils/colors.dart';
 import '../../../shared/routes/navigation_service.dart';
 import '../../../shared/routes/routes_constants.dart';
 import '../../../shared/utils/constans/colors.dart';
@@ -82,11 +83,17 @@ class TowServiceProviderForm extends StatelessWidget {
                   SizedBox(height: 10.h),
                   TextFormField(
                     controller: cubit.nameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'الاسم الكامل',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.person,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -100,11 +107,17 @@ class TowServiceProviderForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.phoneController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'رقم الجوال',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.phone,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -122,12 +135,18 @@ class TowServiceProviderForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.towCompanyController,
                     keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'نوع شركة الساحبة',
                       hintText: "",
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.business,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -141,12 +160,18 @@ class TowServiceProviderForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.towModelController,
                     keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'موديل الساحبة',
                       hintText: "",
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.directions_car,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -195,12 +220,18 @@ class TowServiceProviderForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.towChassisController,
                     keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'رقم هيكل الساحبة',
                       hintText: "",
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.confirmation_number,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -214,12 +245,18 @@ class TowServiceProviderForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.licenseController,
                     keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'رقم رخصة القيادة',
                       hintText: "",
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.card_membership,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     validator: (value) {

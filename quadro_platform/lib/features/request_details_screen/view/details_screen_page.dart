@@ -130,14 +130,12 @@ class DetailsView extends StatelessWidget {
                   SizedBox(
                     height: 1.h,
                   ),
-                  // request.offer == null
-                  //     ?
-                  SectionRow(
-                      requestType: requestType,
-                      label: "حالة الطلب:",
-                      value: request.requestStatus.arabicName),
-                  // :
-                  //  const SizedBox.shrink(),
+                  request.offer == null
+                      ? SectionRow(
+                          requestType: requestType,
+                          label: "حالة الطلب:",
+                          value: request.requestStatus.arabicName)
+                      : const SizedBox.shrink(),
                   SizedBox(
                     height: 3.h,
                   ),

@@ -66,9 +66,15 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: true),
-        onData: (list) =>
-            state.copyWith(requests: list, status: MainScreenStatus.success),
-        onError: (error, _) => throw error,
+        onData: (list) {
+          log("Request count: ${list.length}");
+          return state.copyWith(
+            requests: list,
+            status: MainScreenStatus.success,
+            requestNumber:
+                list.isNotEmpty ? list.length : 0, // Ensure UI updates
+          );
+        },
       );
     } on FirestoreReadWriteFailure catch (e) {
       emit(state.copyWith(
@@ -91,8 +97,10 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
             type: RequestType.workshop_id,
             limit: 10,
             withOffer: false),
-        onData: (list) =>
-            state.copyWith(offers: list, status: MainScreenStatus.success),
+        onData: (list) => state.copyWith(
+          offers: list,
+          status: MainScreenStatus.success,
+        ),
         onError: (error, _) => throw error,
       );
     } on FirestoreReadWriteFailure catch (e) {

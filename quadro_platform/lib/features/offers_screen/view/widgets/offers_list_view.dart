@@ -46,6 +46,10 @@ class OffersListView extends StatelessWidget {
         return ListOfOffers(
             requestType: requestType,
             offers: (state as OfferFetchRejectedSuccess).rejectedOffers);
+      case OfferFetchCompletedSuccess():
+        return ListOfOffers(
+            requestType: requestType,
+            offers: (state as OfferFetchCompletedSuccess).completed);
     }
   }
 

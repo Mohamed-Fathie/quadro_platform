@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../common/controller/services/toast_services.dart';
 import '../../../common/view/logInLogic/login_bloc/bloc/login_bloc.dart';
+import '../../../constants/utils/colors.dart';
 import '../cubit/vehicle_owner_cubit.dart';
 import '../cubit/vehicle_owner_state.dart';
 import 'widgets/image_pickker.dart';
@@ -82,9 +83,15 @@ class VehicleOwnerForm extends StatelessWidget {
                   SizedBox(height: 10.h),
                   TextFormField(
                     controller: cubit.nameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'الاسم الكامل',
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -98,9 +105,15 @@ class VehicleOwnerForm extends StatelessWidget {
                   TextFormField(
                     controller: cubit.phoneController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'رقم الجوال',
-                      prefixIcon: Icon(Icons.phone),
+                      prefixIcon: const Icon(Icons.phone),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

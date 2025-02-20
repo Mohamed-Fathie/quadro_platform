@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:quadro_platform/user/view/bottomNavBars/main_bottom_navbar/red_circle.dart';
 
 import '../../../../features/offers_screen/view/user_offer_page.dart';
 import '../../../../shared/utils/constans/colors.dart';
@@ -42,9 +43,9 @@ class UserMainNavBarScreens {
       PersistentTabConfig(
         screen: const UserOfferPage(),
         item: ItemConfig(
-          activeForegroundColor: Qcolors.secondary,
-          icon: const Icon(Icons.build_circle),
           title: "عروض",
+          activeForegroundColor: Qcolors.secondary,
+          icon: const OfferIcon(), // Using our dynamic icon here
         ),
       ),
       PersistentTabConfig(

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/common/view/logInLogic/login_bloc/bloc/login_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../../../driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
 import '../../../features/onboarding/view/on_boarding_page.dart';
 import '../../../features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
+import '../../../features/workshop_bottom_nav_bar/workshop_railway.dart';
 import '../../../shared/enum/user_role.dart';
 import '../../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
 import '../../controller/provider/profile_data_provider.dart';
@@ -37,6 +39,7 @@ class WidgetFlow extends StatelessWidget {
             case UserRole.vehicleOwner:
               return const MainBottomNavbar();
             case UserRole.workshopOwner:
+              log(kIsWeb.toString());
               return const WorkshopNavBar();
           }
         } else if (state is Unauthenticated) {
@@ -46,17 +49,16 @@ class WidgetFlow extends StatelessWidget {
         }
         return Scaffold(
           backgroundColor: white,
-          body: Stack(children: [
-            const Center(
-              child: Image(
-                image: AssetImage('assets/images/logos/Qadro2.png'),
-              ),
+          body: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(image: AssetImage('assets/images/logos/Qadro2.png')),
+                SizedBox(height: 20),
+                GradientCircularProgress(),
+              ],
             ),
-            Positioned(
-                bottom: 20.h,
-                left: 50.w,
-                child: const GradientCircularProgress())
-          ]),
+          ),
         );
       },
     );

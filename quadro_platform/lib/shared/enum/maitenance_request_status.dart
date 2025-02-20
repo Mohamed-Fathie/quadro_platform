@@ -5,7 +5,8 @@ enum MaitenanceRequestStatus {
   pending, //1
   offerSent, //2
   rejected,
-  inProgress
+  inProgress,
+  complted,
 }
 
 // Extension for MaitenanceRequestStatus
@@ -20,6 +21,8 @@ extension MaitenanceRequestStatusExtension on MaitenanceRequestStatus {
         return "مرفوض";
       case MaitenanceRequestStatus.inProgress:
         return "قيد العمل";
+      case MaitenanceRequestStatus.complted:
+        return "اكتمل";
     }
   }
 }

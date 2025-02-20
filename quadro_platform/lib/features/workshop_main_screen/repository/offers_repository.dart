@@ -108,18 +108,15 @@ class OffersRepository {
             groupedByStatus[OfferStatus.accepted]![offer.id ?? ""] = offer;
             break;
           case OfferStatus.rejected:
-            groupedByStatus[OfferStatus.accepted]![offer.id ?? ""] = offer;
+            groupedByStatus[OfferStatus.rejected]![offer.id ?? ""] = offer;
             break;
-          // Optionally handle OfferStatus.completed or other statuses
-          default:
+          case OfferStatus.completed:
+            groupedByStatus[OfferStatus.completed]![offer.id ?? ""] = offer;
             break;
         }
       }
     }
 
-    log(" pending offer is : ${groupedByStatus[OfferStatus.pending]?.length.toString()}");
-    log(" inprogress offer is : ${groupedByStatus[OfferStatus.inprogress]?.length.toString()}");
-    log(" accpted offer is : ${groupedByStatus[OfferStatus.accepted]?.length.toString()}");
     return {
       'allOffers': allOffers,
       'groupedByStatus': groupedByStatus,

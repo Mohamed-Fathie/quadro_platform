@@ -1,4 +1,12 @@
-enum OffersFilter { all, requests, accepted, inprogress, pending, rejected }
+enum OffersFilter {
+  all,
+  requests,
+  accepted,
+  inprogress,
+  pending,
+  rejected,
+  completed
+}
 
 extension Filter on OffersFilter {
   String get label {
@@ -15,6 +23,8 @@ extension Filter on OffersFilter {
         return 'العروض المقبولة';
       case OffersFilter.rejected:
         return 'العروض المرفوضة';
+      case OffersFilter.completed:
+        return "مكتمل";
     }
   }
 }

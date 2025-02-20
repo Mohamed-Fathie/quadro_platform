@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart' show TextEditingController;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
 import 'package:quadro_platform/features/workshop_main_screen/repository/offers_repository.dart';
 import 'package:quadro_platform/features/workshop_profile/repository/model/review.dart';
 import 'package:quadro_platform/features/workshop_profile/repository/reviews_repository.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
+import 'package:quadro_platform/user/view/maintenance_request/cubit/maintenacne_request_cubit.dart';
 
 import '../../../shared/enum/maitenance_request_status.dart';
 import '../../workshop_main_screen/repository/maintenance_requests_repo.dart';
@@ -24,6 +26,7 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
   DetailsCubit(
       this.maintenanceRequestsRepository, this.offersRepository, this.review)
       : super(const RequestDetailsState(
+            canMarkCompleted: false,
             canMarkInProgress: false,
             canRateService: false,
             canRespond: false));
@@ -37,16 +40,20 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
     required MaintenanceRequestDomainModel request,
   }) {
     emit(RequestDetailsState(
+        canMarkCompleted: requestType == RequestType.workshop_id &&
+            request.offer?.status == OfferStatus.inprogress,
         canRespond: requestType == RequestType.vehicle_owner_id &&
             request.offer != null &&
             request.offer?.status != OfferStatus.rejected &&
             request.offer?.status != OfferStatus.accepted &&
-            request.offer?.status != OfferStatus.inprogress,
+            request.offer?.status != OfferStatus.inprogress &&
+            request.offer?.status != OfferStatus.completed,
         canMarkInProgress: requestType == RequestType.workshop_id &&
             request.offer?.status == OfferStatus.accepted,
         canRateService: requestType == RequestType.vehicle_owner_id &&
-            request.offer?.status == OfferStatus.inprogress &&
-            request.requestStatus != MaitenanceRequestStatus.inProgress));
+            request.requestStatus != MaitenanceRequestStatus.inProgress &&
+            request.requestStatus != MaitenanceRequestStatus.complted &&
+            request.offer?.status == OfferStatus.completed));
   }
 
   @override
@@ -57,7 +64,8 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
 
   void acceptOffer(String requestId, String offerId) async {
     // Implement acceptance logic
-    emit(state.copyWith(canRespond: false));
+    emit(state.copyWith(
+        canRespond: false, offerStatus: OfferStatus.accepted.name));
     await maintenanceRequestsRepository.updateRequest(
         id: requestId, map: {"status": MaitenanceRequestStatus.offerSent.name});
     await offersRepository
@@ -65,7 +73,8 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
   }
 
   void rejectOffer(String requestId, String offerId) async {
-    emit(state.copyWith(canRespond: false));
+    emit(state.copyWith(
+        canRespond: false, offerStatus: OfferStatus.rejected.name));
 
     await maintenanceRequestsRepository.updateRequest(
         id: requestId, map: {"status": MaitenanceRequestStatus.offerSent.name});
@@ -75,11 +84,28 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
 
   Future<void> markOfferInProgress(
       {required String requestId, required String offerId}) async {
-    emit(state.copyWith(canMarkInProgress: false));
+    emit(state.copyWith(
+        canMarkInProgress: false, offerStatus: OfferStatus.inprogress.name));
 
     //  await maintenanceRequestsRepository.updateRequest(id: requestId, map: map)
     await offersRepository
         .updateOffer(id: offerId, map: {"status": OfferStatus.inprogress.name});
+  }
+
+  Future<void> markOfferAsCompleted({
+    required String requestId,
+    required String offerId,
+  }) async {
+    try {
+      emit(state.copyWith(
+          canMarkCompleted: false, offerStatus: OfferStatus.completed.name));
+
+      await offersRepository.updateOffer(
+          id: offerId, map: {"status": OfferStatus.completed.name});
+      // Add any additional state updates or events
+    } catch (e) {
+      // Handle error
+    }
   }
 
   Future<void> submitRating({
@@ -94,12 +120,15 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
     await review.addReview(Review(
         userId: userId,
         rating: rating,
-        reviewComment: comment,
+        reviewComment: comment == null
+            ? null
+            : comment.trim().isEmpty
+                ? null
+                : comment.trim(),
         workshopComment: null,
         dateCreated: DateTime.now()));
     await maintenanceRequestsRepository.updateRequest(
-        id: requestId,
-        map: {"status": MaitenanceRequestStatus.inProgress.name});
+        id: requestId, map: {"status": MaitenanceRequestStatus.complted.name});
     emit(state.copyWith(canRateService: false));
   }
 }

@@ -5,6 +5,8 @@ import 'package:quadro_platform/features/workshop_authentication/models/firestor
 import 'package:quadro_platform/features/workshop_main_screen/repository/models/maintenance_request.dart';
 import 'package:quadro_platform/shared/utils/hleper_function/list_splitter.dart';
 
+import '../../../shared/enum/maitenance_request_status.dart';
+
 class MaintenanceRequestsRepository {
   final FirebaseFirestore _firestore;
 
@@ -56,6 +58,16 @@ class MaintenanceRequestsRepository {
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure.fromCode(e.code);
     }
+  }
+
+  Stream<List<MaintenanceRequest>> watchOfferSentRequests({
+    required String id,
+  }) {
+    return maintenanceRequestRef
+        .where(RequestType.vehicle_owner_id.name, isEqualTo: id)
+        .where('status', isEqualTo: MaitenanceRequestStatus.offerSent.name)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 
   Future<MaintenanceRequest> getMaintenanceRequestById(

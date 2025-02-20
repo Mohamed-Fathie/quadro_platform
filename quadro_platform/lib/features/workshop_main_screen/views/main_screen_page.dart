@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_authentication/repository/workshop_repo.dart';
@@ -8,10 +10,12 @@ import 'package:quadro_platform/features/workshop_main_screen/views/widgets/requ
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/features/workshop_main_screen/views/widgets/workshop_name_widget.dart';
 import 'package:quadro_platform/shared/widgets/section_header.dart';
+import 'package:quadro_platform/shared/widgets/section_with_number.dart';
 import 'package:quadro_platform/shared/widgets/vertical_spacing.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../shared/widgets/quadro_appbar.dart';
+import '../../workshop_bottom_nav_bar/cubit/navigation.dart';
 import '../../workshop_bottom_nav_bar/workshop_screens.dart';
 
 class MainScreenPage extends StatelessWidget {
@@ -71,10 +75,23 @@ class MainScreenView extends StatelessWidget {
               displayLarge: true,
             ),
             const VerticalSpacing(height: 25),
-            const SectionHeader(
-              requestType: RequestType.workshop_id,
-              text: "الطلبات الجديدة",
-              islarge: true,
+            BlocBuilder<MainScreenBloc, MainScreenState>(
+              builder: (context, state) {
+                log("Rebuilding UI with requestNumber: ${state.requestNumber}"); // Debug
+                if (state.requestNumber == null) {
+                  return const SectionHeader(
+                    requestType: RequestType.workshop_id,
+                    text: "الطلبات الجديدة",
+                    islarge: true,
+                  );
+                } else {
+                  return SectionWithNumber(
+                    text: "الطلبات الجديدة (${state.requestNumber})",
+                    requestType: RequestType.workshop_id,
+                    islarge: true,
+                  );
+                }
+              },
             ),
             SizedBox(
               height: 2.h,
@@ -85,6 +102,7 @@ class MainScreenView extends StatelessWidget {
               text: "  العروض الخاصة بي",
               callback: () {
                 WorkshopScreens().controller.jumpToTab(1);
+                context.read<NavigationCubit>().updateIndex(1);
               },
               islarge: true,
               withButton: true,
