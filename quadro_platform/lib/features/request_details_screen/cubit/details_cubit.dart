@@ -65,16 +65,16 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
   void acceptOffer(String requestId, String offerId) async {
     // Implement acceptance logic
     emit(state.copyWith(
-        canRespond: false, offerStatus: OfferStatus.accepted.name));
+        canRespond: false, offerStatus: OfferStatus.accepted.arabicName));
     await maintenanceRequestsRepository.updateRequest(
-        id: requestId, map: {"status": MaitenanceRequestStatus.offerSent.name});
+        id: requestId, map: {"status": MaitenanceRequestStatus.accepted.name});
     await offersRepository
         .updateOffer(id: offerId, map: {"status": OfferStatus.accepted.name});
   }
 
   void rejectOffer(String requestId, String offerId) async {
     emit(state.copyWith(
-        canRespond: false, offerStatus: OfferStatus.rejected.name));
+        canRespond: false, offerStatus: OfferStatus.rejected.arabicName));
 
     await maintenanceRequestsRepository.updateRequest(
         id: requestId, map: {"status": MaitenanceRequestStatus.offerSent.name});
@@ -85,7 +85,8 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
   Future<void> markOfferInProgress(
       {required String requestId, required String offerId}) async {
     emit(state.copyWith(
-        canMarkInProgress: false, offerStatus: OfferStatus.inprogress.name));
+        canMarkInProgress: false,
+        offerStatus: OfferStatus.inprogress.arabicName));
 
     //  await maintenanceRequestsRepository.updateRequest(id: requestId, map: map)
     await offersRepository
@@ -98,7 +99,8 @@ class DetailsCubit extends Cubit<RequestDetailsState> {
   }) async {
     try {
       emit(state.copyWith(
-          canMarkCompleted: false, offerStatus: OfferStatus.completed.name));
+          canMarkCompleted: false,
+          offerStatus: OfferStatus.completed.arabicName));
 
       await offersRepository.updateOffer(
           id: offerId, map: {"status": OfferStatus.completed.name});

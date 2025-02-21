@@ -20,9 +20,10 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
   final RepositoryManager _manager;
   QuadroUser? _user;
   Future<QuadroUser?> getuser() async {
-    _user ??= await _userRepository.getCachedUser();
+    // _user ??= await _userRepository.getCachedUser();
     _user ??=
-        await _userRepository.getUserById(_userRepository.getuserId ?? "");
+        await _userRepository.getUserById(_userRepository.getuserId ?? "null");
+    log(_user!.id);
     return _user;
   }
 

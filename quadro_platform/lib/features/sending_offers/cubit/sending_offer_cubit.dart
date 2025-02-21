@@ -10,6 +10,7 @@ import 'package:quadro_platform/features/workshop_main_screen/repository/reposit
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
 
+import '../../../shared/enum/maitenance_request_status.dart';
 import '../../workshop_authentication/models/firestore_exceptions.dart';
 
 part 'sending_offer_state.dart';
@@ -74,6 +75,10 @@ class SendingOfferCubit extends Cubit<SendingOfferState> {
         guaranteePeriod: int.parse(period),
       );
       await _repositoryManager.addOffer(offer);
+      _repositoryManager.maintenanceRequestsRepository.updateRequest(
+        id: requestId,
+        map: {"status": MaitenanceRequestStatus.offerSent.name},
+      );
       emit(state.copyWith(sendingStatus: SendingOfferStatus.success));
     } on FirestoreReadWriteFailure catch (e) {
       emit(state.copyWith(

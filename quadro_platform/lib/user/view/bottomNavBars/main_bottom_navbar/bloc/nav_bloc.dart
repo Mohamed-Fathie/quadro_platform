@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../features/user/model/user.dart';
@@ -12,7 +14,7 @@ class NavBloc extends Bloc<MainNav, NavState> {
   final UserRepository _userRepository;
   QuadroUser? _user;
   Future<QuadroUser?> getuser() async {
-    _user ??= await _userRepository.getCachedUser();
+    // _user ??= await _userRepository.getCachedUser();
     _user ??=
         await _userRepository.getUserById(_userRepository.getuserId ?? "");
     return _user;
@@ -25,6 +27,9 @@ class NavBloc extends Bloc<MainNav, NavState> {
         )) {
     on<MainScreenOfferNotfiction>((event, emit) async {
       final user = await getuser();
+      log("user is null in the i");
+      log(user?.id ?? "user is null in the i");
+
       await emit.forEach<List<MaintenanceRequest>>(
         _manager.maintenanceRequestsRepository
             .watchOfferSentRequests(id: user?.id ?? ""),

@@ -34,11 +34,11 @@ class OffersCubit extends Cubit<OffersState> {
       {required RequestType requestType}) async {
     final String id;
     if (requestType == RequestType.vehicle_owner_id) {
-      QuadroUser? user = await _manager.getCashedQuadroUser();
+      QuadroUser? user;
       user ??= await _manager.userRepository.getUserById(_manager.authUserId);
       id = user?.id ?? "";
     } else {
-      Workshop? workshop = await _manager.getCashedWorkshop();
+      Workshop? workshop;
       workshop ??= await _manager.workshopRepository
           .getWorkshopById(id: _manager.authUserId);
       id = workshop.ownerId;

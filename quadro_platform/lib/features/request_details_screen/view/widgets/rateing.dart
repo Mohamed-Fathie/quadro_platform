@@ -14,10 +14,10 @@ Widget buildRatingBottomBar(
   return Container(
     height: 120,
     padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Qcolors.getPrimeryColor(context),
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      boxShadow: const [
+    decoration: const BoxDecoration(
+      color: Qcolors.buttonbackground,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      boxShadow: [
         BoxShadow(
           color: Colors.black12,
           blurRadius: 10,
@@ -31,7 +31,6 @@ Widget buildRatingBottomBar(
         Text(
           "قيم الخدمة",
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
         ),

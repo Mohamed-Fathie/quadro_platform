@@ -154,6 +154,7 @@ class TowServiceProviderCubit extends Cubit<TowServiceProviderState> {
     // Here, we assume a role for tow service providers (make sure it exists in your model).
     await AuthServices.registerTowingDriver(
       // context: context,
+
       drivingLicenceNumberController: license,
       emailController: user?.email ?? "",
       mobileController: phone,

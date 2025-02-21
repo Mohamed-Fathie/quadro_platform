@@ -37,7 +37,7 @@ class SignupCubit extends Cubit<SignupState> {
       return;
     }
     if (password.length < 8) {
-      emit(SignupFailure('يجب أن تتكون كلمة المرور من 6 أحرف على الأقل'));
+      emit(SignupFailure('يجب أن تتكون كلمة المرور من 8 أحرف على الأقل'));
       return;
     }
 
