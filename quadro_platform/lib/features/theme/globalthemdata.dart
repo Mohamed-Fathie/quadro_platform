@@ -26,6 +26,11 @@ class GlobalThemData {
 
 // text theme
   static final TextTheme text = TextTheme(
+      displayLarge: const TextStyle().copyWith(
+        fontWeight: FontWeight.bold,
+        fontSize: 30,
+        color: const Color(0xff0288a6),
+      ),
       headlineLarge: const TextStyle().copyWith(
         fontWeight: FontWeight.bold, // Bold font
         fontSize: 24,
@@ -36,7 +41,7 @@ class GlobalThemData {
       ),
       headlineSmall: const TextStyle().copyWith(
         fontWeight: FontWeight.w500, // Medium font
-        fontSize: 14,
+        fontSize: 16,
       ));
 
   // color scheme for the dark mode

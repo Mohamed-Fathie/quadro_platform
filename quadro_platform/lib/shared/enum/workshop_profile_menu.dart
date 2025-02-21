@@ -1,0 +1,1 @@
+enum WorkshopProfileMenu { logout, edit }

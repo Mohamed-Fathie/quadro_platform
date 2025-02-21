@@ -1,0 +1,164 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/features/user/repository/user_repository.dart';
+import 'package:quadro_platform/user/view/mainUserScreen/view/main_user_screen_view.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../../features/workshop_main_screen/repository/repository_manager.dart';
+import '../../../../shared/widgets/quadro_appbar.dart';
+import '../bloc/main_screen_bloc.dart';
+
+class MainUserScreen extends StatelessWidget {
+  const MainUserScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: GradientAppBar(
+        notificationCallBack: () {},
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4.w),
+        child: BlocProvider(
+          create: (context) => MainUserScreenBloc(
+              context.read<UserRepository>(),
+              repositoryManager: context.read<RepositoryManager>())
+            ..add(MainScreenStarted())
+            ..add(MainScreenRequestFetched()),
+          child: const MainUserScreenView(),
+        ),
+      ),
+    );
+  }
+}
+
+// class MainUserScreen extends StatelessWidget {
+//   const MainUserScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           'Quadro',
+//           style: AppTextStyles.heading20Bold,
+//         ),
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.symmetric(
+//           horizontal: 3.w,
+//           vertical: 2.h,
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.end,
+//           children: [
+//             Consumer<ProfileDataProvider>(
+//                 builder: (context, profileProvider, child) {
+//               if (profileProvider.profileData == null) {
+//                 return Text(
+//                   'مرحبا مستخدم كوادرو',
+//                   style: AppTextStyles.Mheading20Bold.copyWith(color: grey),
+//                 );
+//               } else {
+//                 return Text(
+//                   'مرحبا ${profileProvider.profileData!.name!.split(' ').first}' ??
+//                       'مستخدم كوادرو',
+//                   style: AppTextStyles.Mheading20Bold.copyWith(color: grey),
+//                 );
+//               }
+//             }),
+//             SizedBox(
+//               height: 0.5.h,
+//             ),
+//             Text(
+//               'كيف نقدروا نخدموك؟',
+//               style: AppTextStyles.Mheading24Bold.copyWith(color: teal),
+//             ),
+//             SizedBox(
+//               height: 2.h,
+//             ),
+//             InkWell(
+//               onTap: () {
+//                 NavigationService().routeTo(RoutesConstants.bottomNavBar);
+//               },
+//               child: Container(
+//                 margin: EdgeInsets.symmetric(vertical: 1.h),
+//                 padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.5.w),
+//                 height: 18.5.h,
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(20.sp),
+//                   gradient: LinearGradient(
+//                     colors: [
+//                       teal,
+//                       teal2,
+//                       teal3,
+//                     ],
+//                     begin: Alignment.centerRight,
+//                     end: Alignment.bottomLeft,
+//                   ),
+//                 ),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     // Image.asset('assets/images/icons/icons8-tow-truck-50.png'),
+//                     SizedBox(
+//                       width: 3.w,
+//                     ),
+//                     Text(
+//                       'طلب خدمة سحب سيارة',
+//                       style:
+//                           AppTextStyles.Mheading22Bold.copyWith(color: white),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             InkWell(
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) {
+//                       return const WorkshopRegisterationPage();
+//                     },
+//                   ),
+//                 );
+//               },
+//               child: Container(
+//                 margin: EdgeInsets.symmetric(vertical: 1.h),
+//                 padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.5.w),
+//                 height: 18.5.h,
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(20.sp),
+//                   gradient: LinearGradient(
+//                     colors: [
+//                       teal,
+//                       teal2,
+//                       teal3,
+//                     ],
+//                     begin: Alignment.centerRight,
+//                     end: Alignment.centerLeft,
+//                   ),
+//                 ),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     // Image.asset('assets/images/icons/icons8-car-50.png'),
+//                     SizedBox(
+//                       width: 3.w,
+//                     ),
+//                     Text(
+//                       'طلب خدمة صيانة سيارة',
+//                       style:
+//                           AppTextStyles.Mheading22Bold.copyWith(color: white),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
