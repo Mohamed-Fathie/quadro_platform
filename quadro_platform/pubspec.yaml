@@ -89,6 +89,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
+  
   flutter_lints: ^5.0.0
   
 
@@ -107,14 +108,21 @@ flutter:
   assets:
     - assets/images/logos/
     - assets/images/car_brands/
+    - assets/images/car_brands/
     - assets/images/workshop/
     - assets/images/on_boarding/
     - assets/images/Towing-amico.png
     - assets/images/vehicle/towingTruck.png
     - assets/images/vehicle/
+    - assets/images/vehicle/
     - assets/images/ThanitApril_19.jpg
     - assets/images/uberLogo/quadroLogo.png
     - assets/images/logos/quadroLogo.jpg
+    - assets/images/icons/icons8-car-50.png
+    - assets/images/icons/
+    - assets/images/icons/icons8-tow-truck-50.png
+    - assets/images/Towing-amico (1).png
+    - assets/images/svg/
     - assets/images/icons/icons8-car-50.png
     - assets/images/icons/
     - assets/images/icons/icons8-tow-truck-50.png

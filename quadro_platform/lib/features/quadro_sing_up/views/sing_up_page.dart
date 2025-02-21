@@ -83,11 +83,17 @@ class SingUpView extends StatelessWidget {
 
                   TextFormField(
                     controller: signupCubit.emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'البريد الإلكتروني',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.email,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -110,11 +116,17 @@ class SingUpView extends StatelessWidget {
                   // كلمة المرور
                   TextFormField(
                     controller: signupCubit.passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'كلمة المرور',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.lock,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     obscureText: true,
@@ -133,11 +145,17 @@ class SingUpView extends StatelessWidget {
                   // تأكيد كلمة المرور
                   TextFormField(
                     controller: signupCubit.confirmPasswordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'تأكيد كلمة المرور',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.lock_outline,
                         color: Qcolors.secondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: teal,
+                        ),
                       ),
                     ),
                     obscureText: true,
@@ -172,10 +190,6 @@ class SingUpView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "لديك حساب بالفعل؟  ",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
                       InkWell(
                         onTap: () =>
                             NavigationService().routeTo(RoutesConstants.login),
@@ -185,6 +199,10 @@ class SingUpView extends StatelessWidget {
                                 .headlineMedium
                                 ?.copyWith(
                                     fontSize: 16.sp, color: Qcolors.secondary)),
+                      ),
+                      Text(
+                        "لديك حساب بالفعل؟  ",
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     ],
                   ),

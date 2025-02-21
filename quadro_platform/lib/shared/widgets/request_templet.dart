@@ -100,15 +100,18 @@ class RequestTemplet<T> extends StatelessWidget {
                           "الموقع :",
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
-                        Text(
-                            "$city , ${(street == "Unknown street" ? "" : street)} ",
-                            softWrap: true,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.apply(
-                                    color: Qcolors.getColorForRequestType(
-                                        requestType))),
+                        Expanded(
+                          child: Text(
+                              "$city , ${(street == "Unknown street" ? "" : street)} ",
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.apply(
+                                      color: Qcolors.getColorForRequestType(
+                                          requestType))),
+                        ),
                       ],
                     ),
                   ),

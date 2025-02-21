@@ -8,6 +8,7 @@ import '../../../../features/user/model/user.dart';
 import '../../../../features/user/repository/user_repository.dart';
 import '../../../../features/workshop_authentication/models/firestore_exceptions.dart';
 import '../../../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import '../../../../features/workshop_main_screen/repository/models/maintenance_request.dart';
 import '../../../../features/workshop_main_screen/repository/repository_manager.dart';
 import '../../../../shared/enum/maitenance_request_status.dart';
 
@@ -35,6 +36,13 @@ class MainUserScreenBloc extends Bloc<MainScreenEvent, MainUserScreenState> {
             userName: null)) {
     on<MainScreenStarted>(_onMainScreenStarted);
     on<MainScreenRequestFetched>(_onMainScreenRequestFetched);
+    // on<MainScreenOfferNotfiction>((event, emit) async {
+    //   await emit.forEach<List<MaintenanceRequest>>(
+    //     _manager.maintenanceRequestsRepository.watchOfferSentRequests(),
+    //     onData: (requests) => state.copyWith(thereIsOffer: requests.isNotEmpty),
+    //     onError: (_, __) => state.copyWith(thereIsOffer: false),
+    //   );
+    // });
   }
   Future<void> _onMainScreenStarted(
     MainScreenStarted event,

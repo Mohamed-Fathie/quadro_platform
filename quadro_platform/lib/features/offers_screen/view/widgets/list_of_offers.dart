@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import 'package:quadro_platform/shared/enum/car_brands.dart';
+import 'package:quadro_platform/shared/enum/car_models.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/widgets/request_templet.dart';
@@ -44,6 +46,9 @@ class ListOfOffers extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                imageUrl: requestType == RequestType.vehicle_owner_id
+                    ? request.workshop.imagePath
+                    : request.user.pictureUrl,
                 requestStatus: request.requestStatus.arabicName,
                 city: request.workshop.city,
                 street: request.workshop.street,
@@ -63,13 +68,18 @@ class ListOfOffers extends StatelessWidget {
                 carBrand: request.carCompany.name,
                 carModel: request.carModel.name,
                 dateCreated: request.dateCreated,
-                userName: request.user.name ?? "null user",
+                userName: requestType == RequestType.vehicle_owner_id
+                    ? request.workshop.name
+                    : request.user.name ?? "",
               ),
             );
           }
           return Padding(
               padding: EdgeInsets.symmetric(vertical: 5.w),
               child: RequestTemplet(
+                imageUrl: requestType == RequestType.vehicle_owner_id
+                    ? request.workshop.imagePath
+                    : request.user.pictureUrl,
                 requestStatus: request.requestStatus.arabicName,
                 city: request.workshop.city,
                 street: request.workshop.street,
@@ -96,10 +106,12 @@ class ListOfOffers extends StatelessWidget {
                         .handleOfferFilterChange(currentIndex, requestType);
                   }
                 },
-                carBrand: request.carCompany.name,
-                carModel: request.carModel.name,
+                carBrand: request.carCompany.toArabic(),
+                carModel: request.carModel.toArabic(),
                 dateCreated: request.offer!.dateCreated.toDate(),
-                userName: request.user.name ?? "null user",
+                userName: requestType == RequestType.vehicle_owner_id
+                    ? request.workshop.name
+                    : request.user.name ?? "",
               ));
         },
       ).toList(),

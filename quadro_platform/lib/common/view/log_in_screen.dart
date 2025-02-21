@@ -22,7 +22,6 @@ class _LogInScreenState extends State<LogInScreen> {
   bool loginButtonPressed = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -112,10 +111,6 @@ class _LogInScreenState extends State<LogInScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  " لا تمتلك حساب؟ ",
-                  style: AppTextStyles.Mbody16Bold.copyWith(color: black),
-                ),
                 InkWell(
                   onTap: () {
                     NavigationService().routeTo(RoutesConstants.singUpPage);

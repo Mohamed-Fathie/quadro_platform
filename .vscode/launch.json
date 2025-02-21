@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "quadro_platform",
+            "cwd": "quadro_platform",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "quadro_platform (profile mode)",
+            "cwd": "quadro_platform",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "quadro_platform (release mode)",
+            "cwd": "quadro_platform",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

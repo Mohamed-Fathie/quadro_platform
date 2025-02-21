@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:quadro_platform/shared/enum/car_brands.dart';
+import 'package:quadro_platform/shared/enum/car_models.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/utils/constans/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -105,6 +107,10 @@ class SharedRequestsList extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final offer = requests![index];
                             return RequestTemplet(
+                              imageUrl:
+                                  requestType == RequestType.vehicle_owner_id
+                                      ? offer.workshop.imagePath
+                                      : offer.user.pictureUrl,
                               city: offer.workshop.city,
                               street: offer.workshop.street,
                               requestType: RequestType.workshop_id,
@@ -117,10 +123,13 @@ class SharedRequestsList extends StatelessWidget {
                                 offer,
                                 requestType,
                               ),
-                              carBrand: offer.carCompany.name,
-                              carModel: offer.carModel.name,
+                              carBrand: offer.carCompany.toArabic(),
+                              carModel: offer.carModel.toArabic(),
                               dateCreated: offer.offer!.dateCreated.toDate(),
-                              userName: offer.user.name ?? "null user",
+                              userName:
+                                  requestType == RequestType.vehicle_owner_id
+                                      ? offer.workshop.name
+                                      : offer.user.name ?? "",
                             );
                           },
                         )
@@ -131,6 +140,10 @@ class SharedRequestsList extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final request = requests![index];
                                 return RequestTemplet(
+                                  imageUrl: requestType ==
+                                          RequestType.vehicle_owner_id
+                                      ? request.workshop.imagePath
+                                      : request.user.pictureUrl,
                                   requestStatus:
                                       request.requestStatus.arabicName,
                                   street: request.workshop.street,
@@ -141,10 +154,13 @@ class SharedRequestsList extends StatelessWidget {
                                   buttonTitle: buttonTitle,
                                   navigatorCall: () =>
                                       onRequestDetails(request, requestType),
-                                  carBrand: request.carCompany.name,
-                                  carModel: request.carModel.name,
+                                  carBrand: request.carCompany.toArabic(),
+                                  carModel: request.carModel.toArabic(),
                                   dateCreated: request.dateCreated,
-                                  userName: request.user.name ?? "null user",
+                                  userName: requestType ==
+                                          RequestType.vehicle_owner_id
+                                      ? request.workshop.name
+                                      : request.user.name ?? "",
                                 );
                               },
                             )
@@ -182,22 +198,27 @@ class SharedRequestsList extends StatelessWidget {
                                     }
 
                                     return RequestTemplet(
-                                      requestStatus:
-                                          request.requestStatus.arabicName,
-                                      street: request.workshop.street,
-                                      city: request.workshop.city,
-                                      requestType: requestType,
-                                      buttonColore: buttonColor,
-                                      background: backgroundColor,
-                                      buttonTitle: buttonTitle,
-                                      navigatorCall: () => onRequestDetails(
-                                          request, requestType),
-                                      carBrand: request.carCompany.name,
-                                      carModel: request.carModel.name,
-                                      dateCreated: request.dateCreated,
-                                      userName:
-                                          request.user.name ?? "null user",
-                                    );
+                                        imageUrl: requestType ==
+                                                RequestType.vehicle_owner_id
+                                            ? request.workshop.imagePath
+                                            : request.user.pictureUrl,
+                                        requestStatus:
+                                            request.requestStatus.arabicName,
+                                        street: request.workshop.street,
+                                        city: request.workshop.city,
+                                        requestType: requestType,
+                                        buttonColore: buttonColor,
+                                        background: backgroundColor,
+                                        buttonTitle: buttonTitle,
+                                        navigatorCall: () => onRequestDetails(
+                                            request, requestType),
+                                        carBrand: request.carCompany.toArabic(),
+                                        carModel: request.carModel.toArabic(),
+                                        dateCreated: request.dateCreated,
+                                        userName: requestType ==
+                                                RequestType.vehicle_owner_id
+                                            ? request.workshop.name
+                                            : request.user.name ?? "");
                                   },
                                 );
         },

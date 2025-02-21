@@ -10,14 +10,14 @@ import '../../../../features/workshop_main_screen/repository/offers_repository.d
 import '../../../../features/workshop_main_screen/repository/repository_manager.dart';
 import '../../../../features/workshop_profile/repository/reviews_repository.dart';
 import '../../../../shared/utils/constans/helper_functions.dart';
+import 'bloc/nav_bloc.dart';
+import 'bloc/nav_event.dart';
 
 class MainBottomNavbar extends StatelessWidget {
   const MainBottomNavbar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = QhelperFucntions.isDarkMode(context);
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<UserRepository>(
@@ -25,37 +25,39 @@ class MainBottomNavbar extends StatelessWidget {
         ),
         RepositoryProvider<RepositoryManager>(
           create: (context) => RepositoryManager(
-              reviewsRepository: ReviewsRepository(),
-              maintenanceRequestsRepository: MaintenanceRequestsRepository(),
-              offersRepository: OffersRepository(),
-              userRepository: UserRepository(),
-              workshopRepository: WorkshopRepository()),
-        )
-      ],
-      child: FocusScope(
-        canRequestFocus: false,
-        child: PersistentTabView(
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            duration: Duration(milliseconds: 700),
-            curve: Curves.ease,
+            reviewsRepository: ReviewsRepository(),
+            maintenanceRequestsRepository: MaintenanceRequestsRepository(),
+            offersRepository: OffersRepository(),
+            userRepository: UserRepository(),
+            workshopRepository: WorkshopRepository(),
           ),
-          controller: UserMainNavBarScreens().controller,
-          tabs: UserMainNavBarScreens().buildScreens(),
-          navBarBuilder: (navBarConfig) => Style8BottomNavBar(
-            navBarConfig: navBarConfig,
-            navBarDecoration: NavBarDecoration(
-              color: isDark ? const Color(0xFF1F1929) : Colors.white,
-              borderRadius: BorderRadius.circular(
-                10,
+        ),
+      ],
+      child: BlocProvider<NavBloc>(
+        create: (context) => NavBloc(
+          repositoryManager: context.read<RepositoryManager>(),
+          UserRepository(),
+        )..add(MainScreenOfferNotfiction()),
+        child: FocusScope(
+          canRequestFocus: false,
+          child: PersistentTabView(
+            controller: UserMainNavBarScreens().controller,
+            tabs: UserMainNavBarScreens().buildScreens(),
+            navBarBuilder: (navBarConfig) => Style8BottomNavBar(
+              navBarConfig: navBarConfig,
+              navBarDecoration: NavBarDecoration(
+                color: QhelperFucntions.isDarkMode(context)
+                    ? const Color(0xFF1F1929)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
+            handleAndroidBackButtonPress: true,
+            resizeToAvoidBottomInset: true,
+            stateManagement: true,
+            backgroundColor: Colors.grey.shade900,
+            navBarHeight: kBottomNavigationBarHeight,
           ),
-          handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset:
-              true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
-          stateManagement: true, // Default is true.
-          backgroundColor: Colors.grey.shade900,
-          navBarHeight: kBottomNavigationBarHeight,
         ),
       ),
     );

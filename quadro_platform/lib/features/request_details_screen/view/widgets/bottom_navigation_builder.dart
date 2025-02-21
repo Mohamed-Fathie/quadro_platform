@@ -6,6 +6,8 @@ import 'package:quadro_platform/features/request_details_screen/view/widgets/rat
 import 'package:quadro_platform/features/request_details_screen/view/widgets/respose_bar.dart';
 import 'package:quadro_platform/features/workshop_main_screen/models/maintenance_request_data_model.dart';
 
+import 'complete.dart';
+
 class BottomNavigationBuilder extends StatelessWidget {
   final MaintenanceRequestDomainModel request;
   const BottomNavigationBuilder({super.key, required this.request});
@@ -20,6 +22,8 @@ class BottomNavigationBuilder extends StatelessWidget {
           return buildWorkshopProgressBar(context, request);
         } else if (state.canRespond) {
           return buildOfferResponseBar(context, request);
+        } else if (state.canMarkCompleted) {
+          return buildWorkshopCompletBar(context, request);
         }
         return const SizedBox.shrink();
       },

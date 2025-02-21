@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadro_platform/features/request_details_screen/cubit/details_cubit.dart';
 import 'package:quadro_platform/shared/enum/maitenance_request_status.dart';
 import 'package:quadro_platform/shared/enum/offer_status.dart';
 import 'package:quadro_platform/shared/enum/spare_parts.dart';
@@ -39,10 +41,24 @@ class OfferDetails extends StatelessWidget {
             requestType: requestType,
             label: "حالة القطع التي ستستخدم للصيانة :",
             value: offer.sparePartsStatus.label),
-        SectionRow(
-            requestType: requestType,
-            label: "حالة العرض :",
-            value: offer.status.arabicName),
+        BlocSelector<DetailsCubit, RequestDetailsState, String?>(
+          selector: (state) {
+            return state.offerStatus;
+          },
+          builder: (context, state) {
+            if (state == null) {
+              return SectionRow(
+                  requestType: requestType,
+                  label: "حالة العرض :",
+                  value: offer.status.arabicName);
+            } else {
+              return SectionRow(
+                  requestType: requestType,
+                  label: "حالة العرض :",
+                  value: state);
+            }
+          },
+        ),
         SectionRow(
             requestType: requestType,
             label: "تاريخ انشاء العرض :",

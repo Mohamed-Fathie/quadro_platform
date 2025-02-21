@@ -121,14 +121,14 @@ class RepositoryManager {
       OffersFilter.pending: [],
       OffersFilter.inprogress: [],
       OffersFilter.accepted: [],
-      OffersFilter.rejected: []
+      OffersFilter.rejected: [],
+      OffersFilter.completed: []
     };
 
     // Map document IDs to their snapshots
     final docMap = {
       for (var doc in docs) (doc.data()).offerId: doc,
     };
-    log(docMap.length.toString());
 
     // Helper to add grouped offers to the map
     void addGroupedOffers(
@@ -165,6 +165,8 @@ class RepositoryManager {
         OffersFilter.accepted);
     addGroupedOffers(relatedData.groupedOffers?[OfferStatus.rejected] ?? {},
         OffersFilter.rejected);
+    addGroupedOffers(relatedData.groupedOffers?[OfferStatus.completed] ?? {},
+        OffersFilter.completed);
 
     // Aggregate all offers into OfferStatus.all
     offersMap[OffersFilter.all] = [
@@ -172,6 +174,7 @@ class RepositoryManager {
       ...offersMap[OffersFilter.inprogress]!,
       ...offersMap[OffersFilter.accepted]!,
       ...offersMap[OffersFilter.rejected]!,
+      ...offersMap[OffersFilter.completed]!,
     ];
 
     return offersMap;

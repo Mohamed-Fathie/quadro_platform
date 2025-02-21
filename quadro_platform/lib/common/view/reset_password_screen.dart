@@ -85,16 +85,12 @@ class ResetPassWordScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  " او قم ب",
-                  style: AppTextStyles.Mbody16Bold.copyWith(color: black),
-                ),
                 InkWell(
                   onTap: () {
-                    NavigationService().replaceRoute(RoutesConstants.login);
+                    NavigationService().routeTo(RoutesConstants.singUpPage);
                   },
                   child: Text(
-                    "تسجيل الدخول  ",
+                    "انشاء حساب ",
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontFamily: 'Madhani-Arabic',
@@ -103,6 +99,10 @@ class ResetPassWordScreen extends StatelessWidget {
                       color: teal,
                     ),
                   ),
+                ),
+                Text(
+                  "لا تمتلك حساب؟",
+                  style: AppTextStyles.Mbody16Bold.copyWith(color: black),
                 ),
               ],
             )

@@ -92,6 +92,11 @@ class OffersCubit extends Cubit<OffersState> {
               rejectedOffers: statusMap![OffersFilter.rejected]!,
               index: index));
           break;
+        case OffersFilter.completed:
+          statusMap = await _manager.getoffers(id: id, type: type);
+          emit(OfferFetchCompletedSuccess(
+              completed: statusMap![OffersFilter.completed]!, index: index));
+          break;
       }
     } catch (e) {
       emit(OfferFetchFailure(error: e.toString(), index: index));
