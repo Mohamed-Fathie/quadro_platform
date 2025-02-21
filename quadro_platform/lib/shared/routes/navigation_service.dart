@@ -10,7 +10,7 @@ class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   /// Navigate to a route by its name with optional arguments
-  dynamic routeTo(String route, {dynamic arguments}) {
+  dynamic routeTo(String route, {Object? arguments}) {
     try {
       return navigatorKey.currentState?.pushNamed(route, arguments: arguments);
     } catch (e) {
@@ -21,7 +21,7 @@ class NavigationService {
 // navService.routeTo(RoutesConstants.signUp, arguments: {'name': 'John'});
 
   /// Replace the current route with a new one
-  dynamic replaceRoute(String route, {dynamic arguments}) {
+  dynamic replaceRoute(String route, {Object? arguments}) {
     try {
       return navigatorKey.currentState
           ?.pushReplacementNamed(route, arguments: arguments);
@@ -33,7 +33,7 @@ class NavigationService {
 //navService.replaceRoute(RoutesConstants.home);
 
   /// Navigate to a route and clear the navigation stack
-  dynamic clearAndNavigateTo(String route, {dynamic arguments}) {
+  dynamic clearAndNavigateTo(String route, {Object? arguments}) {
     try {
       return navigatorKey.currentState?.pushNamedAndRemoveUntil(
         route,
@@ -55,7 +55,7 @@ class NavigationService {
       debugPrint('No routes in the navigation stack to pop.');
     }
   }
-  // navService.goBack(result: 'Returned Data');
+  //navService.goBack(result: 'Returned Data');
 
   /// Check if a route can pop
   bool canGoBack() {

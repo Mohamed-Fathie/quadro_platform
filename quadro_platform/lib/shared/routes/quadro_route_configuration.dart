@@ -1,23 +1,194 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:quadro_platform/common/view/logInLogic/log_in_logic.dart';
 import 'package:quadro_platform/common/view/log_in_screen.dart';
 import 'package:quadro_platform/common/view/registration_screen.dart';
+import 'package:quadro_platform/features/workshop_authentication/cubit/authbloc_cubit.dart';
+import 'package:quadro_platform/features/workshop_authentication/models/workshop_user.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/trade_license.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/workshop_authenitication_page.dart';
+import 'package:quadro_platform/features/workshop_authentication/views/workshop_registeration_page.dart';
+import 'package:quadro_platform/features/workshop_bottom_nav_bar/workshop_nav_bar.dart';
 import 'package:quadro_platform/shared/routes/routes_constants.dart';
+import 'package:quadro_platform/user/view/bottomNavBars/user_bottom_navbar.dart';
+
+import '../../common/view/reset_password_screen.dart';
+import '../../driver/view/DriverBottomNavBar/driver_bottom_navbar.dart';
+import '../../features/google_map/views/workshop_location_map.dart';
+import '../../features/onboarding/view/on_boarding_page.dart';
+import '../../features/quadro_sing_up/views/role_selection_page.dart';
+import '../../features/quadro_sing_up/views/sing_up_page.dart';
+import '../../features/quadro_sing_up/views/tow_owner_page.dart';
+import '../../features/quadro_sing_up/views/vehicle_owner_page.dart';
+import '../../features/request_details_screen/view/details_screen_page.dart';
+import '../../features/sending_offers/view/sending_offer_page.dart';
+import '../../features/workshop_Editing/view/workshop_edit_page.dart';
+import '../../features/workshop_main_screen/models/maintenance_request_data_model.dart';
+import '../../features/workshop_profile/view/workshop_profile_page.dart';
+import '../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
+import '../../user/view/maintenance_request/views/maintenance_request_page.dart';
+import '../../user/view/workshop_search/views/workshop_search_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case RoutesConstants.login:
-        return MaterialPageRoute(builder: (context) => const LogInScreen());
-      case RoutesConstants.signUp:
-        return MaterialPageRoute(builder: (context) => RegistrationScreen());
+        return _materialRoute(const LogInScreen());
+      case RoutesConstants.driverBottomNavBar:
+        return _materialRoute(DriverBottomNavBar());
+      case RoutesConstants.mainUserBottomNavbar:
+        return _materialRoute(const MainBottomNavbar());
+      case RoutesConstants.maintenanceRequest:
+        final workshop = settings.arguments;
+        if (workshop is! Workshop) return _errorRoute("invalid arg");
+        return _materialRoute(MaintenanceRequestPage(
+          workshop: workshop,
+        ));
+      case RoutesConstants.error:
+        return _materialRoute(const ErrorAuthWidget());
+      case RoutesConstants.workshopBottomNavBar:
+        return _materialRoute(const WorkshopNavBar());
+      case RoutesConstants.workshopLocationMap:
+        final coord = settings.arguments as LatLng?;
+        log("the location is ${coord}");
+        return _materialRoute(WorkshopLocationMapPage(
+          loc: coord,
+        ));
+      case RoutesConstants.workshopSearch:
+        return _materialRoute(const WorkshopSearchPage());
+      case RoutesConstants.onBoardingPage:
+        return _materialRoute(const OnBoardingPage());
+      case RoutesConstants.workshoProfile:
+        final workshop = settings.arguments;
+        if (workshop is! Map<String, dynamic>) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+        return _pageTransition(
+          WorkshopProfilePage(
+            workshop: workshop["workshop"],
+            requestType: workshop["requestType"],
+          ),
+          PageTransitionType.bottomToTop,
+        );
+      // case RoutesConstants.signUp:
+      //   return _materialRoute(const RegistrationScreen());
+      case RoutesConstants.workshopRegistration:
+        return _materialRoute(const WorkshopRegisterationPage());
+
+      case RoutesConstants.licens:
+        final contextCubit = settings.arguments;
+        if (contextCubit is! WorkshopAuthbloc) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+        return _materialRoute(TradeLicensePage(licenscubit: contextCubit));
+
+      case RoutesConstants.workshopdetails:
+        final contextCubit = settings.arguments;
+        if (contextCubit is! WorkshopAuthbloc) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+        return _pageTransition(
+          WorkshopDetainsPage(detailscubit: contextCubit),
+          PageTransitionType.bottomToTop,
+        );
+
+      // case RoutesConstants.loginLogic:
+      //   return _pageTransition(
+      //     const LogInLogic(),
+      //     PageTransitionType.bottomToTop,
+      //   );
+
+      case RoutesConstants.requestDetails:
+        final argument = settings.arguments;
+        if (argument is! Map<String, dynamic>) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+
+        return _pageTransition(
+          DetailsScreenPage(
+            argument: argument,
+          ),
+          PageTransitionType.bottomToTop,
+        );
+
+      case RoutesConstants.sendOffer:
+        final request = settings.arguments;
+        if (request is! MaintenanceRequestDomainModel) {
+          return _errorRoute("Invalid arguments for ${settings.name}");
+        }
+        return _pageTransition(
+          SendingOfferPage(request: request),
+          PageTransitionType.bottomToTop,
+        );
+
+      case RoutesConstants.bottomNavBar:
+        return _pageTransition(
+          UserBottomNavBar(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.vehicleonwerpage:
+        return _pageTransition(
+          const VehicleOwnerScreen(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.roleSelection:
+        return _pageTransition(
+          const RegisterationPage(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.flow:
+        return _pageTransition(
+          const FlowLogin(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.singUpPage:
+        return _pageTransition(
+          const SingUpPage(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.workshopEdit:
+        return _pageTransition(
+          const WorkshopEditPage(),
+          PageTransitionType.bottomToTop,
+        );
+
+      case RoutesConstants.resetPassWordScreen:
+        return _pageTransition(
+          ResetPassWordScreen(),
+          PageTransitionType.bottomToTop,
+        );
+      case RoutesConstants.towOwnerPage:
+        return _pageTransition(
+          const TowOwnerPage(),
+          PageTransitionType.bottomToTop,
+        );
 
       default:
-        return MaterialPageRoute(
-            builder: (context) => Scaffold(
-                  body: Center(
-                    child: Text("Not found ${settings.name}"),
-                  ),
-                ));
+        return _errorRoute("Route not found: ${settings.name}");
     }
+  }
+
+  // Helper method for MaterialPageRoute
+  static MaterialPageRoute _materialRoute(Widget child) {
+    return MaterialPageRoute(builder: (context) => child);
+  }
+
+  // Helper method for PageTransition
+  static PageTransition _pageTransition(Widget child, PageTransitionType type) {
+    return PageTransition(child: child, type: type);
+  }
+
+  // Helper method for error route
+  static MaterialPageRoute _errorRoute(String message) {
+    return MaterialPageRoute(
+      builder: (context) => Scaffold(
+        body: Center(
+          child: Text(message),
+        ),
+      ),
+    );
   }
 }
