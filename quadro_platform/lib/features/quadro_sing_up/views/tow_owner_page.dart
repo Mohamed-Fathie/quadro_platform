@@ -108,7 +108,7 @@ class TowServiceProviderForm extends StatelessWidget {
                     controller: cubit.phoneController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
-                      labelText: 'رقم الجوال',
+                      labelText: 'رقم الهاتف',
                       prefixIcon: const Icon(
                         Icons.phone,
                         color: Qcolors.secondary,
@@ -122,10 +122,10 @@ class TowServiceProviderForm extends StatelessWidget {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال رقم الجوال';
+                        return 'الرجاء إدخال رقم الهاتف';
                       }
                       if (value.length != 10) {
-                        return 'رقم الجوال غير صحيح';
+                        return 'رقم الهاتف غير صحيح';
                       }
                       return null;
                     },

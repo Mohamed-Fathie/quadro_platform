@@ -58,7 +58,7 @@ class RegisterationView extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              Text(' ما الدي تبحث عنه عبر تطبيق كوادروا ؟',
+              Text(' ما الذي تبحث عنه عبر تطبيق كوادروا ؟',
                   softWrap: true,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontSize: 20.sp,
