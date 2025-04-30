@@ -76,11 +76,11 @@ class WorkshopRepository {
 
 //Retrieve Cached User Data
   Future<Workshop?> getCachedUser() async {
+    log("in the cached");
     final prefs = await SharedPreferences.getInstance();
     final workshopString = prefs.getString('cached_workshop');
 
     if (workshopString == null) {
-      log("The cached workshop is null");
       return null;
     }
 

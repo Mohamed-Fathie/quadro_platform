@@ -19,8 +19,7 @@ class WorkshopLocationMapBloc
   GoogleMapController? _mapController;
   LatLng? workshopselectedlocation;
   WorkshopLocationMapBloc({LatLng? location})
-      : _geocoding =
-            GeoCodingRepository("AIzaSyBy4vQeOdM4OZlqi6Cyj6oil43a6pi-Iqg"),
+      : _geocoding = GeoCodingRepository("API key goes here"),
         workshopselectedlocation = location,
         super(WorkshopLocationLoading()) {
     on<WorkshopLocationConfirmed>(

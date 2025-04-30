@@ -76,6 +76,7 @@ class RepositoryManager {
           .where("offer_id", isNull: withOffer);
 
       if (limit != null) query = query.limit(limit);
+
       return _convertToDomainModelStream(query, withOffer);
     } on FirebaseException catch (e) {
       throw FirestoreReadWriteFailure.fromCode(
@@ -141,16 +142,16 @@ class RepositoryManager {
           final request = requestDoc.data();
           offersMap[status]?.add(
             MaintenanceRequestDomainModel(
-              id: requestDoc.id,
-              user: relatedData.users[request.vehicleOwnerId]!,
-              workshop: relatedData.workshops[request.workshopId]!,
-              carCompany: request.carCompany,
-              carModel: request.carModel,
-              description: request.description,
-              requestStatus: request.status,
-              dateCreated: request.dateCreated.toDate(),
-              offer: offer,
-            ),
+                id: requestDoc.id,
+                user: relatedData.users[request.vehicleOwnerId]!,
+                workshop: relatedData.workshops[request.workshopId]!,
+                carCompany: request.carCompany,
+                carModel: request.carModel,
+                description: request.description,
+                requestStatus: request.status,
+                dateCreated: request.dateCreated.toDate(),
+                offer: offer,
+                carImageUrl: request.requestImageUrl),
           );
         }
       });
@@ -212,8 +213,10 @@ class RepositoryManager {
     return query.snapshots().asyncMap((snapshot) async {
       final docs = snapshot.docs;
       final relatedData = await _fetchRelatedData(docs, withOffer);
+
       return docs.map((doc) {
         final maintenanceRequest = doc.data() as MaintenanceRequest;
+        log(maintenanceRequest.toMap().toString());
         return _mapToMaintenanceDomainModel(
           doc.id,
           maintenanceRequest,
@@ -282,6 +285,7 @@ class RepositoryManager {
       for (var doc in docs) (doc.data() as MaintenanceRequest).workshopId
     };
 
+    log("message");
     // Initialize offers only if needed
     final Map<String, Offer?>? offers;
     final Map<OfferStatus, Map<String, Offer>>? groupedOffers;

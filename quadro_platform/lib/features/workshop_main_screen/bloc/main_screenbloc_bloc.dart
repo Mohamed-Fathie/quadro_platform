@@ -19,8 +19,12 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Future<Workshop?> getWorkshop() async {
     if (_workshop == null) {
       _workshop = await _workshopRepository.getCachedUser();
+      log("the workshop in the cach is: ");
+      log(_manager.authUserId);
       _workshop ??=
           await _workshopRepository.getWorkshopById(id: _manager.authUserId);
+      log("the workshop is: ");
+      log(_workshop!.toJsonMap().toString());
       return _workshop;
     }
     return _workshop;

@@ -125,7 +125,9 @@ class DetailsView extends StatelessWidget {
                     label: requestType == RequestType.workshop_id
                         ? "اسم العميل:"
                         : "اسم الورشة",
-                    value: request.workshop.name,
+                    value: requestType == RequestType.workshop_id
+                        ? request.user.name!
+                        : request.workshop.name,
                   ),
                   SizedBox(
                     height: 1.h,

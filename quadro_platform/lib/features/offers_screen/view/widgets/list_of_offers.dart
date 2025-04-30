@@ -89,6 +89,8 @@ class ListOfOffers extends StatelessWidget {
                 offerStatus: request.offer!.status.arabicName,
                 servicePrice: request.offer!.servicePrice.toString(),
                 navigatorCall: () async {
+                  log("here we go");
+                  log(request.carImageUrl ?? " it is null");
                   final result = await NavigationService().routeTo(
                     RoutesConstants.requestDetails,
                     arguments: {

@@ -15,6 +15,7 @@ import '../../../features/workshop_bottom_nav_bar/workshop_railway.dart';
 import '../../../shared/enum/user_role.dart';
 import '../../../user/view/bottomNavBars/main_bottom_navbar/main_bottom_navbar.dart';
 import '../../controller/provider/profile_data_provider.dart';
+import '../../controller/services/auth_services.dart';
 import '../log_in_screen.dart';
 
 class WidgetFlow extends StatelessWidget {
@@ -39,7 +40,6 @@ class WidgetFlow extends StatelessWidget {
             case UserRole.vehicleOwner:
               return const MainBottomNavbar();
             case UserRole.workshopOwner:
-              log(kIsWeb.toString());
               return const WorkshopNavBar();
           }
         } else if (state is Unauthenticated) {
