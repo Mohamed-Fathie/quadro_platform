@@ -171,27 +171,9 @@ class PushNotivicationServices {
       return DateTime.now().isAfter(_tokenExpirationTime!);
     }
 
-    final serviceAccountJson = {
-      "type": "service_account",
-      "project_id": "quadro-204be",
-      "private_key_id": "229624c6d0e52c4e3c385df8527640f08e9dd6d8",
-      "private_key":
-          "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCMWOUDpGb/6PnS\nMz5wDx/FOX5yFEMLvGdOmsoFm+RSTOs9DF84tnzS0V4yi8DYkuxB6+LfoRPArqKD\nNSWoCPMARl4IWnZBnu6xmkJLC/3IyEgYdJ85YtUtgyPufHgow9vW2OOCwhto9Pxh\nu52RUvpSwc9ybjiK4TLjyDBKVvKlKFCRK4r8ud3Yw/7Y8vvUw+qcX3K4RC6Z0mVJ\n7XN8bTupBGiiDiu3B82zlz96aii7ek7tE7tGHMq7X1xBhG0SCYlpZmsGjnA/aEMQ\nKv7mJJhOHZowrMCAxs+N6ir72QfD/7zIPrVxHWTTwr/Eoe6Bt/kadiEdLTe84Nek\nKQWIaIVRAgMBAAECggEABa1W3jXZQMLQ0DLodKn39AdmWQD+0Uu2thRG1cE/lCCu\nZ1LHy0h+dhyn/c1vaJNQ4T3EeJ1QajvmMP6GXmy2P62ZAid+nxrptt9xjQ2YH3YS\njIKzKiQYUXX7jxsT1TpO+zrcwR5O84jtaJqpPgaoP469cHiK6vs/Dr27TlaEDDAs\n8lSaE8aHUjPfVVxNgqfZerls9KgcxVkJ4kjE9ry9lAP7iNplIDdVqdUixBKkk++e\nL0LXkqmtXb1/wh0ijnoVXtJScivetvoN3Lknf4pmZb1rIS294klNMaecvfnLQ1yZ\nybW5BJjpxBEcEQ8v/cWRpueIT6sABHbN+NsWvWaNjQKBgQDDyy1ylob9U/beFMsh\nPQy0miRqz6YBgdvIrntQSDMuJACqgnhY1R7i2guL9TlBzM85/xhc4qTknxqWeBUC\nDhY3rFQuIMRsHWNsQRKbKjuSNt6M245bafbuOk2AD2bPSgTY/+q8JA170XCqOXBp\nBhdEZgRqNHJbyiKd06lVic9IFwKBgQC3gP2Stq1pYXBfIFDoTyiqH7FbVbt9x4qH\n0GXyMgjF4+LbTXYm1kb8T/Tm37tRGbfp300UqK7XxzSxvP0Ef5dm5V6YyDWBr2px\niAUmu6Fgdt2g1GgqkQxhqzeeswiNiYpf13CVhBy39G1Nog4sQjZw3m7kqaQyPA4L\nfrNLIYcW1wKBgC5m/MJngl6Pg7ZmXy3ldhlnXrIhvEonKJuLHpaMRfTte2rtuO/0\nsnk5C/uDhqpdi89G8dMxs7qrKnX2x6PRCtru8JRuF58359REJ9C2VZ/1eRERB9AK\ncQdMsgljnQ4LkNKM9Gjacoehv33YVxfM5b7EHs+81k2CvmmBPGSVYJbJAoGAVvFj\nsz6gPPywrDF4hAj1YF1xv6+IDNkdFqozkyQHqhMF6hfycgY2TddoVncMnilMTR/C\nupYNeSjmG4xKaPY2+saUIllBmLdO/ImQv0BI/pZy/X+F9x0QO7pOuP9kfwL6r9w4\neG7G2JWTsCOnCWs5thJ9ghOqOy7fDK00L9Wr1rMCgYByYy6nfPOh34jFJzsXZGUj\nvtYSqI5M5vtM6c2vGoKxN2DRZ+AdkL6OnVZvmay4U/o+PadNHJiDRONIPFaZr2A0\nu4acc3XK2vIgWllsCaQt++PsSgGOcUO+4Jd5JXhYsE2yFEAdT8FTvbTroei4ii6C\nbPBkdzhgJkpXFduBLQD1DQ==\n-----END PRIVATE KEY-----\n",
-      "client_email":
-          "firebase-adminsdk-s4qp6@quadro-204be.iam.gserviceaccount.com",
-      "client_id": "103198309977513048043",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url":
-          "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url":
-          "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-s4qp6%40quadro-204be.iam.gserviceaccount.com",
-      "universe_domain": "googleapis.com"
-    };
+    final serviceAccountJson = {};
 
-    List<String> scopes = [
-      "https://www.googleapis.com/auth/firebase.messaging"
-    ];
+    List<String> scopes = [];
 
     try {
       final client = await gauth.clientViaServiceAccount(
